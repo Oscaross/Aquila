@@ -23,6 +23,8 @@ public class TimeOfDay : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 1;
+
+        Debug.Log("My name is Gabriel and I have a smelly bum bum.");
     }
 
     void Update()
