@@ -37,6 +37,15 @@
 # Visual Studio cache directory
 .vs/
 
+# Every macOS finder visit cache lands in diffs without this (Claude generated this one)
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
 # Gradle cache directory
 .gradle/
 
