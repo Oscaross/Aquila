@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class CloudBand : MonoBehaviour
 {
-    [SerializeField] private TimeOfDay time;
     [SerializeField] private SkyPreset preset;
     [SerializeField] private CloudBandLevel level;
     [SerializeField] private float windSpeed = 0.7f;
@@ -60,7 +59,7 @@ public class CloudBand : MonoBehaviour
 
     void LateUpdate()
     {
-        Color tint = preset.GetTint(level).Evaluate(time.TimeNow);
+        Color tint = preset.GetTint(level).Evaluate(GameTime.Now);
         float camHalf = cam.orthographicSize * cam.aspect;
         float camX = cam.transform.position.x;
         float camTravel = camX - startCamX;

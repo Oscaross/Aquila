@@ -8,7 +8,6 @@ using UnityEngine.Rendering.Universal;
 [RequireComponent(typeof(Light2D))]
 public class FlickeringLight : MonoBehaviour
 {
-    [SerializeField] private TimeOfDay time;
     [SerializeField] private SkyPreset preset;
     [Tooltip("The multiplier layered over the top of the current intensity for the flicker event. Zero for no flickering.")]
     [SerializeField, Range(0f, 0.3f)] private float flickerMagnitude = 0.08f;
@@ -29,7 +28,7 @@ public class FlickeringLight : MonoBehaviour
     private void LateUpdate()
     {
         // Query the brightness curve according to the current time (i.e. during the day this should be mostly zero).
-        float baseIntensity = preset.playerLightIntensity.Evaluate(time.TimeNow + timeOffset);
+        float baseIntensity = preset.playerLightIntensity.Evaluate(GameTime.Now + timeOffset);
         // PerlinNoise returns a smoothly varying value in 0 to 1. Randomised samples are dependent and connected, meaning we get a "random walk" of flickering according to the flicker speed, magnitude and seed.
         float flicker = 1f + flickerMagnitude * (Mathf.PerlinNoise(Time.time * flickerSpeed + seed, 0f) - 0.5f) * 2f;
         light2D.intensity = baseIntensity * flicker;

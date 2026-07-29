@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4fe88d7ae4993324eab9502f962763d2
+guid: c2bd2f62958e4c74096381ad90cffd04
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3795834783830744533
-    second: FarmBuilding_0
+      213: 6793204065051932803
+    second: FarmBuildingFIelds_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FarmBuilding_0
+      name: FarmBuildingFIelds_0
       rect:
         serializedVersion: 2
-        x: 80
+        x: 0
         y: 0
-        width: 224
-        height: 88
+        width: 440
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5dd9d4cef938da430800000000000000
-      internalID: 3795834783830744533
+      spriteID: 388f820fa1f464e50800000000000000
+      internalID: 6793204065051932803
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FarmBuilding_0: 3795834783830744533
+      FarmBuildingFIelds_0: 6793204065051932803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

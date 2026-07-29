@@ -7,7 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class LayerTint : MonoBehaviour
 {
-    [SerializeField] private TimeOfDay time;
     [SerializeField] private SpriteRenderer target;
     [Tooltip("The ScriptableObject preset for the colour curve in this sunrise-sunset cycle.")]
     [SerializeField] private SkyPreset preset;
@@ -22,7 +21,7 @@ public class LayerTint : MonoBehaviour
     private void LateUpdate()
     {
         // Use the current haze colour and light colour to interpolate the body between the two depending on their depth factor.
-        float t = time.TimeNow;
+        float t = GameTime.Now;
 
         Color haze = preset.hazeColour.Evaluate(t);
         Color lightNow = preset.lightColour.Evaluate(t);

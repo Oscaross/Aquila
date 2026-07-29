@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class SkyColour : MonoBehaviour
 {
-    [SerializeField] private TimeOfDay time;
     [SerializeField] private SpriteRenderer zenith;
     [SerializeField] private SpriteRenderer horizon;
     [SerializeField] private SkyPreset preset;
 
     void LateUpdate()
     {
-        float t = time.TimeNow;
+        float t = GameTime.Now;
         zenith.color = preset.zenithColour.Evaluate(t);
         horizon.color = preset.horizonColour.Evaluate(t);
     }

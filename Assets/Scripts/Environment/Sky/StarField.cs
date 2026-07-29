@@ -6,7 +6,6 @@ using UnityEngine;
 public class StarField : MonoBehaviour
 {
     [SerializeField] private SkyPreset preset;
-    [SerializeField] private TimeOfDay time;
     [Tooltip("Determines how quickly the star modulates in brightness (twinkles). 0 for no twinkle.")]
     [SerializeField] private float twinkleSpeed = 0f;
     [Tooltip("Determines how significantly the star modulates in brightness (twinkles). 0 for no twinkle.")]
@@ -21,7 +20,7 @@ public class StarField : MonoBehaviour
 
     void LateUpdate()
     {
-        Color c = preset.starAlphaCurve.Evaluate(time.TimeNow);
+        Color c = preset.starAlphaCurve.Evaluate(GameTime.Now);
 
         if (twinkleDepth > 0f)
             c.a *= 1f - twinkleDepth * 0.5f *

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/**
+ * Responsible for maintaining the correct GameTime and firing events when certain time-related milestones are reached. 
+*/
 public class TimeOfDay : MonoBehaviour
 {
     [SerializeField] private float dayLengthSeconds = 600; // one day = 10 IRL minutes
@@ -23,8 +26,6 @@ public class TimeOfDay : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 1;
-
-        Debug.Log("My name is Gabriel and I have a smelly bum bum.");
     }
 
     void Update()
@@ -33,26 +34,35 @@ public class TimeOfDay : MonoBehaviour
 
         timeNow += (Time.deltaTime * timeMultiplier) / dayLengthSeconds; // increment the time float by the fraction of time out of the day that has elapsed since last frame, scaled by the multiplier
         
-        // Check progression to the next day.
-        if (timeNow >= 1.0f)
+        // Check progression to the next day (which occurs at dawn).
+        if (timeNow == 0.25f)
         {
-            timeNow -= 1.0f;
             DayCount++;
             didSunsetHappen = false;
             didSunriseHappen = false;
             OnNewDay?.Invoke(DayCount); // incremented the day count by one and notify subscriber methods that a new day is here
         }
 
+        // Wrap timeNow around to 1.0f to prevent times over 1.
+        if (timeNow == 1.0f)
+        {
+            timeNow -= 1.0f;
+        }
+
+        // Sunset?
         if (timeNow >= 0.72f && timeNow <= 0.73f && !didSunsetHappen)
         {
             OnSunset?.Invoke();
             didSunsetHappen = true;
         }
 
+        // Sunrise?
         if (timeNow <= 0.21f && timeNow >= 0.2f && !didSunriseHappen)
         {
             OnSunrise?.Invoke();
             didSunriseHappen = true;
         }
+
+        GameTime.Now = timeNow;
     }
 }

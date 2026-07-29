@@ -6,13 +6,12 @@ using UnityEngine.Rendering.Universal;
 */
 public class GlobalLightCycle : MonoBehaviour
 {
-    [SerializeField] private TimeOfDay time;
     [SerializeField] private Light2D globalLight;
     [SerializeField] private SkyPreset preset;
 
     private void LateUpdate()
     {
-        float t = time.TimeNow;
+        float t = GameTime.Now;
         globalLight.color = preset.lightColour.Evaluate(t);
         globalLight.intensity = preset.intensity.Evaluate(t);
     }
