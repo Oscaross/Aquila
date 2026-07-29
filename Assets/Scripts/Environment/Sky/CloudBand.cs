@@ -78,8 +78,8 @@ public class CloudBand : MonoBehaviour
             float offset = x - camX; // the disparity between where we are now and the cloud's origin
 
             // Check if we need a left -> right or right -> left wrap because our offset has exceeded the limit for wrapping.
-            if (offset > limit) { c.drift -= 2f * limit; x -= 2f * limit; }
-            else if (offset < -limit) { c.drift += 2f * limit; x += 2f * limit; }
+            while (offset > limit) { c.drift -= 2f * limit; x -= 2f * limit; offset = x - camX; }
+            while (offset < -limit) { c.drift += 2f * limit; x += 2f * limit; offset = x - camX; }
 
             // Assignment of new values
             Vector3 oldPos = t.position;

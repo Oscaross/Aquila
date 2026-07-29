@@ -14,8 +14,6 @@ public class TimeOfDay : MonoBehaviour
     [Range(0, 1)]
     public float TimeNow => timeNow;
     public int DayCount { get; private set; }
-
-    public event System.Action<int> OnNewDay;
     public static event System.Action OnSunset;
     public static event System.Action OnSunrise;
 
@@ -33,20 +31,13 @@ public class TimeOfDay : MonoBehaviour
         if (dayLengthSeconds <= 0f) Debug.LogError("A day cannot have a negative/zero number of seconds!");
 
         timeNow += (Time.deltaTime * timeMultiplier) / dayLengthSeconds; // increment the time float by the fraction of time out of the day that has elapsed since last frame, scaled by the multiplier
-        
-        // Check progression to the next day (which occurs at dawn).
-        if (timeNow == 0.25f)
-        {
-            DayCount++;
-            didSunsetHappen = false;
-            didSunriseHappen = false;
-            OnNewDay?.Invoke(DayCount); // incremented the day count by one and notify subscriber methods that a new day is here
-        }
-
+       
         // Wrap timeNow around to 1.0f to prevent times over 1.
-        if (timeNow == 1.0f)
+        if (timeNow >= 1.0f)
         {
             timeNow -= 1.0f;
+            didSunsetHappen = false;
+            didSunriseHappen = false;
         }
 
         // Sunset?
@@ -60,6 +51,7 @@ public class TimeOfDay : MonoBehaviour
         if (timeNow <= 0.21f && timeNow >= 0.2f && !didSunriseHappen)
         {
             OnSunrise?.Invoke();
+            DayCount++;
             didSunriseHappen = true;
         }
 
