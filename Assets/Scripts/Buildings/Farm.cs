@@ -6,16 +6,24 @@ using UnityEngine;
 
 public class Farm : MonoBehaviour
 {
-    [Tooltip("The expected number of days between the last harvest and the next one.")]
-    [SerializeField] private int expectedDaysBetweenHarvests = 5;
     [Tooltip("Standard deviation of how much the expected harvest length can fluctuate by.")]
     [SerializeField, Range(0f, 0.3f)] private float ripenJitter = 0.12f;
-    [SerializeField] private int currCycleHarvestInterval = 0; // how many days between the last harvest and the upcoming harvest
+    [Tooltip("How many days after the previous harvest does the current harvest occur.")]
+    [SerializeField] private int currCycleHarvestInterval = 0;
+    [Tooltip("Number of days elapsed since last harvest.")]
     [SerializeField] private int daysSinceLastHarvest = 0;
+    [Tooltip("The amount of grain a farm with no multipliers and one worker would produce.")]
+    [SerializeField] private int baseFarmYield = 100;
+    [Tooltip("How much of the yield from a farm with one worker does each additional worker add.")]
+    [SerializeField] private float[] workerMultipliers;
+
+    [Tooltip("Each growth phase sprite for the farm background.")]
+    [SerializeField] private Sprite[] growthPhaseBackgrounds;
+    [SerializeField] private SpriteRenderer currentBackground;
+
     private ToolDisplay toolDisplay; // visual cue updater for scythes
     private int numWorkers;
-
-    void Awake() => toolDisplay = GetComponent<ToolDisplay>();
+    private SeasonTable seasonTable;
 
     public int NumWorkers
     {
@@ -43,15 +51,30 @@ public class Farm : MonoBehaviour
     [ContextMenu("Remove Worker")]
     public void RemoveWorker() => NumWorkers = Mathf.Max(0, numWorkers - 1);
 
+    private void RefreshGrowthSprite()
+    {
+        if (growthPhaseBackgrounds.Length == 0 || currentBackground == null) return;
+        int idx = Mathf.Clamp(
+            Mathf.FloorToInt(growthProgress * growthPhaseBackgrounds.Length),
+            0, growthPhaseBackgrounds.Length - 1);
+        currentBackground.sprite = growthPhaseBackgrounds[idx];
+    }
 
     /// <summary>
     /// The proportion of the total harvest cycle that has elapsed.
     /// </summary>
-    public float growthProgress => daysSinceLastHarvest / currCycleHarvestInterval;
+    public float growthProgress => (currCycleHarvestInterval != 0) ? (float) daysSinceLastHarvest / currCycleHarvestInterval : 0; // avoid NaN
 
     private void Start()
     {
         BeginNewCycle();
+        RefreshGrowthSprite();
+    }
+
+    private void Awake()
+    {
+        toolDisplay = GetComponent<ToolDisplay>();
+        seasonTable = SeasonTable.Instance;
     }
 
     private void OnEnable()
@@ -71,10 +94,13 @@ public class Farm : MonoBehaviour
     {
         daysSinceLastHarvest++;
 
-        if (growthProgress >= 1.0f)
+        if (growthProgress >= 1.0f && GameTime.CurrentSeason != Season.Winter)
         {
             Harvest();
         }
+
+        // Update crop background state.
+        RefreshGrowthSprite();
     }
 
     /// <summary>
@@ -84,15 +110,25 @@ public class Farm : MonoBehaviour
     {
         // Add some randomness to the number of days until next harvest by scaling the expected harvest interval by some randomised factor.
         float mult = Mathf.Clamp(Probability.SampleGaussian(1f, ripenJitter), 0.75f, 1.25f); // a multiplier picked from a normal distribution over a mean of 1x and standard eviation of ripenJitter, bounded between 75% (min) and 125% (max)
-        currCycleHarvestInterval = Mathf.RoundToInt(expectedDaysBetweenHarvests * mult);
+        currCycleHarvestInterval = Mathf.RoundToInt(seasonTable.GetCurrentSeasonData().expectedHarvestIntervalDays * mult);
         daysSinceLastHarvest = 0;
     }
 
     void Harvest()
     {
-        int yield = 100;
+        float yield = 0;
+        
+        for (int i = 0; i < numWorkers; i++)
+        {
+            float workerMult = workerMultipliers[i];
+            yield += workerMult * baseFarmYield;
+        }
 
-        Debug.Log($"Harvesting now! Yield: {yield}");
+        yield *= SeasonTable.Instance.GetCurrentSeasonData().yieldMultiplier;
+
+        int yieldRounded = (int) Mathf.Ceil(yield);
+
+        Debug.Log($"Harvesting now! Yield: {yieldRounded}");
         BeginNewCycle();
     }
 }

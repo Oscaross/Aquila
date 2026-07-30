@@ -3,7 +3,6 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     // NOTE: Use [SerialiseField] for private fields to show up in the inspector. Public fields are in there by default.
-
     public Transform target; // this will just be the player's transform (position)
     [Range(0f, 0.1f), Tooltip("")]
     public float smoothTime = 0.05f; // smoothing factor, a higher smooth means the camera takes longer to follow the target as it changes position

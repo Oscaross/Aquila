@@ -13,6 +13,7 @@ public static class GameTime
     /// The number of days that have elapsed since the player began this save. A day is the time taken for the Now variable to move from 0.0 back around to 0.0 (one full day-night cycle).
     /// </summary>
     public static int Day { get; internal set; }
+    public static Season CurrentSeason { get; internal set; }
     public static bool IsNight => Now < 0.25f || Now > 0.75f;
     public static bool IsSunrise => Now > 0.22f && Now < 0.28f;
     public static bool IsSunset => Now > 0.72f && Now < 0.78f;

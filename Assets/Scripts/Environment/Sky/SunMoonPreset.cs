@@ -4,7 +4,7 @@ using UnityEngine;
  * Functions similarly to SkyPreset. Retains information about the sun and moon's colour, alpha and lighting throughout the day night cycle. 
  * 
 */
-[CreateAssetMenu(fileName = "SunMoonPreset", menuName = "Sky/SunMoon Preset")]
+[CreateAssetMenu(fileName = "SunMoonPreset", menuName = "Scriptable Objects/Sky/SunMoon Preset")]
 public class SunMoonPreset : ScriptableObject
 {
     [Header("Sun")]

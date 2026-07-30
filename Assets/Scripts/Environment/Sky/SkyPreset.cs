@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Sky/Sky Preset")]
+[CreateAssetMenu(menuName = "Scriptable Objects/Sky/Sky Preset")]
 public class SkyPreset : ScriptableObject
 {
     [Header("Sky")]

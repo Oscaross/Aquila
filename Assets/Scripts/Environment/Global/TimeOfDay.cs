@@ -5,9 +5,15 @@ using UnityEngine;
 */
 public class TimeOfDay : MonoBehaviour
 {
+    [Header("Day-Night Cycle")]
     [SerializeField] private float dayLengthSeconds = 600; // one day = 10 IRL minutes
     [SerializeField] private float timeMultiplier = 1.0f;
     [SerializeField] private float timeNow = 0.25f; // start at sunrise
+
+    [Header("Annual Cycle")]
+    [SerializeField] private int daysInASeason = 18;
+    [SerializeField] private Season startSeason = Season.Spring;
+
     /// <summary>
     ///  A float over [0, 1] that defines the global time of day. 0.0 = midnight, 0.25 = sunrise, 0.5 = noon, 0.75 = sunset and 1.0 wraps around to 0.0 to restart the cycle.
     /// </summary>
@@ -24,6 +30,8 @@ public class TimeOfDay : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 1;
+
+        GameTime.CurrentSeason = startSeason;
     }
 
     void Update()
@@ -43,18 +51,49 @@ public class TimeOfDay : MonoBehaviour
         // Sunset?
         if (timeNow >= 0.72f && timeNow <= 0.73f && !didSunsetHappen)
         {
-            OnSunset?.Invoke();
-            didSunsetHappen = true;
+            Sunset();
         }
 
         // Sunrise?
         if (timeNow <= 0.21f && timeNow >= 0.2f && !didSunriseHappen)
         {
-            OnSunrise?.Invoke();
-            DayCount++;
-            didSunriseHappen = true;
+            Sunrise();
         }
 
         GameTime.Now = timeNow;
+    }
+
+    /// <summary>
+    /// Handles sunset logic.
+    /// </summary>
+    void Sunset()
+    {
+        OnSunset?.Invoke();
+        didSunsetHappen = true;
+    }
+
+    /// <summary>
+    /// Handles sunrise logic. Note that a sunrise is considered the start of a new day, so this is where most "new day" code is called from.
+    /// </summary>
+    void Sunrise()
+    {
+        OnSunrise?.Invoke();
+        DayCount++;
+        didSunriseHappen = true;
+
+        CheckSeason();
+    }
+
+    /// <summary>
+    /// Handles logic relating to seasons when a new day begins.
+    /// </summary>
+    void CheckSeason()
+    {
+        // Advance the season forward if daysInASeason days have elapsed.
+        if (DayCount % daysInASeason == 0)
+        {
+            int seasonIdx = (int) GameTime.CurrentSeason + 1; // casts to indexed season (Spring = 1, Summer = 2...)
+            GameTime.CurrentSeason = (Season) (seasonIdx % 4);
+        }
     }
 }
