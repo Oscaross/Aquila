@@ -23,7 +23,8 @@ public class Farm : MonoBehaviour
 
     private ToolDisplay toolDisplay; // visual cue updater for scythes
     private int numWorkers;
-    private SeasonTable seasonTable;
+    private SeasonTable seasonTable; // data tables for the given season
+    private LegionResources legion; // resource tracker
 
     public int NumWorkers
     {
@@ -75,6 +76,7 @@ public class Farm : MonoBehaviour
     {
         toolDisplay = GetComponent<ToolDisplay>();
         seasonTable = SeasonTable.Instance;
+        legion = GetComponentInParent<LegionResources>();
     }
 
     private void OnEnable()
@@ -92,6 +94,8 @@ public class Farm : MonoBehaviour
     /// </summary>
     void OnNewDay()
     {
+        if (numWorkers == 0) return;
+
         daysSinceLastHarvest++;
 
         if (growthProgress >= 1.0f && GameTime.CurrentSeason != Season.Winter)
@@ -126,9 +130,12 @@ public class Farm : MonoBehaviour
 
         yield *= SeasonTable.Instance.GetCurrentSeasonData().yieldMultiplier;
 
+        // Use a Gaussian to add variance. Mean is the calculated yield and standard deviation is 10% of that calculated yield.
+
+        yield = Probability.SampleGaussian(yield, yield * 0.1f);
         int yieldRounded = (int) Mathf.Ceil(yield);
 
-        Debug.Log($"Harvesting now! Yield: {yieldRounded}");
+        legion.AddResource(Resource.Grain, yieldRounded);
         BeginNewCycle();
     }
 }
