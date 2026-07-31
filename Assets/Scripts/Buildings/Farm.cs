@@ -16,6 +16,8 @@ public class Farm : MonoBehaviour
     [SerializeField] private int baseFarmYield = 100;
     [Tooltip("How much of the yield from a farm with one worker does each additional worker add.")]
     [SerializeField] private float[] workerMultipliers;
+    [Tooltip("A farm is deserted if there are no workers tending to it (for example it has no workers assigned or it is pillaged). Deserted farms do not grow or produce any yield regardless of season.")]
+    [SerializeField] private bool isDeserted = false;
 
     [Tooltip("Each growth phase sprite for the farm background.")]
     [SerializeField] private Sprite[] growthPhaseBackgrounds;
@@ -42,6 +44,8 @@ public class Farm : MonoBehaviour
     {
         if (numWorkers < 4)
         {
+            if (isDeserted) isDeserted = false;
+
             NumWorkers = numWorkers + 1;
             return true;
         }
@@ -94,7 +98,11 @@ public class Farm : MonoBehaviour
     /// </summary>
     void OnNewDay()
     {
-        if (numWorkers == 0) return;
+        if(isDeserted) return;
+        if (numWorkers == 0)
+        {
+            DesertFarm();
+        }
 
         daysSinceLastHarvest++;
 
@@ -136,6 +144,15 @@ public class Farm : MonoBehaviour
         int yieldRounded = (int) Mathf.Ceil(yield);
 
         legion.AddResource(Resource.Grain, yieldRounded);
+        BeginNewCycle();
+    }
+
+    /// <summary>
+    /// Removes crop progress and relevant sprites. Use if the farm is for example deserted or pillaged.
+    /// </summary>
+    void DesertFarm()
+    {
+        isDeserted = true;
         BeginNewCycle();
     }
 }

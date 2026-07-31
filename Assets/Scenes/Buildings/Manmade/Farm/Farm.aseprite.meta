@@ -1,0 +1,571 @@
+fileFormatVersion: 2
+guid: fefa79e15e3eef0428c993bfd6bac9ba
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 1
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 0
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 16
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 639210957459061403
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: WheatGrowth3
+    originalName: 
+    pivot: {x: 0.50445104, y: -0.4827586}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 173
+      width: 337
+      height: 29
+    spriteID: 37b4a52ba1c38c0498c21524fd0661c3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 173}
+  - name: WheatGrowth2
+    originalName: 
+    pivot: {x: 0.50591713, y: -0.4827586}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 99
+      width: 338
+      height: 29
+    spriteID: 89a2d78da695a8640ad46cab331c441e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 99}
+  - name: WheatGrowth1
+    originalName: 
+    pivot: {x: 0.50591713, y: -0.4827586}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 136
+      width: 338
+      height: 29
+    spriteID: 92e4b4cf9f3c0de4892bca85ca0de506
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 136}
+  - name: WheatGrowth0
+    originalName: 
+    pivot: {x: 0.50445104, y: -0.4827586}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 210
+      width: 337
+      height: 29
+    spriteID: 15bdaee4f11bdfe4da11621ecef19f6a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 210}
+  - name: Wall
+    originalName: 
+    pivot: {x: 0.50857145, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 247
+      width: 350
+      height: 23
+    spriteID: 9e01e94f25a36174fb1a3daf32556f16
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 247}
+  - name: Building
+    originalName: 
+    pivot: {x: 0.44594595, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 222
+      height: 87
+    spriteID: d08be1012f16cb14789a04fe66456abc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: OneScythe
+    originalName: 
+    pivot: {x: 3.9999995, y: -0.93333334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 473
+      y: 247
+      width: 8
+      height: 15
+    spriteID: 6c2c8540804048d44b91bef47b8927a5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 473, y: 247}
+  - name: TwoScythes
+    originalName: 
+    pivot: {x: 1.9999998, y: -0.93333334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 449
+      y: 247
+      width: 16
+      height: 15
+    spriteID: 30fcd8b48c83fb344a7637023ebcdbf4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 449, y: 247}
+  - name: ThreeScythes
+    originalName: 
+    pivot: {x: 1.0322579, y: -0.93333334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 410
+      y: 247
+      width: 31
+      height: 15
+    spriteID: f5c25a0fa7ae86149b21aa39eb0e961f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 410, y: 247}
+  - name: FourScythes
+    originalName: 
+    pivot: {x: 0.7999999, y: -0.93333334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 362
+      y: 247
+      width: 40
+      height: 15
+    spriteID: ba4f59b6f17498d4b8a36e96e126c224
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 362, y: 247}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: 301240029
+    name: WheatGrowth3
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: WheatGrowth3
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 50
+        y: 14
+        width: 337
+        height: 29
+      spriteId: 37b4a52ba1c38c0498c21524fd0661c3
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 1
+    guid: -1264843912
+    name: WheatGrowth2
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: WheatGrowth2
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 49
+        y: 14
+        width: 338
+        height: 29
+      spriteId: 89a2d78da695a8640ad46cab331c441e
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
+    guid: 1464039443
+    name: WheatGrowth1
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: WheatGrowth1
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 49
+        y: 14
+        width: 338
+        height: 29
+      spriteId: 92e4b4cf9f3c0de4892bca85ca0de506
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 3
+    guid: -102044498
+    name: WheatGrowth0
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: WheatGrowth0
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 50
+        y: 14
+        width: 337
+        height: 29
+      spriteId: 15bdaee4f11bdfe4da11621ecef19f6a
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 4
+    guid: 405905958
+    name: Wall
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Wall
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 42
+        y: 0
+        width: 350
+        height: 23
+      spriteId: 9e01e94f25a36174fb1a3daf32556f16
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 5
+    guid: -757121602
+    name: Building
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Building
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 121
+        y: 0
+        width: 222
+        height: 87
+      spriteId: d08be1012f16cb14789a04fe66456abc
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 6
+    guid: -1779895382
+    name: OneScythe
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: OneScythe
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 188
+        y: 14
+        width: 8
+        height: 15
+      spriteId: 6c2c8540804048d44b91bef47b8927a5
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 7
+    guid: -1514401797
+    name: TwoScythes
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: TwoScythes
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 188
+        y: 14
+        width: 16
+        height: 15
+      spriteId: 30fcd8b48c83fb344a7637023ebcdbf4
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 8
+    guid: 1953750321
+    name: ThreeScythes
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: ThreeScythes
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 188
+        y: 14
+        width: 31
+        height: 15
+      spriteId: f5c25a0fa7ae86149b21aa39eb0e961f
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 9
+    guid: -1058718311
+    name: FourScythes
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: FourScythes
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 188
+        y: 14
+        width: 40
+        height: 15
+      spriteId: ba4f59b6f17498d4b8a36e96e126c224
+    linkedCells: []
+    parentIndex: -1
+  platformSettings:
+  - name: Default
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  generatePhysicsShape: 0
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 440, y: 110}
+  previousTextureSize: {x: 512, y: 512}

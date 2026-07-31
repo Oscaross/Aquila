@@ -115,7 +115,7 @@ Transform:
   m_GameObject: {fileID: -2253911629886400664}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.8, y: 0.81, z: 0}
+  m_LocalPosition: {x: -8.8, y: 0.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -158,10 +158,12 @@ MonoBehaviour:
   - 0.8
   - 0.65
   - 0.5
+  isDeserted: 0
   growthPhaseBackgrounds:
   - {fileID: 7865989093016421247, guid: 0eba7b61f9a640c4bbd4a2a3fef4f651, type: 3}
   - {fileID: -2525939800456440487, guid: 0eba7b61f9a640c4bbd4a2a3fef4f651, type: 3}
-  - {fileID: 1183442283151115253, guid: 0eba7b61f9a640c4bbd4a2a3fef4f651, type: 3}
+  - {fileID: -2005073528141963138, guid: fefa79e15e3eef0428c993bfd6bac9ba, type: 3}
+  - {fileID: 5384153960574561448, guid: fefa79e15e3eef0428c993bfd6bac9ba, type: 3}
   currentBackground: {fileID: -2627818712803395755}
 --- !u!114 &2581505366885001165
 MonoBehaviour:
