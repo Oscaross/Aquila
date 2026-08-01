@@ -22,6 +22,7 @@ public class TimeOfDay : MonoBehaviour
     public int DayCount { get; private set; }
     public static event System.Action OnSunset;
     public static event System.Action OnSunrise;
+    public static event System.Action OnSeasonChanged;
 
     private bool didSunriseHappen = false;
     private bool didSunsetHappen = false;
@@ -94,6 +95,7 @@ public class TimeOfDay : MonoBehaviour
         {
             int seasonIdx = (int) GameTime.CurrentSeason + 1; // casts to indexed season (Spring = 1, Summer = 2...)
             GameTime.CurrentSeason = (Season) (seasonIdx % 4);
+            OnSeasonChanged?.Invoke();
         }
     }
 }

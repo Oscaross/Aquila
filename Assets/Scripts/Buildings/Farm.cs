@@ -139,7 +139,6 @@ public class Farm : MonoBehaviour
         yield *= SeasonTable.Instance.GetCurrentSeasonData().yieldMultiplier;
 
         // Use a Gaussian to add variance. Mean is the calculated yield and standard deviation is 10% of that calculated yield.
-
         yield = Probability.SampleGaussian(yield, yield * 0.1f);
         int yieldRounded = (int) Mathf.Ceil(yield);
 
