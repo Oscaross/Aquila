@@ -10,20 +10,19 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private float idleWaitForSeconds;
     [SerializeField] private Transform dragPoint;
     [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer sr;
 
     private Vector2? idlePoint; // if the NPC is idling this is the random point they're currently idling to
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
     private int dir; // the direction the NPC is currently walking in
     private Rigidbody2D rb;
     private bool waitingToWander;
-    private SpriteRenderer sr;
     private Transform log; // log the worker is currently dragging
 
     private void Awake()
     {
         SetState(LumberjackState.Idling);
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
         // TODO: Make some scheduler/manager system that picks targets better
     }
@@ -85,7 +84,7 @@ public class Lumberjack : MonoBehaviour
         rb.linearVelocity = new Vector2(dir * moveSpeed, rb.linearVelocity.y);
 
         // Rotate in direction NPC travels.
-        sr.flipX = dir < 0;
+        sr.transform.localScale = new Vector3(-dir, 1f, 1f);
 
         float dx = Mathf.Abs(target.x - transform.position.x); // distance to target
 
