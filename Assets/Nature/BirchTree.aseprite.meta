@@ -123,102 +123,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: AutumnLeaves
-    originalName: 
-    pivot: {x: 0.4496124, y: -0.38461542}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 135
-      y: 4
-      width: 129
-      height: 156
-    spriteID: 4e860dec9ecd1ca449551d9e5448e964
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 135, y: 4}
-  - name: SpringLeaves
-    originalName: 
-    pivot: {x: 0.4496124, y: -0.38461542}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 135
-      y: 168
-      width: 129
-      height: 156
-    spriteID: 05188d1bf7d15384c85ab85a1fe24851
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 135, y: 168}
-  - name: SummerLeaves
-    originalName: 
-    pivot: {x: 0.4496124, y: -0.38461542}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 135
-      y: 332
-      width: 129
-      height: 156
-    spriteID: 89b217281ffdc6a4ba8269d5537cc2b3
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 135, y: 332}
-  - name: Stump
-    originalName: 
-    pivot: {x: 0.12499988, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 211
-      width: 8
-      height: 14
-    spriteID: 32546f7773f73404083d388cab2ba870
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 211}
   - name: Branches
     originalName: 
-    pivot: {x: 0.42276418, y: -0.030150754}
+    pivot: {x: 0.42276418, y: -0.5769231}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
-      x: 4
+      x: 141
       y: 4
       width: 123
-      height: 199
+      height: 130
     spriteID: 60b8ac09564b8c146ba24370e4b122af
     spriteBone: []
     spriteOutline: []
@@ -227,61 +143,148 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
+    uvTransform: {x: 141, y: 4}
+  - name: Log
+    originalName: 
+    pivot: {x: 0.076923005, y: -0.03508772}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 141
+      y: 142
+      width: 13
+      height: 171
+    spriteID: 51c56a6008e5ec647a09f56641326556
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 141, y: 142}
+  - name: Stump
+    originalName: 
+    pivot: {x: 0.12499988, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 141
+      y: 321
+      width: 8
+      height: 14
+    spriteID: 080303df2a7043c438b00d69a0189d1d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 141, y: 321}
+  - name: SpringLeaves
+    originalName: 
+    pivot: {x: 0.4496124, y: -0.38461542}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 129
+      height: 156
+    spriteID: bd84bf664c16ab44bac80f46dcb76ff3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: SummerLeaves
+    originalName: 
+    pivot: {x: 0.4496124, y: -0.38461542}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 168
+      width: 129
+      height: 156
+    spriteID: 43c9768026256c947bd57c1445ca36b5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 168}
+  - name: AutumnLeaves
+    originalName: 
+    pivot: {x: 0.4496124, y: -0.38461542}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 332
+      width: 129
+      height: 156
+    spriteID: 770924a8b2c6ed3498977db856379f24
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 332}
   spriteSheetImportData: []
   asepriteLayers:
-  - layerIndex: 4
-    guid: 427235052
-    name: AutumnLeaves
-    layerFlags: 3
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: AutumnLeaves
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 22
-        y: 60
-        width: 129
-        height: 156
-      spriteId: 4e860dec9ecd1ca449551d9e5448e964
-    linkedCells: []
-    parentIndex: -1
   - layerIndex: 2
-    guid: 101116425
-    name: SpringLeaves
+    guid: -21685430
+    name: Branches
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: SpringLeaves
+    - name: Branches
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 22
-        y: 60
-        width: 129
-        height: 156
-      spriteId: 05188d1bf7d15384c85ab85a1fe24851
+        x: 28
+        y: 75
+        width: 123
+        height: 130
+      spriteId: 60b8ac09564b8c146ba24370e4b122af
     linkedCells: []
     parentIndex: -1
-  - layerIndex: 3
-    guid: 1697188545
-    name: SummerLeaves
+  - layerIndex: 1
+    guid: 1502599712
+    name: Log
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: SummerLeaves
+    - name: Log
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 22
-        y: 60
-        width: 129
-        height: 156
-      spriteId: 89b217281ffdc6a4ba8269d5537cc2b3
+        x: 79
+        y: 6
+        width: 13
+        height: 171
+      spriteId: 51c56a6008e5ec647a09f56641326556
     linkedCells: []
     parentIndex: -1
   - layerIndex: 0
@@ -299,25 +302,61 @@ ScriptedImporter:
         y: 0
         width: 8
         height: 14
-      spriteId: 32546f7773f73404083d388cab2ba870
+      spriteId: 080303df2a7043c438b00d69a0189d1d
     linkedCells: []
     parentIndex: -1
-  - layerIndex: 1
-    guid: -21685430
-    name: Branches
+  - layerIndex: 3
+    guid: 101116425
+    name: SpringLeaves
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: Branches
+    - name: SpringLeaves
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 28
-        y: 6
-        width: 123
-        height: 199
-      spriteId: 60b8ac09564b8c146ba24370e4b122af
+        x: 22
+        y: 60
+        width: 129
+        height: 156
+      spriteId: bd84bf664c16ab44bac80f46dcb76ff3
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 4
+    guid: 1697188545
+    name: SummerLeaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: SummerLeaves
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 22
+        y: 60
+        width: 129
+        height: 156
+      spriteId: 43c9768026256c947bd57c1445ca36b5
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 5
+    guid: 427235052
+    name: AutumnLeaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: AutumnLeaves
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 22
+        y: 60
+        width: 129
+        height: 156
+      spriteId: 770924a8b2c6ed3498977db856379f24
     linkedCells: []
     parentIndex: -1
   platformSettings:

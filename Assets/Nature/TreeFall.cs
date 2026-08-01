@@ -5,10 +5,10 @@ using UnityEngine;
 */
 public class TreeFall : MonoBehaviour
 {
-    [SerializeField] private float fallDuration = 1.2f;
     [SerializeField] private float angleStep = 7.5f;
     [SerializeField] private AnimationCurve fallCurve;
 
+    private float fallDurationSeconds;
     private bool isFalling;
     private float elapsed;
     private float targetAngle;
@@ -17,9 +17,11 @@ public class TreeFall : MonoBehaviour
     /// Causes a tree to cleanly fall in the given direction.
     /// </summary>
     /// <param name="direction">The direction the tree should fall. 1 for left and -1 for right.</param>
-    public void Fell(int direction)
+    /// <param name="fallDurationSeconds">How many seconds the tree should take from the function call to it being on the ground ready to collect.</param>
+    public void Fell(int direction, float fallDurationSeconds)
     {
         if (Mathf.Abs(direction) != 1) Debug.LogError("Tree must fall left (direction = 1) or right (direction = -1)!");
+        this.fallDurationSeconds = fallDurationSeconds;
 
         targetAngle = -90f * direction; // -1 * -90 = +90 goes clockwise (right), +1 * -90 = -90 goes anti-clockwise (left).
         elapsed = 0f;
@@ -31,7 +33,7 @@ public class TreeFall : MonoBehaviour
         if (!isFalling) return;
 
         elapsed += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsed / fallDuration);
+        float t = Mathf.Clamp01(elapsed / fallDurationSeconds);
         float angle = fallCurve.Evaluate(t) * targetAngle;
 
         // Snap to discrete steps so that the sprite resamples consistently in pixel art.

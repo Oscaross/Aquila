@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: aeaf2c44d2919ed41a0923ce778f32ad
+guid: f6f10910f5704f243b8a5639d4d1385a
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,10 +33,10 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 2
     spriteExtrude: 1
-    spriteMeshType: 1
+    spriteMeshType: 0
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 16
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -74,7 +74,7 @@ ScriptedImporter:
   previousAsepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -87,7 +87,7 @@ ScriptedImporter:
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 639211103187869805
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: OakTree
+  - name: Branches
     originalName: 
     pivot: {x: 0.516129, y: 0}
     alignment: 9
@@ -135,7 +135,7 @@ ScriptedImporter:
       y: 4
       width: 124
       height: 194
-    spriteID: 08c3ae4c3d0fb8d448eb2f8adcad206d
+    spriteID: 195dd1d7cf153b84abc4da76ef6ad68c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,16 +144,58 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Leaves
+    originalName: 
+    pivot: {x: 0.5068493, y: -0.97058827}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 206
+      width: 146
+      height: 102
+    spriteID: 0b5234c10d9bd8c43b80f17954a7571e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 206}
+  - name: AutumnLeaves
+    originalName: 
+    pivot: {x: 0.5068493, y: -0.97058827}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 316
+      width: 146
+      height: 102
+    spriteID: 548e218b0c1161f438a07c80827a30ac
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 316}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1721703873
-    name: OakTree
-    layerFlags: 0
+    guid: -21685430
+    name: Branches
+    layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: OakTree
+    - name: Branches
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -161,7 +203,43 @@ ScriptedImporter:
         y: 0
         width: 124
         height: 194
-      spriteId: 08c3ae4c3d0fb8d448eb2f8adcad206d
+      spriteId: 195dd1d7cf153b84abc4da76ef6ad68c
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 1
+    guid: 723504390
+    name: Leaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Leaves
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 6
+        y: 99
+        width: 146
+        height: 102
+      spriteId: 0b5234c10d9bd8c43b80f17954a7571e
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
+    guid: 427235052
+    name: AutumnLeaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: AutumnLeaves
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 6
+        y: 99
+        width: 146
+        height: 102
+      spriteId: 548e218b0c1161f438a07c80827a30ac
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -177,8 +255,44 @@ ScriptedImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 160, y: 216}
-  previousTextureSize: {x: 256, y: 256}
+  canvasSize: {x: 160, y: 600}
+  previousTextureSize: {x: 256, y: 512}

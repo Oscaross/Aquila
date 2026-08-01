@@ -8,7 +8,7 @@ using System.Collections;
 public static class Delay
 {
     /// <summary>
-    /// Waits for a given number of seconds before triggering some callback.
+    /// Waits for a given number of seconds before triggering some callback. *NOTE* THIS WILL EXECUTE UNLESS CANCELLED. MAKE SURE TO CANCEL CALLBACKS IF THEY NEED TO BE IGNORED IN SOME CASES.
     /// </summary>
     /// <param name="host">The original caller of this delay.</param>
     /// <param name="seconds">How many seconds to wait, not necessarily a whole number.</param>
@@ -16,6 +16,16 @@ public static class Delay
     /// <returns></returns>
     public static Coroutine WaitThen(MonoBehaviour host, float seconds, System.Action action)
         => host.StartCoroutine(Wait(seconds, action));
+
+    /// <summary>
+    /// Cancels a given delay timer so that the callback is not executed.
+    /// </summary>
+    /// <param name="host">The MonoBehaviour instance that requested the delay.</param>
+    /// <param name="handle">The Coroutine instance of the delay.</param>
+    public static void Cancel(MonoBehaviour host, Coroutine handle)
+    {
+        if (handle != null) host.StopCoroutine(handle);
+    }
 
     private static IEnumerator Wait(float seconds, System.Action action)
     {

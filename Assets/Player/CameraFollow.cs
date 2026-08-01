@@ -10,9 +10,8 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target == null) return; // can't track a null target, this helps us avoid null pointers (otherwise target.position maybe throws)
-
-        Vector3 goal = new Vector3(target.position.x, transform.position.y, transform.position.z); // transform.position.z is our z position, we don't really care about it since this is a 2D game with only two axes
-        transform.position = Vector3.SmoothDamp(transform.position, goal, ref velocity, smoothTime); // computes an acceleration that brings the camera towards its target smoothly
+        if (target == null) return;
+        float x = Mathf.Round(target.position.x * 16f) / 16f;
+        transform.position = new Vector3(x, transform.position.y, transform.position.z);
     }
 }
