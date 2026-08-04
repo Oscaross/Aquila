@@ -1,4 +1,5 @@
 public enum Resource
 {
-    Grain
+    Grain,
+    Wood
 }

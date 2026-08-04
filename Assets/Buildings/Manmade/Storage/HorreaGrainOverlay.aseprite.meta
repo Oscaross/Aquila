@@ -1,0 +1,688 @@
+fileFormatVersion: 2
+guid: 2536cf74bacabee4498aa9e76d1aa0fc
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 1
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 0
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 16
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 639214426741731077
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Horrea
+    originalName: 
+    pivot: {x: 0.359447, y: -0.01923077}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 217
+      height: 104
+    spriteID: 12559b776d3b23d4cb5127371a4dbef3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: GrainStore0
+    originalName: 
+    pivot: {x: 0.8695651, y: -0.54545456}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 399
+      width: 69
+      height: 11
+    spriteID: 9d5394e4666425f42924f4aad5115292
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 399}
+  - name: GrainStore1
+    originalName: 
+    pivot: {x: 0.8695651, y: -0.54545456}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 418
+      width: 69
+      height: 11
+    spriteID: 644bf70f9a070444fad92187bf149177
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 418}
+  - name: GrainStore2
+    originalName: 
+    pivot: {x: 0.8695651, y: -0.33333334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 376
+      width: 69
+      height: 15
+    spriteID: be1bc53ac06ec304ba5554da0efe67e6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 376}
+  - name: GrainStore3
+    originalName: 
+    pivot: {x: 0.8695651, y: -0.2777778}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 350
+      width: 69
+      height: 18
+    spriteID: 24648d2bd9902a74d8c46d2402883bae
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 350}
+  - name: GrainStore4
+    originalName: 
+    pivot: {x: 0.8695651, y: -0.23809524}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 321
+      width: 69
+      height: 21
+    spriteID: 2e2c232100e2f71479a0f210743d9fc0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 321}
+  - name: GrainStore5
+    originalName: 
+    pivot: {x: 0.6593406, y: -0.23809524}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 270
+      width: 91
+      height: 21
+    spriteID: b22b59c9d1176a44eb0f031d5345689b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 270}
+  - name: GrainStore6
+    originalName: 
+    pivot: {x: 0.6666667, y: -0.23809524}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 241
+      width: 93
+      height: 21
+    spriteID: 44dd59ca4f288ef4b9cdf5335a7ed0e9
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 241}
+  - name: GrainStore7
+    originalName: 
+    pivot: {x: 0.60784316, y: -0.23809524}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 212
+      width: 102
+      height: 21
+    spriteID: eebaf2d8d4f46d74f98dd999eea189b8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 212}
+  - name: GrainStore8
+    originalName: 
+    pivot: {x: 0.60784316, y: -0.22727275}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 182
+      width: 102
+      height: 22
+    spriteID: 2ef1bf72c94524b49afeda068a26dc74
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 182}
+  - name: GrainStore9
+    originalName: 
+    pivot: {x: 0.60784316, y: -0.2}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 149
+      width: 102
+      height: 25
+    spriteID: eb13beddfb3f89547a36f014aa078c66
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 149}
+  - name: GrainStore10
+    originalName: 
+    pivot: {x: 0.6296296, y: -0.2}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 116
+      width: 108
+      height: 25
+    spriteID: 15bb818cd1dbdf1408423e564be33732
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 116}
+  - name: GrainOverlay
+    originalName: 
+    pivot: {x: 0.6296296, y: -0.35714287}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 299
+      width: 108
+      height: 14
+    spriteID: 2b1f4299a6dd0f84fae2a0e8f80d7b3d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 299}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: -2053134697
+    name: Horrea
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Horrea
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 85
+        y: 2
+        width: 217
+        height: 104
+      spriteId: 12559b776d3b23d4cb5127371a4dbef3
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 1
+    guid: 843021054
+    name: GrainStore0
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore0
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 6
+        width: 69
+        height: 11
+      spriteId: 9d5394e4666425f42924f4aad5115292
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
+    guid: 843021053
+    name: GrainStore1
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore1
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 6
+        width: 69
+        height: 11
+      spriteId: 644bf70f9a070444fad92187bf149177
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 3
+    guid: 843021052
+    name: GrainStore2
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore2
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 5
+        width: 69
+        height: 15
+      spriteId: be1bc53ac06ec304ba5554da0efe67e6
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 4
+    guid: 843021051
+    name: GrainStore3
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore3
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 5
+        width: 69
+        height: 18
+      spriteId: 24648d2bd9902a74d8c46d2402883bae
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 5
+    guid: 843021058
+    name: GrainStore4
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore4
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 5
+        width: 69
+        height: 21
+      spriteId: 2e2c232100e2f71479a0f210743d9fc0
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 6
+    guid: 843021057
+    name: GrainStore5
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore5
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 103
+        y: 5
+        width: 91
+        height: 21
+      spriteId: b22b59c9d1176a44eb0f031d5345689b
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 7
+    guid: 843021056
+    name: GrainStore6
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore6
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 101
+        y: 5
+        width: 93
+        height: 21
+      spriteId: 44dd59ca4f288ef4b9cdf5335a7ed0e9
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 8
+    guid: 843021055
+    name: GrainStore7
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore7
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 101
+        y: 5
+        width: 102
+        height: 21
+      spriteId: eebaf2d8d4f46d74f98dd999eea189b8
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 9
+    guid: 843021046
+    name: GrainStore8
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore8
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 101
+        y: 5
+        width: 102
+        height: 22
+      spriteId: 2ef1bf72c94524b49afeda068a26dc74
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 10
+    guid: 843021045
+    name: GrainStore9
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore9
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 101
+        y: 5
+        width: 102
+        height: 25
+      spriteId: eb13beddfb3f89547a36f014aa078c66
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 11
+    guid: -398923187
+    name: GrainStore10
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainStore10
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 95
+        y: 5
+        width: 108
+        height: 25
+      spriteId: 15bb818cd1dbdf1408423e564be33732
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 12
+    guid: -1973040211
+    name: GrainOverlay
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrainOverlay
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 95
+        y: 5
+        width: 108
+        height: 14
+      spriteId: 2b1f4299a6dd0f84fae2a0e8f80d7b3d
+    linkedCells: []
+    parentIndex: -1
+  platformSettings:
+  - name: Default
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  generatePhysicsShape: 0
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 326, y: 140}
+  previousTextureSize: {x: 256, y: 512}

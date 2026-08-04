@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a778254287185bf4eb34cec011ccbff4
+guid: c916132a8e57b834994c0d418bda25f6
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -74,7 +74,7 @@ ScriptedImporter:
   previousAsepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -87,7 +87,7 @@ ScriptedImporter:
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639208755145584812
+  platformSettingsDirtyTick: 639213954443734224
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: PlainsBgMed
+  - name: PlainsBgFar
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -134,8 +134,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 640
-      height: 236
-    spriteID: db36702c1372aa84f8221bf3ed18a7b0
+      height: 270
+    spriteID: d4bba9b4ccc48e14f8c9bc3b2f8a5b5b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,12 +144,72 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: PlainsBgMed
+    originalName: 
+    pivot: {x: 0.5, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 282
+      width: 640
+      height: 236
+    spriteID: dfdbbf3a6d10bc343afebeb9496671c3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 282}
+  - name: PlainsBgClose
+    originalName: 
+    pivot: {x: 0.5, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 526
+      width: 640
+      height: 227
+    spriteID: e9bd3c324412ac543b7bb03453561bbd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 526}
   spriteSheetImportData: []
   asepriteLayers:
-  - layerIndex: 0
+  - layerIndex: 1
+    guid: 2117357429
+    name: PlainsBgFar
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: PlainsBgFar
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 640
+        height: 270
+      spriteId: d4bba9b4ccc48e14f8c9bc3b2f8a5b5b
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
     guid: 147988486
     name: PlainsBgMed
-    layerFlags: 0
+    layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
@@ -161,7 +221,25 @@ ScriptedImporter:
         y: 0
         width: 640
         height: 236
-      spriteId: db36702c1372aa84f8221bf3ed18a7b0
+      spriteId: dfdbbf3a6d10bc343afebeb9496671c3
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 3
+    guid: -177499736
+    name: PlainsBgClose
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: PlainsBgClose
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 640
+        height: 227
+      spriteId: e9bd3c324412ac543b7bb03453561bbd
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -217,4 +295,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 640, y: 360}
-  previousTextureSize: {x: 1024, y: 256}
+  previousTextureSize: {x: 1024, y: 1024}

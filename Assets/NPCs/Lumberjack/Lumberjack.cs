@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/**
+ * Controls the state and behaviour logic of the lumberjack NPC which is responsible for cutting down trees, dragging them back to camp and processing them.
+*/
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Lumberjack : MonoBehaviour
 {
@@ -11,6 +15,7 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private Transform dragPoint;
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private float chopIntervalSeconds = 0.7f; // the number of seconds we must wait between chops
 
     private Vector2? idlePoint; // if the NPC is idling this is the random point they're currently idling to
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
@@ -18,12 +23,15 @@ public class Lumberjack : MonoBehaviour
     private Rigidbody2D rb;
     private bool waitingToWander;
     private Transform log; // log the worker is currently dragging
+    private float chopTimerSeconds; // how many secs since we last did a chop
+    private LegionResources legion;
 
     private void Awake()
     {
         SetState(LumberjackState.Idling);
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
+        legion = GetComponentInParent<LegionResources>();
         // TODO: Make some scheduler/manager system that picks targets better
     }
 
@@ -41,8 +49,18 @@ public class Lumberjack : MonoBehaviour
 
     private void StartChopping()
     {
+        if (currentState == LumberjackState.Chopping) return; // guard against re-entry, we only can start once
+        // Subscribe to the tree being felled
+        currentTarget.OnTreeFelled += StartDragging;
+        currentTarget.OnTreeStartFalling += FinishChopping;
         SetState(LumberjackState.Chopping);
-        currentTarget.ChopDown(dir, StartDragging);
+        chopTimerSeconds = chopIntervalSeconds; // we want to power up, not go straight into a chop so this needs to wait its full cooldown first
+    }
+
+    private void FinishChopping()
+    {
+        currentTarget.OnTreeStartFalling -= FinishChopping;
+        SetState(LumberjackState.IdlingStill); // he will simply stand at the tree until it gets felled - we probs want a state for this too eventually like StillIdle?
     }
 
     private void StartDragging()
@@ -51,7 +69,6 @@ public class Lumberjack : MonoBehaviour
         log.SetParent(dragPoint, false);
         log.localPosition = Vector3.zero; // no offset around the lumberjack EXCEPT for the drag point
 
-        currentTarget = null;
         SetState(LumberjackState.Dragging);
     }
 
@@ -59,8 +76,19 @@ public class Lumberjack : MonoBehaviour
     {
         Destroy(log.gameObject); // TODO: More elegant way of disposing of the log
 
+        int yield = currentTarget.GetWoodYield();
+        legion.AddResource(Resource.Wood, yield);
+
+        currentTarget.OnTreeFelled -= StartDragging;
+
+        currentTarget = null; // lumberjack is done with this tree
+
+        Debug.Log($"Wood delivered: {yield}");
+
         SetState(LumberjackState.Depositing);
         currentCallback = Delay.WaitThen(this, 4f, () => currentState = LumberjackState.Idling); // we want the guy to wait for a bit after dropping the logs off
+
+        
     }
 
     private void OnIdleTargetReached()
@@ -97,12 +125,23 @@ public class Lumberjack : MonoBehaviour
 
     private void SetState(LumberjackState next)
     {
+        Debug.Log($"{currentState} → {next}");
         currentState = next;
         animator.SetInteger("State", (int) next);
     }
 
     private void Update()
     {
+        if (currentState == LumberjackState.Chopping)
+        {
+            chopTimerSeconds -= Time.deltaTime;
+            if (chopTimerSeconds <= 0f)
+            {
+                chopTimerSeconds = chopIntervalSeconds;
+                currentTarget.Chop(dir);
+            }
+        }
+
         if (currentState == LumberjackState.Idling && currentTarget != null)
             SetState(LumberjackState.WalkingTo);
     }
@@ -138,6 +177,6 @@ enum LumberjackState
     WalkingTo = 2,
     Chopping = 4,
     Dragging = 1,
-    Depositing = 0
+    Depositing = 0,
+    IdlingStill = 5
 }
-

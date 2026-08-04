@@ -6,16 +6,25 @@ using UnityEngine;
 
 public class FunctionalTree : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer leaves;
-    [SerializeField] SpriteRenderer stump;
-    [SerializeField] SpriteRenderer branches;
-    [SerializeField] SpriteRenderer log;
-    [SerializeField] private int currentGrowthPhase = 0;
-    [SerializeField] private Sprite[] growthPhases;
+    [Header("Rendering")]
+    [SerializeField] SpriteRenderer leaves; // leaves get changed by season/removed in winter
+    [SerializeField] SpriteRenderer stump; // stumps remain after a tree is chopped
+    [SerializeField] SpriteRenderer branches; // branches are removed when the tree falls
+    [SerializeField] SpriteRenderer log; // logs are dragged back by lumberjacks after felling
+
+    [Header("Logic")]
+    [SerializeField] private int currentGrowthPhase = 0; 
+    [SerializeField] private Sprite[] growthPhases; // the various sapling sprites for this tree
     [SerializeField] private Sprite[] seasonalLeaves;
-    [SerializeField] private int daysBetweenGrowthPhase = 3;
-    [SerializeField] private int daysSinceLastGrew = 0;
-    [SerializeField] private float fallDurationSeconds = 7f;
+    [SerializeField] private int daysBetweenGrowthPhase = 3; // how long it takes to go to the next sapling sprite
+    [SerializeField] private int daysSinceLastGrew = 0; 
+    [SerializeField] private float fallDurationSeconds = 3f;
+    [SerializeField] private int hardness = 5; // how many hits of an axe it takes for the tree to fall
+    [SerializeField] private int waitAfterFellSeconds = 2; // how long in secs we wait after the tree is felled before emitting the on felled signal
+    [SerializeField] private int baseWoodYield = 50;
+
+    public event System.Action OnTreeFelled; // called after the tree settles and has hit the ground
+    public event System.Action OnTreeStartFalling; // called immediately when the tree begins its fell animation
 
     /// <summary>
     /// Is a worker coming to chop down this tree?
@@ -31,10 +40,14 @@ public class FunctionalTree : MonoBehaviour
     public float FallDurationSeconds => fallDurationSeconds;
 
     private TreeFall treeFallManager;
+    private Shaker shaker;
+    private int treeHealth; // how many chops has this particular tree had
 
     private void Awake()
     {
         treeFallManager = GetComponentInChildren<TreeFall>();
+        shaker = GetComponentInChildren<Shaker>();
+        treeHealth = hardness; // the tree starts with its total hardness as its health
     }
 
     private void OnEnable()
@@ -63,12 +76,31 @@ public class FunctionalTree : MonoBehaviour
         Debug.Log(seasonIdx);
     }
 
-    [ContextMenu("Chop Down")]
-    public void ChopDown(int chopDirection, System.Action onChopped = null)
+    public void Chop(int chopDirection)
+    {
+        treeHealth--;
+        shaker.Shake();
+
+        if (treeHealth <= 0)
+        {
+            Fell(chopDirection);
+            OnTreeStartFalling.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Returns the amount of wood that this tree produced.
+    /// </summary>
+    /// <returns>The amount of wood this tree produced.</returns>
+    public int GetWoodYield()
+    {
+        return baseWoodYield;
+    }
+
+    private void Fell(int chopDirection)
     {
         treeFallManager.Fell(chopDirection, fallDurationSeconds);
-
-        Delay.WaitThen(this, fallDurationSeconds + 2f, onChopped); // wait before we call back the lumberjack to drag the tree
+        Delay.WaitThen(this, fallDurationSeconds + waitAfterFellSeconds, () => OnTreeFelled?.Invoke());
     }
 
     public Transform DetachLog()

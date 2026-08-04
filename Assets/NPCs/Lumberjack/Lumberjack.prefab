@@ -192,11 +192,12 @@ MonoBehaviour:
   currentState: 0
   currentTarget: {fileID: 0}
   moveSpeed: 2
-  pathfindingClosenessThreshold: 0.05
-  idleWaitForSeconds: 3
+  pathfindingClosenessThreshold: 0.75
+  idleWaitForSeconds: 6
   dragPoint: {fileID: 8875623422966198629}
   animator: {fileID: 4820557784935041640}
   sr: {fileID: 1096532198268489828}
+  chopIntervalSeconds: 1.7
 --- !u!50 &8195466164246745974
 Rigidbody2D:
   serializedVersion: 5
