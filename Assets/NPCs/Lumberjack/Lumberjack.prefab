@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283512883540952344}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.71263844, w: 0.70153147}
+  m_LocalPosition: {x: 0, y: 2.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5877669868917249027}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90.9}
 --- !u!1 &7628269933980779512
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,13 +107,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -941765836099332672, guid: a42e7249bb2f76043bf0ee504cd5ffdb, type: 3}
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 6222332352704014887, guid: 38392cae72ca8604592a55e4ac37abac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.5}
+  m_Size: {x: 1.0625, y: 1.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -198,6 +198,7 @@ MonoBehaviour:
   animator: {fileID: 4820557784935041640}
   sr: {fileID: 1096532198268489828}
   chopIntervalSeconds: 1.7
+  lookForJobProbability: 0.3
 --- !u!50 &8195466164246745974
 Rigidbody2D:
   serializedVersion: 5
@@ -224,7 +225,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &4109035397841535350
 BoxCollider2D:
   m_ObjectHideFlags: 0

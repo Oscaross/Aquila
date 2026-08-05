@@ -76,7 +76,8 @@ MonoBehaviour:
   fallDurationSeconds: 3
   hardness: 5
   waitAfterFellSeconds: 2
-  isTargeted: 0
+  baseWoodYield: 5
+  IsTargeted: 0
 --- !u!1 &3999326861920556078
 GameObject:
   m_ObjectHideFlags: 0

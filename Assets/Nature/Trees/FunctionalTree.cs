@@ -29,7 +29,12 @@ public class FunctionalTree : MonoBehaviour
     /// <summary>
     /// Is a worker coming to chop down this tree?
     /// </summary>
-    public bool isTargeted = false;
+    public bool IsTargeted = false;
+    /// <summary>
+    /// Has this tree been chopped down?
+    /// </summary>
+    public bool IsFelled => isFelled;
+    private bool isFelled = false;
     /// <summary>
     /// What stage in the growth cycle is the tree at (i.e. sapling, almost grown, fully grown)
     /// </summary>
@@ -100,6 +105,7 @@ public class FunctionalTree : MonoBehaviour
     private void Fell(int chopDirection)
     {
         treeFallManager.Fell(chopDirection, fallDurationSeconds);
+        isFelled = true;
         Delay.WaitThen(this, fallDurationSeconds + waitAfterFellSeconds, () => OnTreeFelled?.Invoke());
     }
 

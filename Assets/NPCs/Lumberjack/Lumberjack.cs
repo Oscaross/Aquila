@@ -16,15 +16,18 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private float chopIntervalSeconds = 0.7f; // the number of seconds we must wait between chops
+    [SerializeField] private float lookForJobProbability = 0.3f;
 
-    private Vector2? idlePoint; // if the NPC is idling this is the random point they're currently idling to
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
     private int dir; // the direction the NPC is currently walking in
     private Rigidbody2D rb;
-    private bool waitingToWander;
     private Transform log; // log the worker is currently dragging
     private float chopTimerSeconds; // how many secs since we last did a chop
     private LegionResources legion;
+    private LumberjackWorkQueue workQueue;
+    private Vector2 destination; // where are we pathfinding to
+    private System.Action onArrive; // what function do we call when we reach our destination
+    private Vector2 logStorePos; // where the log store (horrea) is located
 
     private void Awake()
     {
@@ -32,7 +35,14 @@ public class Lumberjack : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         legion = GetComponentInParent<LegionResources>();
-        // TODO: Make some scheduler/manager system that picks targets better
+        workQueue = GetComponentInParent<LumberjackWorkQueue>();
+
+        logStorePos = legion.GetStore(Resource.Wood).transform.position; // TODO: Will throw null if the building isn't built yet, but idk whether lumberjacks can even exist if this building doesn't
+    }
+
+    private void Start()
+    {
+        ChangeIdleTarget(); // kickstart the state cycle
     }
 
     private void AssignTarget(FunctionalTree target)
@@ -40,11 +50,11 @@ public class Lumberjack : MonoBehaviour
         Delay.Cancel(this, currentCallback); // we're likely waiting on the next idling cycle, but if we do then there's a risk that our target gets overwritten by trivial idling code instead
 
         currentTarget = target;
-        currentCallback = null;
-        waitingToWander = false;
-        idlePoint = null;
 
-        SetState(LumberjackState.WalkingTo);
+        target.IsTargeted = true;
+        currentCallback = null;
+
+        SetDestination(target.transform.position, StartChopping);
     }
 
     private void StartChopping()
@@ -60,7 +70,7 @@ public class Lumberjack : MonoBehaviour
     private void FinishChopping()
     {
         currentTarget.OnTreeStartFalling -= FinishChopping;
-        SetState(LumberjackState.IdlingStill); // he will simply stand at the tree until it gets felled - we probs want a state for this too eventually like StillIdle?
+        SetState(LumberjackState.Idling); // he will simply stand at the tree until it gets felled - we probs want a state for this too eventually like StillIdle?
     }
 
     private void StartDragging()
@@ -83,27 +93,37 @@ public class Lumberjack : MonoBehaviour
 
         currentTarget = null; // lumberjack is done with this tree
 
-        Debug.Log($"Wood delivered: {yield}");
-
         SetState(LumberjackState.Depositing);
-        currentCallback = Delay.WaitThen(this, 4f, () => currentState = LumberjackState.Idling); // we want the guy to wait for a bit after dropping the logs off
+        currentCallback = Delay.WaitThen(this, 1f, () => ChangeIdleTarget()); // we want the guy to wait for a bit after dropping the logs off
 
         
     }
 
     private void OnIdleTargetReached()
     {
-        idlePoint = null;
-        waitingToWander = true;
+        SetState(LumberjackState.Idling);
+        // Randomly look for a job once, if we get one great, go for it, otherwise continue idling.
+        if (Random.value < lookForJobProbability)
+        {
+            FunctionalTree target;
+            if (workQueue.TryGetJob(transform.position, out target))
+            {
+                AssignTarget(target);
+                return;
+            }
+        }
+
         currentCallback = Delay.WaitThen(this, idleWaitForSeconds, ChangeIdleTarget);
     }
 
     private void ChangeIdleTarget()
     {
-        waitingToWander = false;
-        idlePoint = new Vector2(
+        SetState(LumberjackState.WalkingTo);
+        Vector2 idlePoint = new Vector2(
             transform.position.x + (Random.value < 0.5f ? -1 : 1) * Random.Range(1f, 3f),
             transform.position.y);
+
+        SetDestination(idlePoint, OnIdleTargetReached);
     }
     private void PathfindTo(Vector2 target, System.Action onTargetReached)
     {
@@ -125,9 +145,15 @@ public class Lumberjack : MonoBehaviour
 
     private void SetState(LumberjackState next)
     {
-        Debug.Log($"{currentState} → {next}");
         currentState = next;
         animator.SetInteger("State", (int) next);
+    }
+
+    private void SetDestination(Vector2 target, System.Action onArrived)
+    {
+        destination = target;
+        onArrive = onArrived;
+        SetState(LumberjackState.WalkingTo);
     }
 
     private void Update()
@@ -141,25 +167,15 @@ public class Lumberjack : MonoBehaviour
                 currentTarget.Chop(dir);
             }
         }
-
-        if (currentState == LumberjackState.Idling && currentTarget != null)
-            SetState(LumberjackState.WalkingTo);
     }
 
     private void FixedUpdate()
     {
         switch (currentState)
         {
-            // Randomly walk around
-            case LumberjackState.Idling:
-                if (idlePoint.HasValue)
-                    PathfindTo(idlePoint.Value, OnIdleTargetReached);
-                else if (!waitingToWander)
-                    ChangeIdleTarget();
-                break;
             // Walk to the tree
             case LumberjackState.WalkingTo:
-                PathfindTo(currentTarget.transform.position, StartChopping);
+                PathfindTo(destination, onArrive);
                 break;
             // Drag back to the camp (currently 0, 0)
             case LumberjackState.Dragging:
@@ -173,10 +189,9 @@ public class Lumberjack : MonoBehaviour
 
 enum LumberjackState
 {
-    Idling = 3,
-    WalkingTo = 2,
-    Chopping = 4,
-    Dragging = 1,
-    Depositing = 0,
-    IdlingStill = 5
+    Idling = 0,
+    WalkingTo = 1,
+    Chopping = 2,
+    Dragging = 3,
+    Depositing = 4
 }

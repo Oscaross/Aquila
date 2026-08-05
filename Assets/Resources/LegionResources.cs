@@ -31,6 +31,21 @@ public class LegionResources : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns a reference to the resource store building for some given resource, null if none exists.
+    /// </summary>
+    /// <param name="r">The resource for which the store should contain.</param>
+    /// <returns>Reference to the building, null if one is not placed.</returns>
+    public ResourceStoreBuilding GetStore(Resource r)
+    {
+        foreach (var s in GetComponentsInChildren<ResourceStoreBuilding>())
+        {
+            if (s.Resource == r) return s;
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Fetches the count of a given resource.
     /// </summary>
     /// <param name="resource">The resource to query (e.g. grain).</param>

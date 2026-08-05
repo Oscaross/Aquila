@@ -12,6 +12,8 @@ public class ResourceStoreBuilding : MonoBehaviour
     [SerializeField] private SpriteRenderer currentDiageticState;
     [SerializeField] private Resource resource;
 
+    public Resource Resource => resource;
+
     private LegionResources legion;
 
     private void Awake()
