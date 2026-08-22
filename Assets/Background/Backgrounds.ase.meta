@@ -132,7 +132,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 4
+      y: 372
       width: 640
       height: 270
     spriteID: d4bba9b4ccc48e14f8c9bc3b2f8a5b5b
@@ -143,7 +143,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
+    uvTransform: {x: 4, y: 372}
   - name: PlainsBgMed
     originalName: 
     pivot: {x: 0.5, y: 0}
@@ -153,10 +153,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 282
+      y: 650
       width: 640
-      height: 236
-    spriteID: dfdbbf3a6d10bc343afebeb9496671c3
+      height: 199
+    spriteID: fd32001dd2fba49b283a670646be5d9d
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -164,8 +164,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 282}
-  - name: PlainsBgClose
+    uvTransform: {x: 4, y: 650}
+  - name: Sky
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -174,10 +174,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 526
+      y: 4
       width: 640
-      height: 227
-    spriteID: e9bd3c324412ac543b7bb03453561bbd
+      height: 360
+    spriteID: 2fec64215da414793865a024a5914143
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -185,7 +185,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 526}
+    uvTransform: {x: 4, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 1
@@ -220,26 +220,26 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 640
-        height: 236
-      spriteId: dfdbbf3a6d10bc343afebeb9496671c3
+        height: 199
+      spriteId: fd32001dd2fba49b283a670646be5d9d
     linkedCells: []
     parentIndex: -1
-  - layerIndex: 3
-    guid: -177499736
-    name: PlainsBgClose
+  - layerIndex: 0
+    guid: -822998763
+    name: Sky
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: PlainsBgClose
+    - name: Sky
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
         width: 640
-        height: 227
-      spriteId: e9bd3c324412ac543b7bb03453561bbd
+        height: 360
+      spriteId: 2fec64215da414793865a024a5914143
     linkedCells: []
     parentIndex: -1
   platformSettings:
