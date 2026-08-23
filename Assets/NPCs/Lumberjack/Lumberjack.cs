@@ -9,8 +9,6 @@ public class Lumberjack : MonoBehaviour
 {
     [SerializeField] private LumberjackState currentState;
     [SerializeField] private FunctionalTree currentTarget;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float pathfindingClosenessThreshold; // how close in world units we have to be before we've reached our pathfinding target
     [SerializeField] private float idleWaitForSeconds;
     [SerializeField] private Transform dragPoint;
     [SerializeField] private Animator animator;
@@ -19,23 +17,20 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private float lookForJobProbability = 0.3f;
 
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
-    private int dir; // the direction the NPC is currently walking in
-    private Rigidbody2D rb;
     private Transform log; // log the worker is currently dragging
     private float chopTimerSeconds; // how many secs since we last did a chop
     private LegionResources legion;
+    private Pathfinder pathfinder;
     private LumberjackWorkQueue workQueue;
-    private Vector2 destination; // where are we pathfinding to
-    private System.Action onArrive; // what function do we call when we reach our destination
     private Vector2 logStorePos; // where the log store (horrea) is located
 
     private void Awake()
     {
         SetState(LumberjackState.Idling);
-        rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         legion = GetComponentInParent<LegionResources>();
         workQueue = GetComponentInParent<LumberjackWorkQueue>();
+        pathfinder = GetComponent<Pathfinder>();
 
         logStorePos = legion.GetStore(Resource.Wood).transform.position; // TODO: Will throw null if the building isn't built yet, but idk whether lumberjacks can even exist if this building doesn't
     }
@@ -54,7 +49,8 @@ public class Lumberjack : MonoBehaviour
         target.IsTargeted = true;
         currentCallback = null;
 
-        SetDestination(target.transform.position, StartChopping);
+        SetState(LumberjackState.WalkingTo);
+        pathfinder.PathfindTo(target.transform.position, StartChopping);
     }
 
     private void StartChopping()
@@ -81,6 +77,7 @@ public class Lumberjack : MonoBehaviour
         log.localRotation = Quaternion.identity;
 
         SetState(LumberjackState.Dragging);
+        pathfinder.PathfindTo(logStorePos, StoreWood);
     }
 
     private void StoreWood()
@@ -96,8 +93,6 @@ public class Lumberjack : MonoBehaviour
 
         SetState(LumberjackState.Depositing);
         currentCallback = Delay.WaitThen(this, 1f, () => ChangeIdleTarget()); // we want the guy to wait for a bit after dropping the logs off
-
-        
     }
 
     private void OnIdleTargetReached()
@@ -124,37 +119,13 @@ public class Lumberjack : MonoBehaviour
             transform.position.x + (Random.value < 0.5f ? -1 : 1) * Random.Range(1f, 3f),
             transform.position.y);
 
-        SetDestination(idlePoint, OnIdleTargetReached);
-    }
-    private void PathfindTo(Vector2 target, System.Action onTargetReached)
-    {
-        // Move the physical body to the target.
-        dir = (int) Mathf.Sign(target.x - transform.position.x);
-        rb.linearVelocity = new Vector2(dir * moveSpeed, rb.linearVelocity.y);
-
-        // Rotate in direction NPC travels.
-        sr.transform.localScale = new Vector3(-dir, 1f, 1f);
-
-        float dx = Mathf.Abs(target.x - transform.position.x); // distance to target
-
-        if (dx <= pathfindingClosenessThreshold) 
-        {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            onTargetReached?.Invoke();
-        }
+        pathfinder.PathfindTo(idlePoint, OnIdleTargetReached);
     }
 
     private void SetState(LumberjackState next)
     {
         currentState = next;
         animator.SetInteger("State", (int) next);
-    }
-
-    private void SetDestination(Vector2 target, System.Action onArrived)
-    {
-        destination = target;
-        onArrive = onArrived;
-        SetState(LumberjackState.WalkingTo);
     }
 
     private void Update()
@@ -165,25 +136,8 @@ public class Lumberjack : MonoBehaviour
             if (chopTimerSeconds <= 0f)
             {
                 chopTimerSeconds = chopIntervalSeconds;
-                currentTarget.Chop(dir);
+                currentTarget.Chop(pathfinder.Facing);
             }
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        switch (currentState)
-        {
-            // Walk to the tree
-            case LumberjackState.WalkingTo:
-                PathfindTo(destination, onArrive);
-                break;
-            // Drag back to the camp (currently 0, 0)
-            case LumberjackState.Dragging:
-                PathfindTo(Vector2.zero, StoreWood);
-                break;
-            default:
-                break;
         }
     }
 }
