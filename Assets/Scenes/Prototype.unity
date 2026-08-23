@@ -534,6 +534,22 @@ PrefabInstance:
       value: ZenithSky
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
+      propertyPath: m_Color.b
+      value: 0.72730285
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
+      propertyPath: m_Color.g
+      value: 0.60060894
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5441971
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
       propertyPath: m_SortingOrder
       value: -110
       objectReference: {fileID: 0}
@@ -670,6 +686,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: effa16199577b594aa3b75112ce50e2c, type: 3}
   m_PrefabInstance: {fileID: 212786599}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &214148984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 214148986}
+  - component: {fileID: 214148985}
+  m_Layer: 0
+  m_Name: SkyController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &214148985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214148984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d8e904bb4fcfe14ea291a9b8c486aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 11400000, guid: 3f3d8aac988f2d9409fb0fd2619f29ff, type: 2}
+  horizonY: 0
+--- !u!4 &214148986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214148984}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1268382, y: -2.0578501, z: 0.16184571}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &258039251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1916,6 +1978,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Farm
       objectReference: {fileID: 0}
+    - target: {fileID: 2876556759032312053, guid: b23e7c8ea681c52449332085376e542f, type: 3}
+      propertyPath: isDeserted
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: b23e7c8ea681c52449332085376e542f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2099,7 +2165,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: -10}
+  m_LocalPosition: {x: 0, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2514,12 +2580,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -50
-  m_Sprite: {fileID: -8763182980925395080, guid: c916132a8e57b834994c0d418bda25f6, type: 3}
+  m_Sprite: {fileID: -5612263482244727026, guid: c916132a8e57b834994c0d418bda25f6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 40, y: 12.3125}
+  m_Size: {x: 160, y: 4.8125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2534,7 +2600,7 @@ Transform:
   m_GameObject: {fileID: 626745556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalPosition: {x: 0, y: -3.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2566,8 +2632,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 626745557}
-  preset: {fileID: 11400000, guid: 3f3d8aac988f2d9409fb0fd2619f29ff, type: 2}
-  depthFactor: 0.5
+  sky: {fileID: 214148985}
+  lightResponse: 1
 --- !u!1 &646244929
 GameObject:
   m_ObjectHideFlags: 0
@@ -3176,6 +3242,22 @@ PrefabInstance:
     - target: {fileID: -2253911629886400664, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
       propertyPath: m_Name
       value: HorizonSky
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
+      propertyPath: m_Color.a
+      value: 0.6991492
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
+      propertyPath: m_Color.b
+      value: 0.38039216
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
+      propertyPath: m_Color.g
+      value: 0.54940236
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8948312
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: 232de4bbe4be44a458f351324ec806b1, type: 3}
       propertyPath: m_SortingOrder
@@ -4042,7 +4124,7 @@ Transform:
   m_GameObject: {fileID: 1863114209}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 0, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4065,7 +4147,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zenith: {fileID: 176454925}
   horizon: {fileID: 1346193397}
-  preset: {fileID: 11400000, guid: 3f3d8aac988f2d9409fb0fd2619f29ff, type: 2}
 --- !u!4 &1880354132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5877669868917249027, guid: 9a889eb289818c24eaf677f707cf7819, type: 3}
@@ -4261,7 +4342,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 40, y: 16.875}
+  m_Size: {x: 160, y: 11.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -4276,7 +4357,7 @@ Transform:
   m_GameObject: {fileID: 1988298494}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -11, z: 0}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4308,8 +4389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1988298495}
-  preset: {fileID: 11400000, guid: 3f3d8aac988f2d9409fb0fd2619f29ff, type: 2}
-  depthFactor: 0.7
+  sky: {fileID: 214148985}
+  lightResponse: 1
 --- !u!1 &2047811900
 GameObject:
   m_ObjectHideFlags: 0
@@ -4633,3 +4714,4 @@ SceneRoots:
   - {fileID: 503026732}
   - {fileID: 262229543}
   - {fileID: 564239049}
+  - {fileID: 214148986}

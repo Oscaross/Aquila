@@ -43,11 +43,13 @@ Material:
     m_Floats:
     - _Curve: 1.6
     - _Cutoff: 0.5
+    - _Desat: 0.16
     - _EnableExternalAlpha: 0
+    - _HighlightKeep: 0.3
     - _HorizonY: 0
     - _LayerHaze: 0.1
     - _PPU: 16
-    - _RampAmount: 0.08
+    - _RampAmount: 0.02
     - _RampHeight: 12
     - _Steps: 32
     - _ZWrite: 0
