@@ -31,8 +31,18 @@ public class TreeSpawnZone : MonoBehaviour
     public float Occupancy => CarryingCapacity > 0f ? CurrentDensity / CarryingCapacity : 1f;
     public IReadOnlyList<FunctionalTree> TreesInZone => treesInZone;
 
-    public void AddTree(FunctionalTree t) => treesInZone.Add(t);
-    public void RemoveTree(FunctionalTree t) => treesInZone.Remove(t);
+    public void AddTree(FunctionalTree t)
+    {
+        treesInZone.Add(t);
+        t.OnTreeExpired += RemoveTree; // once the tree is ready to be removed we'll call the RemoveTree subscriber and it will safely dispatch the tree from memory + hierarchy
+    }
+
+    public void RemoveTree(FunctionalTree t)
+    {
+        t.OnTreeExpired -= RemoveTree;
+        treesInZone.Remove(t);
+        Destroy(t.gameObject);
+    }
 
     public bool TryGetSpawnPosition(out float x, int attempts = 10)
     {
@@ -41,7 +51,6 @@ public class TreeSpawnZone : MonoBehaviour
         for (int i = 0; i < attempts; i++)
         {
             x = Random.Range(XMin, XMax);
-            Debug.Log($"Sampled spawn pos at {x}");
             if (CanSpawnAt(x)) return true;
         }
         x = 0f;

@@ -45,7 +45,7 @@ public class TreeSpawner : MonoBehaviour
         return result;
     }
 
-    public List<FunctionalTree> GetChoppableTreesInRange(float xMin, float xMax) => GetTreesInRange(xMin, xMax).Where(t => t != null && !t.IsTargeted && !t.IsFelled).ToList();
+    public List<FunctionalTree> GetChoppableTreesInRange(float xMin, float xMax) => GetTreesInRange(xMin, xMax).Where(t => t != null && t.CanTarget).ToList();
 
     private void GenerateNewForest()
     {

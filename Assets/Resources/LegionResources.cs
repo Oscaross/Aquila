@@ -107,8 +107,6 @@ public class LegionResources : MonoBehaviour
         if (delta >= significantResourceChangeThreshold)
         {
             SignificantResourceChangeOccurred?.Invoke(r);
-            Debug.Log("Significant resource change detected.");
         }
-
     }
 }

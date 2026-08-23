@@ -78,6 +78,7 @@ public class Lumberjack : MonoBehaviour
         log = currentTarget.DetachLog(); // gain reference to the transform of the log part of the felled tree
         log.SetParent(dragPoint, false);
         log.localPosition = Vector3.zero; // no offset around the lumberjack EXCEPT for the drag point
+        log.localRotation = Quaternion.identity;
 
         SetState(LumberjackState.Dragging);
     }

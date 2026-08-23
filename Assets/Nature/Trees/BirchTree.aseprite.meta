@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Branches
+  - name: GrowthPhase2
     originalName: 
-    pivot: {x: 0.42276418, y: -0.5769231}
+    pivot: {x: 0.35135138, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 141
       y: 4
-      width: 123
-      height: 130
-    spriteID: 60b8ac09564b8c146ba24370e4b122af
+      width: 37
+      height: 98
+    spriteID: 4e5d91d406418b7479413715f807305b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,19 +144,19 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 141, y: 4}
-  - name: Log
+  - name: GrowthPhase1
     originalName: 
-    pivot: {x: 0.076923005, y: -0.03508772}
+    pivot: {x: 0.1333332, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 141
-      y: 142
-      width: 13
-      height: 171
-    spriteID: 51c56a6008e5ec647a09f56641326556
+      y: 110
+      width: 15
+      height: 44
+    spriteID: 2b4ec515705c6674a857c63a81d628c2
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -164,7 +164,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 141, y: 142}
+    uvTransform: {x: 141, y: 110}
   - name: Stump
     originalName: 
     pivot: {x: 0.12499988, y: 0}
@@ -173,11 +173,11 @@ ScriptedImporter:
     customData: 
     rect:
       serializedVersion: 2
-      x: 141
-      y: 321
+      x: 164
+      y: 110
       width: 8
       height: 14
-    spriteID: 080303df2a7043c438b00d69a0189d1d
+    spriteID: 68c32dba03da0ff4f83ab1b95c36b2f1
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -185,8 +185,50 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 141, y: 321}
-  - name: SpringLeaves
+    uvTransform: {x: 164, y: 110}
+  - name: Log
+    originalName: 
+    pivot: {x: 0.076923005, y: -0.03508772}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 306
+      width: 13
+      height: 171
+    spriteID: 99b069549241d2e488384be31324acc6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 306}
+  - name: Branches
+    originalName: 
+    pivot: {x: 0.42276418, y: -0.5769231}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 168
+      width: 123
+      height: 130
+    spriteID: 196e3b5e10e684a42aedffd7b9a69ee3
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 168}
+  - name: Leaves
     originalName: 
     pivot: {x: 0.4496124, y: -0.38461542}
     alignment: 9
@@ -198,7 +240,7 @@ ScriptedImporter:
       y: 4
       width: 129
       height: 156
-    spriteID: bd84bf664c16ab44bac80f46dcb76ff3
+    spriteID: 35048a83980aeaa46aa8231dd1b5e31e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -207,19 +249,19 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: SummerLeaves
+  - name: GrowthPhase0
     originalName: 
-    pivot: {x: 0.4496124, y: -0.38461542}
+    pivot: {x: -0.4285717, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
-      y: 168
-      width: 129
-      height: 156
-    spriteID: 43c9768026256c947bd57c1445ca36b5
+      y: 485
+      width: 7
+      height: 23
+    spriteID: 42d43f33777dcf943ba77fd1f8fb5230
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -227,67 +269,46 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 168}
-  - name: AutumnLeaves
-    originalName: 
-    pivot: {x: 0.4496124, y: -0.38461542}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 332
-      width: 129
-      height: 156
-    spriteID: 770924a8b2c6ed3498977db856379f24
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 332}
+    uvTransform: {x: 4, y: 485}
   spriteSheetImportData: []
   asepriteLayers:
-  - layerIndex: 2
-    guid: -21685430
-    name: Branches
+  - layerIndex: 0
+    guid: -1626583790
+    name: GrowthPhase2
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: Branches
+    - name: GrowthPhase2
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 28
-        y: 75
-        width: 123
-        height: 130
-      spriteId: 60b8ac09564b8c146ba24370e4b122af
+        x: 67
+        y: 0
+        width: 37
+        height: 98
+      spriteId: 4e5d91d406418b7479413715f807305b
     linkedCells: []
     parentIndex: -1
   - layerIndex: 1
-    guid: 1502599712
-    name: Log
+    guid: -60499849
+    name: GrowthPhase1
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: Log
+    - name: GrowthPhase1
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 79
-        y: 6
-        width: 13
-        height: 171
-      spriteId: 51c56a6008e5ec647a09f56641326556
+        x: 78
+        y: 0
+        width: 15
+        height: 44
+      spriteId: 2b4ec515705c6674a857c63a81d628c2
     linkedCells: []
     parentIndex: -1
-  - layerIndex: 0
+  - layerIndex: 3
     guid: -938817057
     name: Stump
     layerFlags: 3
@@ -302,53 +323,53 @@ ScriptedImporter:
         y: 0
         width: 8
         height: 14
-      spriteId: 080303df2a7043c438b00d69a0189d1d
-    linkedCells: []
-    parentIndex: -1
-  - layerIndex: 3
-    guid: 101116425
-    name: SpringLeaves
-    layerFlags: 3
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: SpringLeaves
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 22
-        y: 60
-        width: 129
-        height: 156
-      spriteId: bd84bf664c16ab44bac80f46dcb76ff3
+      spriteId: 68c32dba03da0ff4f83ab1b95c36b2f1
     linkedCells: []
     parentIndex: -1
   - layerIndex: 4
-    guid: 1697188545
-    name: SummerLeaves
+    guid: 1502599712
+    name: Log
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: SummerLeaves
+    - name: Log
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 22
-        y: 60
-        width: 129
-        height: 156
-      spriteId: 43c9768026256c947bd57c1445ca36b5
+        x: 79
+        y: 6
+        width: 13
+        height: 171
+      spriteId: 99b069549241d2e488384be31324acc6
     linkedCells: []
     parentIndex: -1
   - layerIndex: 5
-    guid: 427235052
-    name: AutumnLeaves
+    guid: -21685430
+    name: Branches
     layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: AutumnLeaves
+    - name: Branches
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 28
+        y: 75
+        width: 123
+        height: 130
+      spriteId: 196e3b5e10e684a42aedffd7b9a69ee3
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 6
+    guid: 723504390
+    name: Leaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Leaves
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -356,7 +377,25 @@ ScriptedImporter:
         y: 60
         width: 129
         height: 156
-      spriteId: 770924a8b2c6ed3498977db856379f24
+      spriteId: 35048a83980aeaa46aa8231dd1b5e31e
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
+    guid: 1505584092
+    name: GrowthPhase0
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: GrowthPhase0
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 83
+        y: 0
+        width: 7
+        height: 23
+      spriteId: 42d43f33777dcf943ba77fd1f8fb5230
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -412,4 +451,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 160, y: 216}
-  previousTextureSize: {x: 512, y: 512}
+  previousTextureSize: {x: 256, y: 512}
