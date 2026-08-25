@@ -16,14 +16,13 @@ public class TreeFall : MonoBehaviour
     /// <summary>
     /// Causes a tree to cleanly fall in the given direction.
     /// </summary>
-    /// <param name="direction">The direction the tree should fall. 1 for left and -1 for right.</param>
+    /// <param name="direction">The direction the tree should fall.</param>
     /// <param name="fallDurationSeconds">How many seconds the tree should take from the function call to it being on the ground ready to collect.</param>
-    public void Fell(int direction, float fallDurationSeconds)
+    public void Fell(Direction direction, float fallDurationSeconds)
     {
-        if (Mathf.Abs(direction) != 1) Debug.LogError("Tree must fall left (direction = 1) or right (direction = -1)!");
         this.fallDurationSeconds = fallDurationSeconds;
 
-        targetAngle = -90f * direction; // -1 * -90 = +90 goes clockwise (right), +1 * -90 = -90 goes anti-clockwise (left).
+        targetAngle = 90f * direction.Sign(); // -1 * -90 = +90 goes clockwise (right), +1 * -90 = -90 goes anti-clockwise (left).
         elapsed = 0f;
         isFalling = true;
     }

@@ -92,7 +92,7 @@ public class FunctionalTree : MonoBehaviour
         if (daysSinceLastGrew >= daysBetweenGrowthPhase) Grow();
     }
 
-    public void Chop(int chopDirection)
+    public void Chop(Direction chopDirection)
     {
         treeHealth--;
         shaker.Shake();
@@ -113,7 +113,7 @@ public class FunctionalTree : MonoBehaviour
         return baseWoodYield;
     }
 
-    private void Fell(int chopDirection)
+    private void Fell(Direction chopDirection)
     {
         treeFallManager.Fell(chopDirection, fallDurationSeconds);
         isFelled = true;

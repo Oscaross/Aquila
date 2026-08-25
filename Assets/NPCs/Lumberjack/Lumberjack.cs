@@ -19,7 +19,7 @@ public class Lumberjack : MonoBehaviour
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
     private Transform log; // log the worker is currently dragging
     private float chopTimerSeconds; // how many secs since we last did a chop
-    private LegionResources legion;
+    private Legion legion;
     private Pathfinder pathfinder;
     private LumberjackWorkQueue workQueue;
     private Vector2 logStorePos; // where the log store (horrea) is located
@@ -28,11 +28,11 @@ public class Lumberjack : MonoBehaviour
     {
         SetState(LumberjackState.Idling);
         animator = GetComponentInChildren<Animator>();
-        legion = GetComponentInParent<LegionResources>();
+        legion = GetComponentInParent<Legion>();
         workQueue = GetComponentInParent<LumberjackWorkQueue>();
         pathfinder = GetComponent<Pathfinder>();
 
-        logStorePos = legion.GetStore(Resource.Wood).transform.position; // TODO: Will throw null if the building isn't built yet, but idk whether lumberjacks can even exist if this building doesn't
+        logStorePos = legion.Resources.GetStore(Resource.Wood).transform.position; // TODO: Will throw null if the building isn't built yet, but idk whether lumberjacks can even exist if this building doesn't
     }
 
     private void Start()
@@ -85,7 +85,7 @@ public class Lumberjack : MonoBehaviour
         Destroy(log.gameObject); // TODO: More elegant way of disposing of the log
 
         int yield = currentTarget.GetWoodYield();
-        legion.AddResource(Resource.Wood, yield);
+        legion.Resources.AddResource(Resource.Wood, yield);
 
         currentTarget.OnTreeFelled -= StartDragging;
 

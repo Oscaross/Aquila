@@ -12,8 +12,8 @@ TagManager:
   - Water
   - UI
   - NPC
-  - 
-  - 
+  - Barbarian
+  - Sky
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Water
+    uniqueID: 208194957
     locked: 0
   m_RenderingLayers:
   - Default

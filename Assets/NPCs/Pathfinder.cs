@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /**
@@ -17,12 +16,9 @@ public class Pathfinder : MonoBehaviour
     private Vector2 destination;
     private System.Action onArrive;
     private bool isMoving;
-    private int facing = 1;
+    private Direction facing = Direction.Left;
 
-    /// <summary>
-    /// -1 for left and +1 for right.
-    /// </summary>
-    public int Facing => facing;
+    public Direction Facing => facing;
     public bool IsMoving => isMoving;
 
     private void Awake() => rb = GetComponent<Rigidbody2D>();
@@ -52,18 +48,13 @@ public class Pathfinder : MonoBehaviour
     /// <summary>
     /// Change the facing direction (rotation) of the GameObject.
     /// </summary>
-    /// <param name="dir">-1 for left, +1 for right, anything else will log an error.</param>
-    public void SetFacing(int dir)
+    /// <param name="dir">The direction to face.</param>
+    public void SetFacing(Direction dir)
     {
         if (dir == facing) return;
-        if (Mathf.Abs(dir) != 1)
-        {
-            Debug.LogError("A pathfinder was told to face a direction other than -1 or +1.");
-            return;
-        }
 
         facing = dir;
-        flipRoot.localScale = new Vector3(-facing, 1f, 1f);
+        flipRoot.localScale = new Vector3(-facing.Sign(), 1f, 1f);
     }
 
     private void FixedUpdate()
@@ -83,7 +74,7 @@ public class Pathfinder : MonoBehaviour
             return;        
         }
 
-        SetFacing((int)Mathf.Sign(dx));
-        rb.linearVelocity = new Vector2(facing * moveSpeed, rb.linearVelocity.y);
+        SetFacing(DirectionExtensions.FromDelta(dx));
+        rb.linearVelocity = new Vector2(facing.Sign() * moveSpeed, rb.linearVelocity.y);
     }
 }

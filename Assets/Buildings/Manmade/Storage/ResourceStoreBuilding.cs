@@ -14,11 +14,13 @@ public class ResourceStoreBuilding : MonoBehaviour
 
     public Resource Resource => resource;
 
-    private LegionResources legion;
+    private Legion legion;
+    private LegionResources resources;
 
     private void Awake()
     {
-        legion = GetComponentInParent<LegionResources>();
+        legion = GetComponentInParent<Legion>();
+        resources = legion.Resources;
     }
 
     private void Start()
@@ -28,12 +30,12 @@ public class ResourceStoreBuilding : MonoBehaviour
 
     private void OnEnable()
     {
-        legion.ResourceChangeOccurred += OnResourceCountChange;
+        resources.ResourceChangeOccurred += OnResourceCountChange;
     }
 
     private void OnDisable()
     {
-        legion.ResourceChangeOccurred -= OnResourceCountChange;
+        resources.ResourceChangeOccurred -= OnResourceCountChange;
     }
 
     private void OnResourceCountChange(Resource r)
@@ -42,7 +44,7 @@ public class ResourceStoreBuilding : MonoBehaviour
 
         int numStates = diageticStates.Length;
 
-        float fraction = Mathf.Clamp01(legion.GetResourceCount(r) / (float) legion.GetResourceCapacity(r));
+        float fraction = Mathf.Clamp01(resources.GetResourceCount(r) / (float)resources.GetResourceCapacity(r));
         int idx = Mathf.Clamp(
             Mathf.FloorToInt(fraction * diageticStates.Length),
             0, diageticStates.Length - 1); // the index is the "percentage" full our stores are multiplied by the number of diagetic states, clamped between the array's valid index bounds

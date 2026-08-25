@@ -17,6 +17,9 @@ public static class Delay
     public static Coroutine WaitThen(MonoBehaviour host, float seconds, System.Action action)
         => host.StartCoroutine(Wait(seconds, action));
 
+    public static Coroutine Wait(MonoBehaviour host, float seconds)
+        => host.StartCoroutine(Wait(seconds, null));
+
     /// <summary>
     /// Cancels a given delay timer so that the callback is not executed.
     /// </summary>

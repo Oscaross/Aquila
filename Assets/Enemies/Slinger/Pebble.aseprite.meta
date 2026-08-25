@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f6f10910f5704f243b8a5639d4d1385a
+guid: 40b235c73bf039f45b6de40e048bb97f
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -74,7 +74,7 @@ ScriptedImporter:
   previousAsepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 0
+    layerImportMode: 1
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -87,7 +87,7 @@ ScriptedImporter:
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 0
+    layerImportMode: 1
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639211103187869805
+  platformSettingsDirtyTick: 639231204793127011
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,51 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Log
+  - name: Pebble
     originalName: 
-    pivot: {x: 0.5999999, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 158
-      y: 4
-      width: 20
-      height: 101
-    spriteID: ea146e9248ccdb349a42bd6a1e2ff902
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 158, y: 4}
-  - name: Branches
-    originalName: 
-    pivot: {x: 0.52755904, y: -0.28323698}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 192
-      width: 127
-      height: 173
-    spriteID: 4326d7f5859459e49982deef4e400958
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 192}
-  - name: Leaves
-    originalName: 
-    pivot: {x: 0.5, y: -0.24444444}
+    pivot: {x: 0.5, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -175,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 146
-      height: 180
-    spriteID: dd75163f14727394f99b0e9a0da516b0
+      width: 2
+      height: 2
+    spriteID: 6338c266daf63094b943cf7e98f6a5ff
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -188,58 +146,22 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
-  - layerIndex: 1
-    guid: 1502599712
-    name: Log
-    layerFlags: 3
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: Log
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 68
-        y: 0
-        width: 20
-        height: 101
-      spriteId: ea146e9248ccdb349a42bd6a1e2ff902
-    linkedCells: []
-    parentIndex: -1
   - layerIndex: 0
-    guid: -21685430
-    name: Branches
-    layerFlags: 3
+    guid: -2005624066
+    name: Pebble
+    layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Branches
+    - name: Pebble
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 13
-        y: 49
-        width: 127
-        height: 173
-      spriteId: 4326d7f5859459e49982deef4e400958
-    linkedCells: []
-    parentIndex: -1
-  - layerIndex: 2
-    guid: 723504390
-    name: Leaves
-    layerFlags: 3
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: Leaves
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 7
-        y: 44
-        width: 146
-        height: 180
-      spriteId: dd75163f14727394f99b0e9a0da516b0
+        x: 1
+        y: 0
+        width: 2
+        height: 2
+      spriteId: 6338c266daf63094b943cf7e98f6a5ff
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -294,5 +216,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 160, y: 256}
-  previousTextureSize: {x: 256, y: 512}
+  canvasSize: {x: 4, y: 4}
+  previousTextureSize: {x: 16, y: 16}
