@@ -43,7 +43,8 @@ Material:
     m_Floats:
     - _EnableExternalAlpha: 0
     - _PlaneHeightPixels: 180
-    - _ReflectionFade: 0.9
+    - _ReflectionFade: 1
+    - _ReflectionSquash: 0.9
     - _ReflectionStrength: 0.483
     - _SkyInfluence: 0.424
     - _SurfaceThickness: 0

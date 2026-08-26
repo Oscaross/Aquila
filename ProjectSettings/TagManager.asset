@@ -38,10 +38,28 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Skybox
+    uniqueID: 2419635639
+    locked: 0
+  - name: Background
+    uniqueID: 1975874615
+    locked: 0
+  - name: Weather
+    uniqueID: 1093985507
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Water
+  - name: Buildings
+    uniqueID: 2296751211
+    locked: 0
+  - name: Character
+    uniqueID: 1938204889
+    locked: 0
+  - name: River
+    uniqueID: 412956911
+    locked: 0
+  - name: RiverWater
     uniqueID: 208194957
     locked: 0
   m_RenderingLayers:

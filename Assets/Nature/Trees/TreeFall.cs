@@ -22,7 +22,7 @@ public class TreeFall : MonoBehaviour
     {
         this.fallDurationSeconds = fallDurationSeconds;
 
-        targetAngle = 90f * direction.Sign(); // -1 * -90 = +90 goes clockwise (right), +1 * -90 = -90 goes anti-clockwise (left).
+        targetAngle = 90f * -direction.Sign(); // -1 * -90 = +90 goes clockwise (right), +1 * -90 = -90 goes anti-clockwise (left).
         elapsed = 0f;
         isFalling = true;
     }
