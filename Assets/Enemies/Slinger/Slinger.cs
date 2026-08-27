@@ -19,6 +19,7 @@ public class Slinger : MonoBehaviour
     [SerializeField] private float targetStandingRange;
     [Tooltip("Where projectiles originate from on the slinger.")]
     [SerializeField] private Transform firePoint;
+    [SerializeField] private float baseAccuracy;
 
     private Pathfinder pathfinder;
     private Legion legion;
@@ -61,10 +62,20 @@ public class Slinger : MonoBehaviour
 
         Delay.WaitThen(this, firingTimeSeconds, () =>
         {
-            legion.ProjectileManager.SpawnProjectile(firePoint.position, currentTarget, pebble);
+            legion.ProjectileManager.ShootProjectileAtTarget(transform.position, currentTarget, baseAccuracy, pebble, OnTargetMiss, OnTargetHit);
             SetState(SlingerState.Idling);
             Delay.WaitThen(this, betweenShotsTimeSeconds, LoadSlingshot);
         });
+    }
+
+    private void OnTargetMiss(Vector2 contactPoint)
+    {
+        Debug.Log("Oh no! We missed.");
+    }
+
+    private void OnTargetHit(Collider2D collider, Vector2 contactPoint)
+    {
+        Debug.Log("Oh yo! We hit.");
     }
 }
 

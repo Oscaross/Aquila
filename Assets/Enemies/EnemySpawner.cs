@@ -10,6 +10,6 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnSlinger()
     {
         Slinger s = Instantiate(slingerPrefab, new Vector2(transform.position.x, transform.position.y) + spawnOffset, Quaternion.identity, transform.parent);
-        s.SetTarget(new Vector2(Random.Range(-30f, 45f), 0f)); // DEBUG
+        s.SetTarget(new Vector2(transform.position.x + 2f, 0f)); // DEBUG
     }
 }

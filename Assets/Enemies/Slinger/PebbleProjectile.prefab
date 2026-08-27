@@ -50,6 +50,20 @@ MonoBehaviour:
   timeToHitTargetSeconds: 3
   gravity: -4
   maximumLifetimeSeconds: 10
+  despawnTimeAfterHitSeconds: 10
+  thetaMin: 30
+  thetaMax: 60
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  minSpreadRadius: 1
+  spreadAtReferenceRange: 1
+  spreadFalloff: 2
+  verticalSpreadMultiplier: 1
+  speed: 3
 --- !u!50 &9087176398286184680
 Rigidbody2D:
   serializedVersion: 5
