@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8568580361583276751}
   - component: {fileID: 5550899877324419060}
+  - component: {fileID: 6687935949515118838}
   m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2275287663001121878}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 6815074235199900474, guid: 0eba7b61f9a640c4bbd4a2a3fef4f651, type: 3}
+  m_Sprite: {fileID: -1599576939313683598, guid: 3006a128e47179c4db5029b759338880, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,6 +88,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6687935949515118838
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2275287663001121878}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 934538306adf7c044bc936814564f6b5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5322486070262567385
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +156,7 @@ GameObject:
   - component: {fileID: 7505745250885443823}
   - component: {fileID: 2592048947044342577}
   - component: {fileID: 2119659654750707569}
+  - component: {fileID: -6727936137865190674}
   m_Layer: 7
   m_Name: Slinger
   m_TagString: Untagged
@@ -242,13 +266,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  pebble: {fileID: 2159412629750167544, guid: b62d97c3f83fa424881c58cf2a674401, type: 3}
-  loadingTimeSeconds: 3
-  firingTimeSeconds: 2
-  betweenShotsTimeSeconds: 3
-  aimingPointX: 4
-  targetStandingRange: 0
-  firePoint: {fileID: 1591581731519151952}
+  loadingTimeSeconds: 2.25
+  firingTimeSeconds: 1.4
+  betweenShotsTimeSeconds: 2.4
+  targetStandingRange: 15
 --- !u!114 &2119659654750707569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,6 +285,28 @@ MonoBehaviour:
   flipRoot: {fileID: 7104955870176404399}
   moveSpeed: 2
   arrivalThreshold: 1
+--- !u!114 &-6727936137865190674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7501473902200528923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e7fe5aa55512a4195e91ecf5136dba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profileThisFires: {fileID: 11400000, guid: af6fea9558039fd4ab651f8b1c3135f3, type: 2}
+  firePoint: {fileID: 1591581731519151952}
+  accuracy: 0.9
+  cacheTolerance: 0.01
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &8991627598817078328
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +332,7 @@ Transform:
   m_GameObject: {fileID: 8991627598817078328}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: -0.55, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

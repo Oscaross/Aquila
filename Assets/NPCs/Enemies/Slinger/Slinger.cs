@@ -11,14 +11,12 @@ public class Slinger : MonoBehaviour
     [SerializeField] private float firingTimeSeconds;
     [Tooltip("Time elapsed between slinger finishing firing and starting reloading for the next shot.")]
     [SerializeField] private float betweenShotsTimeSeconds;
-
-    [Tooltip("DEBUG ONLY: Test the projectile firing system")]
-    [SerializeField] private float aimingPointX;
     [Tooltip("The distance in world units that the slinger should stand away from its actual target.")]
     [SerializeField] private float targetStandingRange;
 
     private Pathfinder pathfinder;
     private RangedAttacker rangedAttacker;
+    private Animator animator;
     private Legion legion;
     private Vector2 currentTarget;
 
@@ -27,12 +25,13 @@ public class Slinger : MonoBehaviour
         pathfinder = GetComponent<Pathfinder>();
         rangedAttacker = GetComponent<RangedAttacker>();
         legion = GetComponentInParent<Legion>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void SetState(SlingerState next)
     {
         currentState = next;
-        // animator.SetInteger("State", (int)next);
+        animator.SetInteger("State", (int) next);
     }
 
     public void SetTarget(Vector2 target)
@@ -57,23 +56,23 @@ public class Slinger : MonoBehaviour
     private void FireSlingshot()
     {
         SetState(SlingerState.Firing);
-
+        
         Delay.WaitThen(this, firingTimeSeconds, () =>
         {
-            if(rangedAttacker.TryFireProjectile(transform.position, currentTarget, OnTargetMiss, OnTargetHit))
             SetState(SlingerState.Idling);
+            if(!rangedAttacker.TryFireAt(currentTarget, OnTargetHit, OnTargetMiss)) Debug.Log("I should reposition");
             Delay.WaitThen(this, betweenShotsTimeSeconds, LoadSlingshot);
         });
     }
 
-    private void OnTargetMiss(Vector2 contactPoint)
+    private void OnTargetMiss()
     {
-        Debug.Log("Oh no! We missed.");
+        Debug.Log("[Slinger] Oh no! We missed.");
     }
 
-    private void OnTargetHit(Vector2 contactPoint, Collider2D collider)
+    private void OnTargetHit()
     {
-        Debug.Log("Oh yo! We hit.");
+        Debug.Log("[Slinger] Oh yo! We hit.");
     }
 }
 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d269a92bc63c4f4797eaa85ae079849, type: 3}
+  m_Name: PebbleProfile
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 2159412629750167544, guid: b62d97c3f83fa424881c58cf2a674401, type: 3}
+  gravity: -7
+  maxSpeed: 30
+  minProjectionAngleDeg: 40
+  maxProjectionAngleDeg: 60
+  angleStepDegs: 6
+  maximumLifetimeSeconds: 10
+  despawnTimeAfterHitSeconds: 10
