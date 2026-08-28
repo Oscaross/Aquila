@@ -4,7 +4,6 @@ using UnityEngine;
 public class Slinger : MonoBehaviour
 {
     [SerializeField] private SlingerState currentState;
-    [SerializeField] private Projectile pebble;
     // [SerializeField] private Animator animator;
     [Tooltip("Time elapsed between the slinger beginning the slingshot reload and starting the firing animation in seconds.")]
     [SerializeField] private float loadingTimeSeconds;
@@ -17,17 +16,16 @@ public class Slinger : MonoBehaviour
     [SerializeField] private float aimingPointX;
     [Tooltip("The distance in world units that the slinger should stand away from its actual target.")]
     [SerializeField] private float targetStandingRange;
-    [Tooltip("Where projectiles originate from on the slinger.")]
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private float baseAccuracy;
 
     private Pathfinder pathfinder;
+    private RangedAttacker rangedAttacker;
     private Legion legion;
     private Vector2 currentTarget;
 
     private void Awake()
     {
         pathfinder = GetComponent<Pathfinder>();
+        rangedAttacker = GetComponent<RangedAttacker>();
         legion = GetComponentInParent<Legion>();
     }
 
@@ -62,7 +60,7 @@ public class Slinger : MonoBehaviour
 
         Delay.WaitThen(this, firingTimeSeconds, () =>
         {
-            legion.ProjectileManager.ShootProjectileAtTarget(transform.position, currentTarget, baseAccuracy, pebble, OnTargetMiss, OnTargetHit);
+            if(rangedAttacker.TryFireProjectile(transform.position, currentTarget, OnTargetMiss, OnTargetHit))
             SetState(SlingerState.Idling);
             Delay.WaitThen(this, betweenShotsTimeSeconds, LoadSlingshot);
         });
@@ -73,7 +71,7 @@ public class Slinger : MonoBehaviour
         Debug.Log("Oh no! We missed.");
     }
 
-    private void OnTargetHit(Collider2D collider, Vector2 contactPoint)
+    private void OnTargetHit(Vector2 contactPoint, Collider2D collider)
     {
         Debug.Log("Oh yo! We hit.");
     }

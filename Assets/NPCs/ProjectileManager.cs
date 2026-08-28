@@ -1,10 +1,13 @@
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ProjectileManager : MonoBehaviour
 {
-    public void ShootProjectileAtTarget(Vector2 origin, Vector2 target, float firerAccuracy, Projectile projectilePrefab, System.Action<Vector2> onShotMissedTarget, System.Action<Collider2D, Vector2> onShotHitTarget)
+    private List<Projectile> projectilesInScene = new List<Projectile>(); 
+
+    public void SpawnProjectile()
     {
-        Projectile p = Instantiate(projectilePrefab, origin, Quaternion.identity, transform);
-        p.TryFireProjectile(origin, target, firerAccuracy, onShotMissedTarget, onShotHitTarget);
+
     }
 }
