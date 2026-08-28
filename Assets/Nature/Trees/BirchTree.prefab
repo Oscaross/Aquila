@@ -65,7 +65,7 @@ MonoBehaviour:
   stump: {fileID: 2624536574900493778}
   branches: {fileID: 8392839011845813085}
   log: {fileID: 3339463398998290189}
-  currentGrowthPhase: 0
+  currentGrowthPhase: 2
   growthPhases:
   - {fileID: 9064795304812636674, guid: 315cc9d4126927c4a905f63bbee1370d, type: 3}
   - {fileID: 8042960244914448780, guid: 315cc9d4126927c4a905f63bbee1370d, type: 3}
@@ -76,6 +76,7 @@ MonoBehaviour:
   hardness: 5
   waitAfterFellSeconds: 2
   baseWoodYield: 5
+  daysUntilStumpDisappears: 2
   IsTargeted: 0
 --- !u!1 &3999326861920556078
 GameObject:
@@ -509,7 +510,7 @@ SpriteRenderer:
   m_Size: {x: 8.0625, y: 9.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7230857606349735219

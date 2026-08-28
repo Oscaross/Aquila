@@ -23,7 +23,7 @@ public class FunctionalTree : MonoBehaviour
     [SerializeField] private int waitAfterFellSeconds = 2; // how long in secs we wait after the tree is felled before emitting the on felled signal
     [SerializeField] private int baseWoodYield = 50;
     [SerializeField] private int daysUntilStumpDisappears = 2;
-
+    
     public event System.Action OnTreeFelled; // called after the tree settles and has hit the ground
     public event System.Action OnTreeStartFalling; // called immediately when the tree begins its fell animation
     public event System.Action<FunctionalTree> OnTreeExpired; // called to destroy the tree after it has been felled and its stump is expired
@@ -92,10 +92,12 @@ public class FunctionalTree : MonoBehaviour
         if (daysSinceLastGrew >= daysBetweenGrowthPhase) Grow();
     }
 
-    public void Chop(Direction chopDirection)
+    public void Chop(Direction chopDirection, SoundDefinition soundDefinition)
     {
         treeHealth--;
         shaker.Shake();
+        
+        AudioManager.Instance.PlayOneShot(soundDefinition, transform.position);
 
         if (treeHealth <= 0)
         {

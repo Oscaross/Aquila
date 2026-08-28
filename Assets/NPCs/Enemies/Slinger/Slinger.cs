@@ -14,6 +14,8 @@ public class Slinger : MonoBehaviour
     [Tooltip("The distance in world units that the slinger should stand away from its actual target.")]
     [SerializeField] private float targetStandingRange;
 
+    [SerializeField] private SoundDefinition fireSlingshotSound;
+
     private Pathfinder pathfinder;
     private RangedAttacker rangedAttacker;
     private Animator animator;
@@ -59,6 +61,7 @@ public class Slinger : MonoBehaviour
         
         Delay.WaitThen(this, firingTimeSeconds, () =>
         {
+            AudioManager.Instance.PlayOneShot(fireSlingshotSound, transform.position);
             SetState(SlingerState.Idling);
             if(!rangedAttacker.TryFireAt(currentTarget, OnTargetHit, OnTargetMiss)) Debug.Log("I should reposition");
             Delay.WaitThen(this, betweenShotsTimeSeconds, LoadSlingshot);

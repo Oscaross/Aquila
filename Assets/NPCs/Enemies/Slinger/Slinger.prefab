@@ -270,6 +270,7 @@ MonoBehaviour:
   firingTimeSeconds: 1.4
   betweenShotsTimeSeconds: 2.4
   targetStandingRange: 15
+  fireSlingshotSound: {fileID: 11400000, guid: b6792c67497230549a3958e6c8810301, type: 2}
 --- !u!114 &2119659654750707569
 MonoBehaviour:
   m_ObjectHideFlags: 0

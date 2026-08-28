@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aea536027e9d5b40922c4102a80c93a, type: 3}
+  m_Name: SFX_AxeStrike
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 2ad90c44430acb349be9f1780113da5b, type: 3}
+  - {fileID: 8300000, guid: c222b034284eb6f49a827dcd3e875c26, type: 3}
+  - {fileID: 8300000, guid: de59cb0a2be0af84c9e3ee1a7a5f974e, type: 3}
+  - {fileID: 8300000, guid: 64a00d9d429e12c4bb1a30e30ad3c217, type: 3}
+  volume: 0.15
+  pitchRange: {x: 0.95, y: 1.05}
+  minDistance: 2
+  maxDistance: 25

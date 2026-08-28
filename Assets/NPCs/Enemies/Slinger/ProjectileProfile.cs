@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProjectileProfile", menuName = "Scriptable Objects/Projectiles")]
+[CreateAssetMenu(fileName = "ProjectileProfile", menuName = "Scriptable Objects/Projectiles/ProjectileProfile")]
 public class ProjectileProfile : ScriptableObject
 {
     public Projectile projectilePrefab;

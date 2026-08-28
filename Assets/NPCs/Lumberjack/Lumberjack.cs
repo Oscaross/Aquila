@@ -16,6 +16,8 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private float chopIntervalSeconds = 0.7f; // the number of seconds we must wait between chops
     [SerializeField] private float lookForJobProbability = 0.3f;
 
+    [SerializeField] private SoundDefinition soundDefinition;
+
     private Coroutine currentCallback; // the current delay callback the lumberjack is waiting on - must be cancelled and overwritten if he's assigned a job
     private Transform log; // log the worker is currently dragging
     private float chopTimerSeconds; // how many secs since we last did a chop
@@ -136,7 +138,7 @@ public class Lumberjack : MonoBehaviour
             if (chopTimerSeconds <= 0f)
             {
                 chopTimerSeconds = chopIntervalSeconds;
-                currentTarget.Chop(pathfinder.Facing);
+                currentTarget.Chop(pathfinder.Facing, soundDefinition);
             }
         }
     }
