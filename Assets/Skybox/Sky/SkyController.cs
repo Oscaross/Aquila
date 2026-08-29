@@ -1,4 +1,5 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /**
  * 
@@ -9,41 +10,108 @@ public class SkyController : MonoBehaviour
 {
     public static SkyController Instance { get; private set; }
 
-    [SerializeField] private SkyPreset preset;
+
+    [SerializeField] private HorizonPreset[] sunrises;
+    [SerializeField] private HorizonPreset[] sunsets;
+    [SerializeField] private float minRampExponent;
+    [SerializeField] private float maxRampExponent;
+    
+    [SerializeField] private IlluminationProfile illumination;
     [SerializeField] private float horizonY = 0f;
 
-    /// <summary>
-    /// Current colour of the zenith (non-horizon sky).
-    /// </summary>
-    public Color Zenith { get; private set; }
-    /// <summary>
-    /// Current colour of the horizon.
-    /// </summary>
-    public Color Horizon { get; private set; }
-    /// <summary>
-    /// Current light tint in the sky.
-    /// </summary>
-    public Color Light { get; private set; }
-    /// <summary>
-    /// Current haze for haze shader to tint backgrounds with.
-    /// </summary>
-    public Color Haze { get; private set; }
+    [Header("Runtime (read-only)")]
+    [SerializeField] private Color zenith;
+    [SerializeField] private Color horizon;
+    [SerializeField] private Color light;
+    [SerializeField] private Color haze;
+    
+    public Color Zenith { get => zenith; private set => zenith = value; }
+    public Color Horizon { get => horizon; private set => horizon = value; }
+    public Color Light { get => light; private set => light = value; }
+    public Color Haze { get => haze; private set => haze = value; }
 
     static readonly int HazeColorID = Shader.PropertyToID("_GlobalHazeColor");
-    static readonly int HorizonYID = Shader.PropertyToID("_GlobalHorizonY");
+    private static readonly int HorizonYID = Shader.PropertyToID("_GlobalHorizonY");
+    private static readonly int HorizonColorID = Shader.PropertyToID("_GlobalHorizonColor");
+    private static readonly int LightColorID = Shader.PropertyToID("_GlobalLightColor");
+    private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
+    private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
 
-    private void OnEnable() => Instance = this;
+
+    private HorizonPreset currentSunrise;
+    private HorizonPreset currentSunset;
+    private float currentRampExponent;
+
+
+    private void OnEnable()
+    {
+        ConfigureNewHorizonPreset();
+        Instance = this;
+        TimeOfDay.OnNoon += ConfigureNewHorizonPreset;
+    }
+
+    private void OnDisable()
+    {
+        TimeOfDay.OnNoon -= ConfigureNewHorizonPreset;
+    }
 
     private void LateUpdate()
     {
+        if (illumination == null || currentSunrise == null || currentSunset == null) return;
+        
         float t = GameTime.Now;
+        // We only want the horizon to be "strong" and present in the visuals at sunrise/sunset where it's at its peak, and fade in and out from those moments.
+        float horizonStrength = 0f;
+        // The haze bias is how much the horizon colour contributes towards the haze. This is determined by the specific Sunset/Sunrise we've picked.
+        float hazeBias;
 
-        Zenith = preset.zenithColour.Evaluate(t);
-        Horizon = preset.horizonColour.Evaluate(t);
-        Light = preset.lightColour.Evaluate(t);
-        Haze = preset.hazeColour.Evaluate(t);
+        if (GameTime.TryGetSunriseProgress(t, out float p1))
+        {
+            Color c = currentSunrise.horizonColour.Evaluate(p1);
+            horizonStrength = Mathf.Sin(p1 * Mathf.PI);
+            horizon = new Color(c.r, c.g, c.b, horizonStrength);
+            hazeBias = currentSunrise.hazeHorizonBias;
+        }
+        else if (GameTime.TryGetSunsetProgress(t, out float p2))
+        {
+            Color c = currentSunset.horizonColour.Evaluate(p2);
+            horizonStrength = Mathf.Sin(p2 * Mathf.PI);
+            horizon = new Color(c.r, c.g, c.b, horizonStrength);
+            hazeBias = currentSunset.hazeHorizonBias;
+        }
+        else
+        {
+            hazeBias = 0f;
+            horizon = new Color(0f, 0f, 0f, 0f);
+        }
+        
+        zenith = illumination.zenithColour.Evaluate(t);
+        light = illumination.lightColour.Evaluate(t);
 
+        // The colour of the haze, a linear interpolation between the top and bottom of the sky (zenith, horizon). The higher the horizon strength & haze bias the closer this is to the horizon colour.
+        Color hazeRgb = Color.Lerp(Zenith, Horizon, horizonStrength * hazeBias);
+
+        haze = new Color(hazeRgb.r, hazeRgb.g, hazeRgb.b, illumination.hazeStrength.Evaluate(t));
+        
         Shader.SetGlobalColor(HazeColorID, Haze);
         Shader.SetGlobalFloat(HorizonYID, horizonY);
+        Shader.SetGlobalColor(HorizonColorID, Horizon);
+        Shader.SetGlobalColor(LightColorID, Light);
+        Shader.SetGlobalFloat(LightIntensityID, illumination.intensity.Evaluate(t));
+        Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
+    }
+
+    /// <summary>
+    /// Chooses a random sunrise and sunset for the day, and a random ramp exponent which is effectively the height of the horizon (controls how much horizon the player can see).
+    /// </summary>
+    private void ConfigureNewHorizonPreset()
+    {
+        Debug.Log("Configuring new preset");
+        Debug.Assert(sunrises.Length > 0 && sunsets.Length > 0);
+
+        currentSunrise =  sunrises[Random.Range(0, sunrises.Length)];
+        currentSunset = sunsets[Random.Range(0, sunsets.Length)];
+        
+        currentRampExponent = Random.Range(minRampExponent, maxRampExponent);
     }
 }

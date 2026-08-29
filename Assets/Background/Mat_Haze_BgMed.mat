@@ -41,15 +41,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ColourSteps: 6
     - _Curve: 1.6
     - _Cutoff: 0.5
     - _Desat: 0.16
     - _EnableExternalAlpha: 0
+    - _HazeSteps: 20
     - _HighlightKeep: 0.3
     - _HorizonY: 0
-    - _LayerHaze: 0.1
+    - _LayerDepth: 0.28
+    - _LayerHaze: 0.2
+    - _LightAtDay: 1
+    - _LightAtNight: 0.14
+    - _LightFalloff: 3
+    - _LightResponse: 1
+    - _MinContrast: 0.7
+    - _MinLight: 0
     - _PPU: 16
     - _RampAmount: 0.02
+    - _RampCurve: 1.6
     - _RampHeight: 12
     - _Steps: 32
     - _ZWrite: 0

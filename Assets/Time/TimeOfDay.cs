@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using NUnit.Framework;
 
 /**
  * Responsible for maintaining the correct GameTime and firing events when certain time-related milestones are reached. 
@@ -17,15 +19,17 @@ public class TimeOfDay : MonoBehaviour
     /// <summary>
     ///  A float over [0, 1] that defines the global time of day. 0.0 = midnight, 0.25 = sunrise, 0.5 = noon, 0.75 = sunset and 1.0 wraps around to 0.0 to restart the cycle.
     /// </summary>
-    [Range(0, 1)]
+    [UnityEngine.Range(0, 1)]
     public float TimeNow => timeNow;
     public int DayCount { get; private set; }
-    public static event System.Action OnSunset;
-    public static event System.Action OnSunrise;
-    public static event System.Action OnSeasonChanged;
+    public static event Action OnSunset;
+    public static event Action OnSunrise;
+    public static event Action OnNoon;
+    public static event Action OnSeasonChanged;
 
     private bool didSunriseHappen = false;
     private bool didSunsetHappen = false;
+    private bool didNoonHappen = false;
 
     private void Awake()
     {
@@ -37,7 +41,7 @@ public class TimeOfDay : MonoBehaviour
 
     void Update()
     {
-        if (dayLengthSeconds <= 0f) Debug.LogError("A day cannot have a negative/zero number of seconds!");
+        Debug.Assert(dayLengthSeconds > 0);
 
         timeNow += (Time.deltaTime * timeMultiplier) / dayLengthSeconds; // increment the time float by the fraction of time out of the day that has elapsed since last frame, scaled by the multiplier
        
@@ -47,16 +51,23 @@ public class TimeOfDay : MonoBehaviour
             timeNow -= 1.0f;
             didSunsetHappen = false;
             didSunriseHappen = false;
+            didNoonHappen = false;
+        }
+
+        if (GameTime.IsNoon && !didNoonHappen)
+        {
+            OnNoon?.Invoke();
+            didNoonHappen = true;
         }
 
         // Sunset?
-        if (timeNow >= 0.72f && timeNow <= 0.73f && !didSunsetHappen)
+        if (GameTime.IsSunset && !didSunsetHappen)
         {
             Sunset();
         }
 
         // Sunrise?
-        if (timeNow <= 0.21f && timeNow >= 0.2f && !didSunriseHappen)
+        if (GameTime.IsSunrise && !didSunriseHappen)
         {
             Sunrise();
         }

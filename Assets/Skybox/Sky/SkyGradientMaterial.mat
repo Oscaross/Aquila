@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Haze_BgFar
-  m_Shader: {fileID: 4800000, guid: c20e9a4bf169742a0aeda72f9d0186b9, type: 3}
+  m_Name: SkyGradientMaterial
+  m_Shader: {fileID: 4800000, guid: 091ef9542825c4e48a1d4b4cd6e214b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,34 +23,33 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ColourSteps: 6
-    - _Curve: 1.6
-    - _Cutoff: 0.5
-    - _Desat: 0.233
-    - _HazeSteps: 20
-    - _HighlightKeep: 0.25
-    - _HorizonY: 0
-    - _LayerDepth: 0.35
-    - _LayerHaze: 0.25
-    - _LightAtDay: 0.9
-    - _LightAtNight: 0
-    - _LightFalloff: 4
-    - _LightResponse: 0.642
-    - _MinContrast: 0.6
-    - _MinLight: 0
-    - _PPU: 32
-    - _RampAmount: 0.06
-    - _RampCurve: 1.6
-    - _RampHeight: 12
-    - _Steps: 32
+    - _BandCount: 32
+    - _DitherAmount: 1
+    - _DitherScale: 1
+    - _EnableExternalAlpha: 0
+    - _MaxAlpha: 1
+    - _RampExponent: 0.92
+    - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _HazeColor: {r: 0.72, g: 0.78, b: 0.85, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

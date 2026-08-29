@@ -8,7 +8,6 @@ using UnityEngine;
 public class SkyColour : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer zenith;
-    [SerializeField] private SpriteRenderer horizon;
 
     private void LateUpdate()
     {
@@ -16,6 +15,5 @@ public class SkyColour : MonoBehaviour
         if (sky == null) return;
 
         zenith.color = sky.Zenith;
-        horizon.color = sky.Horizon;
     }
 }
