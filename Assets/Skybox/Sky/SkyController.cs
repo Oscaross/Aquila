@@ -33,6 +33,7 @@ public class SkyController : MonoBehaviour
     static readonly int HazeColorID = Shader.PropertyToID("_GlobalHazeColor");
     private static readonly int HorizonYID = Shader.PropertyToID("_GlobalHorizonY");
     private static readonly int HorizonColorID = Shader.PropertyToID("_GlobalHorizonColor");
+    private static readonly int ZenithColorID = Shader.PropertyToID("_GlobalZenithColor");
     private static readonly int LightColorID = Shader.PropertyToID("_GlobalLightColor");
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
@@ -67,14 +68,14 @@ public class SkyController : MonoBehaviour
         if (GameTime.TryGetSunriseProgress(t, out float p1))
         {
             Color c = currentSunrise.horizonColour.Evaluate(p1);
-            horizonStrength = Mathf.Sin(p1 * Mathf.PI);
+            horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p1 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, horizonStrength);
             hazeBias = currentSunrise.hazeHorizonBias;
         }
         else if (GameTime.TryGetSunsetProgress(t, out float p2))
         {
             Color c = currentSunset.horizonColour.Evaluate(p2);
-            horizonStrength = Mathf.Sin(p2 * Mathf.PI);
+            horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p2 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, horizonStrength);
             hazeBias = currentSunset.hazeHorizonBias;
         }
@@ -95,6 +96,7 @@ public class SkyController : MonoBehaviour
         Shader.SetGlobalColor(HazeColorID, Haze);
         Shader.SetGlobalFloat(HorizonYID, horizonY);
         Shader.SetGlobalColor(HorizonColorID, Horizon);
+        Shader.SetGlobalColor(ZenithColorID, Zenith);
         Shader.SetGlobalColor(LightColorID, Light);
         Shader.SetGlobalFloat(LightIntensityID, illumination.intensity.Evaluate(t));
         Shader.SetGlobalFloat(RampExponentID, currentRampExponent);

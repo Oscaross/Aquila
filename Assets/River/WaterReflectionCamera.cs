@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Mirrors the main camera about a water surface and renders into a RenderTexture
@@ -16,6 +18,7 @@ public class WaterReflectionCamera : MonoBehaviour
     private static readonly int ReflectionTex = Shader.PropertyToID("_WaterReflectionTex");
     private static readonly int ReflectionTexel = Shader.PropertyToID("_WaterReflectionTexelSize");
     private static readonly int WaterlineScreenY = Shader.PropertyToID("_WaterlineScreenY");
+    private static readonly int PixelScaleID = Shader.PropertyToID("_GlobalPixelScale");
 
     private Camera cam;
 
@@ -24,6 +27,24 @@ public class WaterReflectionCamera : MonoBehaviour
         cam = GetComponent<Camera>();
         cam.orthographic = true;
         cam.targetTexture = target;
+
+        RenderPipelineManager.beginCameraRendering += OnBeginCamera;
+    }
+
+    private void OnDisable()
+    {
+        RenderPipelineManager.beginCameraRendering -= OnBeginCamera;
+    }
+
+    // Ensures that both the reflection camera and the main camera agree on their PixelScale which allows things like atmospheric dither or ripple effects to be consistently rendered.
+    private void OnBeginCamera(ScriptableRenderContext ctx, Camera c)
+    {
+        if (c == cam) Shader.SetGlobalFloat(PixelScaleID, 1f);
+        else if (c == mainCamera)
+        {
+            var ppc = mainCamera.GetComponent<PixelPerfectCamera>();
+            Shader.SetGlobalFloat(PixelScaleID, ppc.pixelRatio);
+        }
     }
 
     private void LateUpdate()

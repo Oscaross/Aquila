@@ -1,0 +1,105 @@
+GIMP Palette
+#
+139 150 168	Untitled
+165 174 188	Untitled
+190 197 208	Untitled
+216 220 228	Untitled
+242 244 247	Untitled
+111 156 177	Untitled
+145 183 200	Untitled
+181 210 221	Untitled
+ 35  44  40	Untitled
+ 59  72  65	Untitled
+ 83 100  89	Untitled
+110 126 118	Untitled
+138 151 147	Untitled
+ 32  41  58	Untitled
+ 50  63  82	Untitled
+ 68  85 104	Untitled
+ 88 107 126	Untitled
+109 128 147	Untitled
+ 38  53  28	Untitled
+ 57  79  39	Untitled
+ 77 104  48	Untitled
+ 98 129  57	Untitled
+120 152  74	Untitled
+143 174  92	Untitled
+ 66  61  30	Untitled
+ 92  89  43	Untitled
+117 118  56	Untitled
+140 147  72	Untitled
+170 169 104	Untitled
+ 49  36  27	Untitled
+ 83  57  42	Untitled
+121  77  54	Untitled
+155  98  66	Untitled
+180 124  81	Untitled
+204 150  96	Untitled
+ 51  53  59	Untitled
+ 71  73  80	Untitled
+ 92  94 101	Untitled
+113 114 122	Untitled
+134 134 145	Untitled
+156 154 166	Untitled
+ 51  38  27	Untitled
+ 81  60  41	Untitled
+110  83  54	Untitled
+138 106  70	Untitled
+162 130  89	Untitled
+185 154 111	Untitled
+ 90  47  39	Untitled
+120  64  49	Untitled
+149  81  57	Untitled
+173 101  69	Untitled
+191 122  87	Untitled
+209 144 106	Untitled
+133 124 105	Untitled
+154 145 127	Untitled
+182 173 154	Untitled
+209 200 182	Untitled
+236 228 211	Untitled
+ 17  19  24	Untitled
+ 29  27  34	Untitled
+ 41  35  43	Untitled
+ 51  45  49	Untitled
+138  90  60	Untitled
+165 116  81	Untitled
+190 142 104	Untitled
+215 168 128	Untitled
+238 195 154	Untitled
+ 74  29  32	Untitled
+112  39  42	Untitled
+154  48  49	Untitled
+183  63  56	Untitled
+201  83  65	Untitled
+217 105  74	Untitled
+ 42  46  52	Untitled
+ 66  72  81	Untitled
+ 90  98 108	Untitled
+115 124 135	Untitled
+141 150 160	Untitled
+167 176 185	Untitled
+ 95  74  32	Untitled
+134 103  44	Untitled
+173 132  56	Untitled
+207 162  78	Untitled
+238 192 106	Untitled
+ 34  54  61	Untitled
+ 53  86  97	Untitled
+ 73 117 131	Untitled
+102 145 157	Untitled
+134 173 182	Untitled
+ 51  32  47	Untitled
+ 81  52  75	Untitled
+111  73 100	Untitled
+140  95 120	Untitled
+143  60  28	Untitled
+186  87  34	Untitled
+224 117  40	Untitled
+240 154  63	Untitled
+247 212 137	Untitled
+251 228 174	Untitled
+255 243 214	Untitled
+191  76 170	Untitled
+241  98 214	Untitled
+255 132 232	Untitled

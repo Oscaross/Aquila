@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BandCount: 20
+    - _BandCount: 32
     - _DitherAmount: 1
     - _DitherScale: 1
     - _EnableExternalAlpha: 0
