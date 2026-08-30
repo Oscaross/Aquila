@@ -725,15 +725,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
       propertyPath: m_Color.b
-      value: 0.82011765
+      value: 0.09411765
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
       propertyPath: m_Color.g
-      value: 0.77526695
+      value: 0.07450981
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
       propertyPath: m_Color.r
-      value: 0.667253
+      value: 0.06666667
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: e6af9bdc186488b46bf0ffd36598acff, type: 3}
       propertyPath: m_SortingLayer
@@ -895,6 +895,8 @@ MonoBehaviour:
   sunrises:
   - {fileID: 11400000, guid: 9e4a54915e00e2945831e29199a477ea, type: 2}
   - {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
+  - {fileID: 11400000, guid: 2c9ff037f9dedd84cbf182308f7202c1, type: 2}
+  - {fileID: 11400000, guid: 237d61d4ea551ca4c88d1f9131371708, type: 2}
   sunsets:
   - {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
   - {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
@@ -903,6 +905,13 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
+  zenith: {r: 0.06666667, g: 0.07450981, b: 0.09411765, a: 1}
+  horizon: {r: 0, g: 0, b: 0, a: 0}
+  light: {r: 1, g: 1, b: 1, a: 1}
+  haze: {r: 0.06666667, g: 0.07450981, b: 0.09411765, a: 0.2004528}
+  currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
+  currentSunset: {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
+  currentRampExponent: 1.5853617
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0

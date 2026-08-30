@@ -37,10 +37,9 @@ public class SkyController : MonoBehaviour
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
 
-
-    private HorizonPreset currentSunrise;
-    private HorizonPreset currentSunset;
-    private float currentRampExponent;
+    [SerializeField] private HorizonPreset currentSunrise;
+    [SerializeField] private HorizonPreset currentSunset;
+    [SerializeField] private float currentRampExponent;
 
 
     private void OnEnable()
@@ -106,7 +105,6 @@ public class SkyController : MonoBehaviour
     /// </summary>
     private void ConfigureNewHorizonPreset()
     {
-        Debug.Log("Configuring new preset");
         Debug.Assert(sunrises.Length > 0 && sunsets.Length > 0);
 
         currentSunrise =  sunrises[Random.Range(0, sunrises.Length)];

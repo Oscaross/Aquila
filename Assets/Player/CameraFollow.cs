@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
+[DefaultExecutionOrder(1000)]
 public class CameraFollow : MonoBehaviour
 {
     public Transform target; // this will just be the player's transform (position)
@@ -8,7 +9,7 @@ public class CameraFollow : MonoBehaviour
     public float smoothTime = 0.05f; // smoothing factor, a higher smooth means the camera takes longer to follow the target as it changes position
     private Vector3 velocity; // an internal tracked property
 
-    private static readonly int PixelScaleID = Shader.PropertyToID("_PixelScale");
+    private static readonly int PixelScaleID = Shader.PropertyToID("_GlobalPixelScale");
     [SerializeField] PixelPerfectCamera ppc;
     
     private void LateUpdate()

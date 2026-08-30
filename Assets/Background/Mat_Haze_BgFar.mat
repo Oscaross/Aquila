@@ -39,11 +39,11 @@ Material:
     - _LayerDepth: 0.35
     - _LayerHaze: 0.25
     - _LightAtDay: 0.9
-    - _LightAtNight: 0
-    - _LightFalloff: 4
+    - _LightAtNight: 0.014
+    - _LightFalloff: 3.5
     - _LightResponse: 0.642
     - _MinContrast: 0.6
-    - _MinLight: 0
+    - _MinLight: 0.01
     - _PPU: 32
     - _RampAmount: 0.06
     - _RampCurve: 1.6

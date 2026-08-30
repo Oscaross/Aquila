@@ -70,11 +70,15 @@ Shader "Aquila/SkyGradient"
                 float a = pow(saturate(1.0 - IN.uv.y), max(_GlobalRampExponent, 0.01)) * _MaxAlpha;
 
                 // Screen pixels, divided down to GAME pixels so the dither cells match the art.
-                float2 gamePx = IN.screenPos.xy / IN.screenPos.w * _ScreenParams.xy / max(_GlobalPixelScale, 1.0);
+                float2 screenUV = IN.screenPos.xy / max(IN.screenPos.w, 0.0001);
+                float2 gamePx = screenUV * _ScreenParams.xy / max(_GlobalPixelScale, 1.0);
 
+                // floor before fmod so the index is integral; the offset keeps it positive
+                // off the left edge of the screen, where gamePx goes negative.
                 int2 p = int2(fmod(floor(gamePx) + 4096.0, 4.0));
                 float threshold = (bayer4[p.y * 4 + p.x] + 0.5) / 16.0;
 
+                // Quantise to _BandCount levels, dithering across each band boundary.
                 float scaled = a * _BandCount;
                 float rounded = lerp(step(0.5, frac(scaled)), step(threshold, frac(scaled)), _DitherAmount);
                 a = saturate((floor(scaled) + rounded) / _BandCount);
