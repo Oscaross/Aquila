@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a82ec7c1fd9cd14daafe62a2636b906, type: 3}
+  m_Name: MainPaletteFixed
+  m_EditorClassIdentifier: 
+  paletteFile: {fileID: 4900000, guid: 2a6bc3bf99689fd40b60f1011ed0d809, type: 3}
+  ramps:
+  - name: CoolGrey
+    count: 7
+  - name: Teal
+    count: 8
+  - name: DarkBlue
+    count: 8
+  - name: ForestGreen
+    count: 9
+  - name: MossGreen
+    count: 8
+  - name: OrangeBrown
+    count: 9
+  - name: BlueStone
+    count: 9
+  - name: Wood
+    count: 9
+  - name: WarmStone
+    count: 8
+  - name: Darkness
+    count: 4
+  - name: Earth
+    count: 8
+  - name: Red
+    count: 9
+  - name: Gold
+    count: 8
+  - name: River
+    count: 9
+  - name: Purple
+    count: 7
+  - name: Orange
+    count: 7
+  - name: Yellow
+    count: 6

@@ -73,13 +73,13 @@ Shader "Aquila/SkyGradient"
                 float2 gamePx = screenUV * _ScreenParams.xy / max(_GlobalPixelScale, 1.0);
                 float threshold = AquilaBayerThreshold(gamePx);
 
-                float a = pow(saturate(1.0 - IN.uv.y), max(_GlobalRampExponent, 0.01))
-                          * _GlobalHorizonColor.a * _MaxAlpha;
-
+                float a = pow(saturate(1.0 - IN.uv.y), max(_GlobalRampExponent, 0.01));
+                float dither = _DitherAmount * saturate(_GlobalHorizonColor.a * 4.0);
                 float scaled = a * _BandCount;
-                float rounded = lerp(step(0.5, frac(scaled)), step(threshold, frac(scaled)), _DitherAmount);
+                float rounded = lerp(step(0.5, frac(scaled)), step(threshold, frac(scaled)), dither);
                 a = saturate((floor(scaled) + rounded) / _BandCount);
 
+                a *= _GlobalHorizonColor.a * _MaxAlpha;
                 float3 zen = _GlobalZenithColor.rgb;
                 float3 hor = _GlobalHorizonColor.rgb;
                 float3 col = lerp(zen, hor, a);

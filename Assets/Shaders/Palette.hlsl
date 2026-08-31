@@ -4,27 +4,29 @@
 // ----------------------------------------------------------------------------
 // Shared colour discipline for every Aquila shader.
 //
-// The palette is uploaded by ShaderController from an AquilaPalette asset: the
-// authored ramps, expanded with interpolated steps within each ramp so shader
-// output has somewhere sensible to land without leaving the palette's colour
-// space. Nothing here interpolates ACROSS ramps, so no muddy in-between hues.
+// Lighting is an INDEX OFFSET, not a multiply. A pixel's authored colour is
+// looked up to find which ramp it belongs to and where it sits in that ramp;
+// the light level shifts it along that ramp; the result is read back out. The
+// ramp never changes, so a dimmed brown lands on a darker brown rather than on
+// whatever neutral happened to be nearest in RGB space.
 //
-// Dithering is offered, never imposed — shaders that already dither their own
-// bands should use the hard-snap variants so the two patterns don't compound.
+// Uploaded by ShaderController:
+//   _PaletteIndexLUT — 32^3 RGB cube. r = ramp, g = index in ramp, b = ramp length.
+//   _PaletteRamps    — one row per ramp, one texel per entry, dark to light.
 // ----------------------------------------------------------------------------
 
-#define AQUILA_MAX_PALETTE 256
+TEXTURE3D(_PaletteIndexLUT);
+TEXTURE2D(_PaletteRamps);
+SAMPLER(sampler_point_clamp);
 
-// Array length is fixed on first upload, so ShaderController always sends the
-// full 256 and _PaletteCount bounds the meaningful entries.
-float4 _PaletteColours[AQUILA_MAX_PALETTE];
-float  _PaletteCount;
-float  _PaletteAlphaSteps;
+float _PaletteMaxRampLength;
+float _PaletteRampCount;
+float _PaletteAlphaSteps;
 
-// Bias applied to the dither mix. Higher pulls harder toward the nearest
-// swatch, so the crosshatch only appears where a colour is genuinely between
-// two entries rather than spread evenly across flat regions.
-float  _PaletteDitherBias;
+/// Signed index steps applied to every lit pixel. 0 at full daylight, negative
+/// at night. Published by SkyController, already quantised there so the whole
+/// scene steps at the same moments.
+float _GlobalLightOffset;
 
 // ---- Bayer ------------------------------------------------------------------
 // One matrix and one indexing convention for the whole project, so every
@@ -48,8 +50,6 @@ float AquilaBayerThreshold(float2 gamePx)
     return (AquilaBayer4[p.y * 4 + p.x] + 0.5) / 16.0;
 }
 
-// ---- Scalar quantisation ----------------------------------------------------
-
 /// Snaps a 0-1 value to `steps` levels, dithering across each boundary.
 float SnapDithered(float v, float steps, float threshold)
 {
@@ -57,7 +57,7 @@ float SnapDithered(float v, float steps, float threshold)
     return saturate((floor(scaled) + step(threshold, frac(scaled))) / steps);
 }
 
-/// Snaps alpha to a limited set of blend weights. Use where the layer must stay
+/// Snaps alpha to a limited set of blend weights. For layers that must stay
 /// translucent — the water plane, anything you need to see through.
 float SnapAlpha(float a, float2 gamePx)
 {
@@ -72,45 +72,69 @@ void ClipDitheredAlpha(float a, float2 gamePx)
     clip(a - AquilaBayerThreshold(gamePx));
 }
 
-// ---- Palette snapping -------------------------------------------------------
-
-/// Finds the two nearest palette entries by squared RGB distance.
-/// Distances come back as squared; callers take the root only if they need it.
-void AquilaFindNearestTwo(float3 rgb, out float3 best, out float3 second,
-                          out float bestD, out float secondD)
+void AquilaLookup(float3 rgb, out float ramp, out float index, out float rampLength)
 {
-    best = rgb; second = rgb;
-    bestD = 1e9; secondD = 1e9;
+    const float LUT_SIZE = 64.0;
 
-    int count = (int)_PaletteCount;
-    for (int i = 0; i < count; i++)
-    {
-        float3 p  = _PaletteColours[i].rgb;
-        float3 d3 = rgb - p;
-        float  d  = dot(d3, d3);
+    // The sampled colour is already in the space the LUT is addressed in — no
+    // conversion. Adding one here brightened everything, which is how we found out.
+    float3 uvw = saturate(rgb) * ((LUT_SIZE - 1.0) / LUT_SIZE) + (0.5 / LUT_SIZE);
+    float4 hit = SAMPLE_TEXTURE3D(_PaletteIndexLUT, sampler_point_clamp, uvw);
 
-        if (d < bestD)
-        {
-            secondD = bestD; second = best;
-            bestD   = d;     best   = p;
-        }
-        else if (d < secondD)
-        {
-            secondD = d; second = p;
-        }
-    }
+    ramp       = floor(hit.r * 255.0 + 0.5);
+    index      = floor(hit.g * 255.0 + 0.5);
+    rampLength = floor(hit.b * 255.0 + 0.5);
 }
 
-TEXTURE3D(_PaletteLUT);
-SAMPLER(sampler_PaletteLUT);
+/// Reads a colour back out of the ramp texture at a given position.
+float3 AquilaReadRamp(float ramp, float index)
+{
+    float2 uv = float2((index + 0.5) / _PaletteMaxRampLength,
+                       (ramp  + 0.5) / _PaletteRampCount);
+    return SAMPLE_TEXTURE2D(_PaletteRamps, sampler_point_clamp, uv).rgb;
+}
 
+float3 DebugRampColour(float ramp)
+{
+    // Distinct hues per ramp, cycling. Not pretty, but adjacent ramps
+    // are visibly different rather than a smooth red gradient.
+    float h = frac(ramp * 0.618);          // golden ratio spreads hues evenly
+    float3 k = float3(3.0, 2.0, 1.0) / 3.0;
+    float3 p = abs(frac(h + k) * 6.0 - 3.0);
+    return saturate(p - 1.0);
+}
+
+/// Snaps a colour to the palette without changing its brightness. For shaders
+/// that only need the output on-palette — generated colours like the water
+/// bands or the sun glimmer.
 float3 SnapToPalette(float3 rgb)
 {
-    const float LUT_SIZE = 32;
-    // Offset to cell centres — sampling the raw 0-1 range lands half a cell
-    // outside at the extremes and clamps, biasing pure black and white.
-    float3 uvw = saturate(rgb) * ((LUT_SIZE - 1.0) / LUT_SIZE) + (0.5 / LUT_SIZE);
-    return SAMPLE_TEXTURE3D(_PaletteLUT, sampler_PaletteLUT, uvw).rgb;
+    float ramp, index, rampLength;
+    AquilaLookup(rgb, ramp, index, rampLength);
+    return AquilaReadRamp(ramp, index);
+}
+/// Lights a colour by moving it along its own ramp. `offset` is in whole index
+/// steps; fractional values dither between adjacent entries so a transition
+/// reads as gradual rather than as the whole screen switching at once.
+float3 LightWithPalette(float3 rgb, float offset, float2 gamePx)
+{
+    float ramp, index, rampLength;
+    AquilaLookup(rgb, ramp, index, rampLength);
+
+    // Split the offset into a whole step plus a dithered remainder.
+    float shifted = index + offset;
+    float whole   = floor(shifted);
+    float rem     = shifted - whole;
+    whole += step(AquilaBayerThreshold(gamePx), rem);
+
+    whole = clamp(whole, 0.0, rampLength - 1.0);
+    return AquilaReadRamp(ramp, whole);
+}
+
+/// The common case: light by the current global level.
+float3 LightWithPaletteGlobal(float3 rgb, float2 gamePx)
+{
+    return LightWithPalette(rgb, _GlobalLightOffset, gamePx);
 }
 
 #endif

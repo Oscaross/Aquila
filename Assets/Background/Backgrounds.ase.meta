@@ -132,31 +132,10 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 372
+      y: 4
       width: 640
       height: 181
     spriteID: d4bba9b4ccc48e14f8c9bc3b2f8a5b5b
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 372}
-  - name: Sky
-    originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 640
-      height: 360
-    spriteID: 2fec64215da414793865a024a5914143
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -174,7 +153,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 561
+      y: 193
       width: 640
       height: 79
     spriteID: 6040b58eda84bfc42918e4554c96e92d
@@ -185,7 +164,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 561}
+    uvTransform: {x: 4, y: 193}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 1
@@ -204,24 +183,6 @@ ScriptedImporter:
         width: 640
         height: 181
       spriteId: d4bba9b4ccc48e14f8c9bc3b2f8a5b5b
-    linkedCells: []
-    parentIndex: -1
-  - layerIndex: 0
-    guid: -822998763
-    name: Sky
-    layerFlags: 3
-    layerType: 0
-    blendMode: 0
-    cells:
-    - name: Sky
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 0
-        y: 0
-        width: 640
-        height: 360
-      spriteId: 2fec64215da414793865a024a5914143
     linkedCells: []
     parentIndex: -1
   - layerIndex: 2
@@ -295,4 +256,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 640, y: 360}
-  previousTextureSize: {x: 1024, y: 1024}
+  previousTextureSize: {x: 1024, y: 512}

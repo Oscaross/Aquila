@@ -10,12 +10,10 @@ public class AquilaPalette : ScriptableObject
     public class Ramp
     {
         public string name;
-        public int startIndex;
         public int count;
     }
 
     public Ramp[] ramps;
-    [Range(0, 8)] public int subdivisions = 2;
 
     private Color[] ParseGpl()
     {
@@ -37,33 +35,37 @@ public class AquilaPalette : ScriptableObject
         return colours.ToArray();
     }
     
-    /// <summary>
-    /// Expands the authored ramps into a larger set by interpolating WITHIN each ramp.
-    /// Never across ramps — blending a dirt brown with a foliage green gives muddy
-    /// colours that aren't in the art's language.
-    /// </summary>
-    public Color[] Expand()
+    public List<Color[]> GetRamps()
     {
         Color[] source = ParseGpl();
-        var result = new List<Color>();
+        Debug.Log($"GPL parsed: {source.Length}. Ramps array: {ramps.Length}.");
 
+        int declared = 0;
+        foreach (Ramp r in ramps) declared += r.count;
+        Debug.Log($"Ramp counts sum to {declared}.");
+
+        if (declared != source.Length)
+            Debug.LogError($"Ramps cover {declared} of {source.Length} — " +
+                           $"{source.Length - declared} colours unreachable.");
+        
+        var result = new List<Color[]>();
+        
+        Color[] converted;
+        int idxInSource = 0;
+        
         foreach (Ramp ramp in ramps)
         {
-            if (ramp.count < 1) continue;
+            converted = new Color[ramp.count];
 
-            int end = Mathf.Min(ramp.startIndex + ramp.count, source.Length);
-
-            for (int i = ramp.startIndex; i < end - 1; i++)
+            for (int i = 0; i < ramp.count; i++)
             {
-                result.Add(source[i]);
-                for (int s = 1; s <= subdivisions; s++)
-                    result.Add(Color.Lerp(source[i], source[i + 1],
-                        s / (float)(subdivisions + 1)));
+                converted[i] = source[idxInSource];
+                idxInSource++;
             }
-
-            if (end - 1 >= ramp.startIndex) result.Add(source[end - 1]);
+            
+            result.Add(converted);
         }
 
-        return result.ToArray();
+        return result;
     }
 }

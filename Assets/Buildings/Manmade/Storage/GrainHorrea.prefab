@@ -186,6 +186,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GrainHorrea
       objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: 56da22d9a56296d45afd1baf7cf65865, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 49bb9f203d7943449bd98f1817312679, type: 2}
     - target: {fileID: 7878350319992209165, guid: 56da22d9a56296d45afd1baf7cf65865, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.926514

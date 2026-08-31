@@ -37,6 +37,8 @@ public class SkyController : MonoBehaviour
     private static readonly int LightColorID = Shader.PropertyToID("_GlobalLightColor");
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
+    private static readonly int LightOffsetID = Shader.PropertyToID("_GlobalLightOffset");
+
 
     [SerializeField] private HorizonPreset currentSunrise;
     [SerializeField] private HorizonPreset currentSunset;
@@ -69,14 +71,14 @@ public class SkyController : MonoBehaviour
         {
             Color c = currentSunrise.horizonColour.Evaluate(p1);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p1 * Mathf.PI));
-            horizon = new Color(c.r, c.g, c.b, horizonStrength);
+            horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
             hazeBias = currentSunrise.hazeHorizonBias;
         }
         else if (GameTime.TryGetSunsetProgress(t, out float p2))
         {
             Color c = currentSunset.horizonColour.Evaluate(p2);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p2 * Mathf.PI));
-            horizon = new Color(c.r, c.g, c.b, horizonStrength);
+            horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
             hazeBias = currentSunset.hazeHorizonBias;
         }
         else
@@ -89,9 +91,9 @@ public class SkyController : MonoBehaviour
         light = illumination.lightColour.Evaluate(t);
 
         // The colour of the haze, a linear interpolation between the top and bottom of the sky (zenith, horizon). The higher the horizon strength & haze bias the closer this is to the horizon colour.
-        Color hazeRgb = Color.Lerp(Zenith, Horizon, horizonStrength * hazeBias);
+        Color hazeRgb = Color.Lerp(Zenith, Horizon, ShaderController.QuantiseAlpha(horizonStrength * hazeBias));
 
-        haze = new Color(hazeRgb.r, hazeRgb.g, hazeRgb.b, illumination.hazeStrength.Evaluate(t));
+        haze = new Color(hazeRgb.r, hazeRgb.g, hazeRgb.b, ShaderController.QuantiseAlpha(illumination.hazeStrength.Evaluate(t)));
         
         Shader.SetGlobalColor(HazeColorID, Haze);
         Shader.SetGlobalFloat(HorizonYID, horizonY);
@@ -100,6 +102,9 @@ public class SkyController : MonoBehaviour
         Shader.SetGlobalColor(LightColorID, Light);
         Shader.SetGlobalFloat(LightIntensityID, illumination.intensity.Evaluate(t));
         Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
+        
+        float offset = (illumination.intensity.Evaluate(t) - 1f) * ShaderController.maxOffset;
+        Shader.SetGlobalFloat(LightOffsetID, offset);
     }
 
     /// <summary>

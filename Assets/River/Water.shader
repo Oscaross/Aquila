@@ -34,9 +34,9 @@ Shader "Aquila/Water"
             #pragma vertex vert
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Assets/Shaders/Palette.hlsl"
 
             TEXTURE2D(_WaterReflectionTex);
-            SAMPLER(sampler_point_clamp);
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColour;
@@ -55,6 +55,7 @@ Shader "Aquila/Water"
             float4 _WaterReflectionTexelSize;
             float4 _SkyHorizonColour;
             float  _WaterlineScreenY; 
+            float  _SunPositionX;
 
             struct Attributes
             {
@@ -93,11 +94,11 @@ Shader "Aquila/Water"
                 screenUV.x += round(wavePx) * _WaterReflectionTexelSize.x;
 
                 half4 refl = SAMPLE_TEXTURE2D(_WaterReflectionTex, sampler_point_clamp, screenUV);
-
+                refl.rgb = SnapToPalette(refl.rgb);
+                
                 // Composite: reflection over base, fading with depth.
                 half fade = saturate(1.0 - depth / _ReflectionFade);
                 half3 baseCol = lerp(_BaseColour.rgb, _SkyHorizonColour.rgb, _SkyInfluence); // applying the sky colour tinting to river surface
-                baseCol = floor(baseCol * 8.0 + 0.5) / 8.0; // quantise again
 
                 half4 col = half4(baseCol, _BaseColour.a);
                 col.rgb = lerp(col.rgb, refl.rgb, refl.a * _ReflectionStrength * fade);
@@ -108,6 +109,7 @@ Shader "Aquila/Water"
                 col.rgb = lerp(col.rgb, _SurfaceColour.rgb, isLine);
 
                 col.a = _BaseColour.a;
+                
                 return col;
             }
             ENDHLSL

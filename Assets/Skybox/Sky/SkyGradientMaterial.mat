@@ -41,11 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BandCount: 32
+    - _BandCount: 22
     - _DitherAmount: 1
     - _DitherScale: 1
     - _EnableExternalAlpha: 0
-    - _MaxAlpha: 1
+    - _MaxAlpha: 0.737
     - _RampExponent: 0.92
     - _ZWrite: 0
     m_Colors:
