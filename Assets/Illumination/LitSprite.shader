@@ -80,12 +80,8 @@ Shader "Aquila/LitSprite"
                 half4 c = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 c *= IN.color;
                 clip(c.a - _Cutoff);
+                c.rgb = LightWithPaletteHard(c.rgb, _GlobalLightOffset);
 
-                // Sprite colours start on-palette, so the lit result stays near its own
-                // ramp — this should snap far more cleanly than the haze does.
-                c.rgb *= _GlobalLightColor.rgb * _GlobalLightIntensity;
-                c.rgb = SnapToPalette(c.rgb);
-                
                 return c;
             }
             ENDHLSL

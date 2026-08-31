@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a82ec7c1fd9cd14daafe62a2636b906, type: 3}
   m_Name: MainPaletteFixed
   m_EditorClassIdentifier: 
-  paletteFile: {fileID: 4900000, guid: 2a6bc3bf99689fd40b60f1011ed0d809, type: 3}
+  paletteFile: {fileID: 4900000, guid: 5b7bda7ec99ffc94cb76e6fb2b3cf88a, type: 3}
   ramps:
   - name: CoolGrey
     count: 7
@@ -31,7 +31,7 @@ MonoBehaviour:
   - name: Wood
     count: 9
   - name: WarmStone
-    count: 8
+    count: 9
   - name: Darkness
     count: 4
   - name: Earth
@@ -47,4 +47,4 @@ MonoBehaviour:
   - name: Orange
     count: 7
   - name: Yellow
-    count: 6
+    count: 7

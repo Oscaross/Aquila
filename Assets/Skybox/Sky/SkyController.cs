@@ -105,6 +105,8 @@ public class SkyController : MonoBehaviour
         
         float offset = (illumination.intensity.Evaluate(t) - 1f) * ShaderController.maxOffset;
         Shader.SetGlobalFloat(LightOffsetID, offset);
+        
+        Debug.Log($"intensity={illumination.intensity.Evaluate(t):F2} offset={offset:F2}");
     }
 
     /// <summary>

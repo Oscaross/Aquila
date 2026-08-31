@@ -36,7 +36,7 @@ public class ShaderController : MonoBehaviour
     [Tooltip("Discrete alpha levels available to shaders that blend rather than clip.")]
     [SerializeField, Range(2, 32)] private int alphaSteps = 16;
 
-    public static int maxOffset = 3;
+    public static int maxOffset = 5;
 
     private static readonly int IndexLutID    = Shader.PropertyToID("_PaletteIndexLUT");
     private static readonly int RampTexID     = Shader.PropertyToID("_PaletteRamps");

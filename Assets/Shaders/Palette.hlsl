@@ -72,13 +72,20 @@ void ClipDitheredAlpha(float a, float2 gamePx)
     clip(a - AquilaBayerThreshold(gamePx));
 }
 
+/// The LUT is addressed in sRGB, where dark colours stay well separated.
+/// Sprite textures are imported with sRGB ticked, so Unity converts them to
+/// linear on sample; this converts back so the lookup sees the authored value.
+float3 AquilaToSrgb(float3 c)
+{
+    return (c <= 0.0031308) ? c * 12.92 : 1.055 * pow(max(c, 0.0), 1.0 / 2.4) - 0.055;
+}
+
 void AquilaLookup(float3 rgb, out float ramp, out float index, out float rampLength)
 {
     const float LUT_SIZE = 64.0;
 
-    // The sampled colour is already in the space the LUT is addressed in — no
-    // conversion. Adding one here brightened everything, which is how we found out.
-    float3 uvw = saturate(rgb) * ((LUT_SIZE - 1.0) / LUT_SIZE) + (0.5 / LUT_SIZE);
+    float3 srgb = saturate(AquilaToSrgb(rgb));
+    float3 uvw = srgb * ((LUT_SIZE - 1.0) / LUT_SIZE) + (0.5 / LUT_SIZE);
     float4 hit = SAMPLE_TEXTURE3D(_PaletteIndexLUT, sampler_point_clamp, uvw);
 
     ramp       = floor(hit.r * 255.0 + 0.5);
@@ -113,28 +120,23 @@ float3 SnapToPalette(float3 rgb)
     AquilaLookup(rgb, ramp, index, rampLength);
     return AquilaReadRamp(ramp, index);
 }
+
 /// Lights a colour by moving it along its own ramp. `offset` is in whole index
 /// steps; fractional values dither between adjacent entries so a transition
 /// reads as gradual rather than as the whole screen switching at once.
-float3 LightWithPalette(float3 rgb, float offset, float2 gamePx)
+float3 LightWithPaletteHard(float3 rgb, float offset)
 {
     float ramp, index, rampLength;
     AquilaLookup(rgb, ramp, index, rampLength);
 
-    // Split the offset into a whole step plus a dithered remainder.
-    float shifted = index + offset;
-    float whole   = floor(shifted);
-    float rem     = shifted - whole;
-    whole += step(AquilaBayerThreshold(gamePx), rem);
-
-    whole = clamp(whole, 0.0, rampLength - 1.0);
-    return AquilaReadRamp(ramp, whole);
+    float shifted = clamp(round(index + offset), 0.0, rampLength - 1.0);
+    return AquilaReadRamp(ramp, shifted);
 }
 
 /// The common case: light by the current global level.
-float3 LightWithPaletteGlobal(float3 rgb, float2 gamePx)
+float3 LightWithPaletteGlobal(float3 rgb)
 {
-    return LightWithPalette(rgb, _GlobalLightOffset, gamePx);
+    return LightWithPaletteHard(rgb, _GlobalLightOffset);
 }
 
 #endif
