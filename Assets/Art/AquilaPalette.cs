@@ -5,6 +5,8 @@ using UnityEngine;
 public class AquilaPalette : ScriptableObject
 {
     public TextAsset paletteFile;
+    [Tooltip("Within each ramp, linearly interpolates between each colour this number of additional steps. The higher this value, the less sharp the steps are between darker colours and their lighter counterparts.")]
+    [SerializeField, Range(0, 8)] public int stepsBetweenColours = 2;
 
     [System.Serializable]
     public class Ramp
@@ -49,21 +51,26 @@ public class AquilaPalette : ScriptableObject
                            $"{source.Length - declared} colours unreachable.");
         
         var result = new List<Color[]>();
-        
-        Color[] converted;
         int idxInSource = 0;
-        
         foreach (Ramp ramp in ramps)
         {
-            converted = new Color[ramp.count];
-
+            // Read this ramp's authored colours first.
+            var authored = new Color[ramp.count];
             for (int i = 0; i < ramp.count; i++)
+                authored[i] = source[idxInSource++];
+
+            // Then expand: every gap between adjacent entries gains stepsBetweenColours.
+            var expanded = new List<Color>();
+            for (int i = 0; i < authored.Length - 1; i++)
             {
-                converted[i] = source[idxInSource];
-                idxInSource++;
+                expanded.Add(authored[i]);
+                for (int j = 1; j <= stepsBetweenColours; j++)
+                    expanded.Add(Color.Lerp(authored[i], authored[i + 1],
+                        j / (float)(stepsBetweenColours + 1)));
             }
-            
-            result.Add(converted);
+            expanded.Add(authored[^1]);   // last authored colour has no gap after it
+
+            result.Add(expanded.ToArray());
         }
 
         return result;

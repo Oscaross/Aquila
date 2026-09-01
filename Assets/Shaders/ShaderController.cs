@@ -27,22 +27,30 @@ using UnityEngine.Experimental.Rendering;
 public class ShaderController : MonoBehaviour
 {
     private const int LutSize = 64;   // cells per axis; n^3 entries
-
     public static ShaderController Instance { get; private set; }
-
     [SerializeField] private AquilaPalette palette;
+    [Tooltip("Debug mode for analysing shader lighting behaviour. ZERO for no debug. " +
+             "Mode 1: ramp, every pixel that resolves to the same ramp is coloured in the same hue. " +
+             "Mode 2: index, colours by position after the darkness shift regardless of ramp. Every pixel that is shaded at the same relative index in its ramp should be the same hue." +
+             "Mode 3: ramp and index combined, every distinct (ramp, index) pair has its own hue, so every visually distinct entry in use is shown." +
+             "Mode 4: isolate a single ramp according to debugRamp. Whichever debug ramp is selected is coloured in by index. Anything not on debugRamp is coloured in gray." +
+             "Mode 100: numeric probe. Encodes each (ramp, index, rampLength) into a byte in RGB. Eyedrop the pixel to analyse and its RGB encodes three integers; R = rampIndex, G = indexInRamp, B = rampLength.")]
+    [SerializeField, Range(0, 100)] private int shaderDebugMode;
+    [Tooltip("The ramp index to isolate when in mode 4 of debug mode.")]
+    [SerializeField, Range(0, 100)] private int debugRamp;
 
     [Header("Quantisation")]
     [Tooltip("Discrete alpha levels available to shaders that blend rather than clip.")]
     [SerializeField, Range(2, 32)] private int alphaSteps = 16;
-
-    public static int maxOffset = 5;
 
     private static readonly int IndexLutID    = Shader.PropertyToID("_PaletteIndexLUT");
     private static readonly int RampTexID     = Shader.PropertyToID("_PaletteRamps");
     private static readonly int MaxRampLenID  = Shader.PropertyToID("_PaletteMaxRampLength");
     private static readonly int RampCountID   = Shader.PropertyToID("_PaletteRampCount");
     private static readonly int AlphaStepsID  = Shader.PropertyToID("_PaletteAlphaSteps");
+
+    private static readonly int DebugModeID = Shader.PropertyToID("_DebugMode");
+    private static readonly int DebugRampID = Shader.PropertyToID("_DebugRamp");
 
     private Texture3D indexLut;
     private Texture2D rampTexture;
@@ -75,6 +83,8 @@ public class ShaderController : MonoBehaviour
     private void LateUpdate()
     {
         Shader.SetGlobalFloat(AlphaStepsID, alphaSteps);
+        Shader.SetGlobalFloat(DebugRampID, debugRamp);
+        Shader.SetGlobalFloat(DebugModeID, shaderDebugMode);
     }
 
     /// <summary>
@@ -108,7 +118,6 @@ public class ShaderController : MonoBehaviour
 
         Debug.Log($"{name}: baked {ramps.Count} ramps, longest {maxRampLength}.", this);
     }
-
     // ---- Ramp texture ------------------------------------------------------------
 
     /// <summary>

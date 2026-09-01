@@ -19,6 +19,8 @@ public class SkyController : MonoBehaviour
     [SerializeField] private IlluminationProfile illumination;
     [SerializeField] private float horizonY = 0f;
 
+    [SerializeField] private ShaderController shaderController;
+
     [Header("Runtime (read-only)")]
     [SerializeField] private Color zenith;
     [SerializeField] private Color horizon;
@@ -38,6 +40,8 @@ public class SkyController : MonoBehaviour
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
     private static readonly int LightOffsetID = Shader.PropertyToID("_GlobalLightOffset");
+    // This allows shaders like lit shaders to figure out, globally, where they should land on the ramp. Darkness peaks at midnight, and is a minimum at midday.
+    private static readonly int DarknessID = Shader.PropertyToID("_GlobalDarkness");
 
 
     [SerializeField] private HorizonPreset currentSunrise;
@@ -102,11 +106,13 @@ public class SkyController : MonoBehaviour
         Shader.SetGlobalColor(LightColorID, Light);
         Shader.SetGlobalFloat(LightIntensityID, illumination.intensity.Evaluate(t));
         Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
+
         
-        float offset = (illumination.intensity.Evaluate(t) - 1f) * ShaderController.maxOffset;
-        Shader.SetGlobalFloat(LightOffsetID, offset);
+        float intensity = illumination.intensity.Evaluate(t);
+        float darkness = 1f - intensity;
         
-        Debug.Log($"intensity={illumination.intensity.Evaluate(t):F2} offset={offset:F2}");
+        Shader.SetGlobalFloat(DarknessID, darkness);
+        Shader.SetGlobalFloat(LightIntensityID, intensity);
     }
 
     /// <summary>

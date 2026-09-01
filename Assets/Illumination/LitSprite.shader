@@ -53,7 +53,6 @@ Shader "Aquila/LitSprite"
 
             // Published by SkyController, already quantised there.
             float4 _GlobalLightColor;
-            float  _GlobalLightIntensity;
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
@@ -80,7 +79,7 @@ Shader "Aquila/LitSprite"
                 half4 c = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 c *= IN.color;
                 clip(c.a - _Cutoff);
-                c.rgb = LightWithPaletteHard(c.rgb, _GlobalLightOffset);
+                c.rgb = LightWithPaletteHard(c.rgb, _GlobalDarkness);
 
                 return c;
             }

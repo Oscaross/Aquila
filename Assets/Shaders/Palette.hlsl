@@ -22,11 +22,9 @@ SAMPLER(sampler_point_clamp);
 float _PaletteMaxRampLength;
 float _PaletteRampCount;
 float _PaletteAlphaSteps;
-
-/// Signed index steps applied to every lit pixel. 0 at full daylight, negative
-/// at night. Published by SkyController, already quantised there so the whole
-/// scene steps at the same moments.
-float _GlobalLightOffset;
+int _DebugMode;
+float _DebugRamp;
+float _GlobalDarkness;
 
 // ---- Bayer ------------------------------------------------------------------
 // One matrix and one indexing convention for the whole project, so every
@@ -82,7 +80,7 @@ float3 AquilaToSrgb(float3 c)
 
 void AquilaLookup(float3 rgb, out float ramp, out float index, out float rampLength)
 {
-    const float LUT_SIZE = 64.0;
+    const float LUT_SIZE = 64;
 
     float3 srgb = saturate(AquilaToSrgb(rgb));
     float3 uvw = srgb * ((LUT_SIZE - 1.0) / LUT_SIZE) + (0.5 / LUT_SIZE);
@@ -101,11 +99,11 @@ float3 AquilaReadRamp(float ramp, float index)
     return SAMPLE_TEXTURE2D(_PaletteRamps, sampler_point_clamp, uv).rgb;
 }
 
-float3 DebugRampColour(float ramp)
+float3 HueFromID(float id)
 {
     // Distinct hues per ramp, cycling. Not pretty, but adjacent ramps
     // are visibly different rather than a smooth red gradient.
-    float h = frac(ramp * 0.618);          // golden ratio spreads hues evenly
+    float h = frac(id * 0.618);          // golden ratio spreads hues evenly
     float3 k = float3(3.0, 2.0, 1.0) / 3.0;
     float3 p = abs(frac(h + k) * 6.0 - 3.0);
     return saturate(p - 1.0);
@@ -121,22 +119,29 @@ float3 SnapToPalette(float3 rgb)
     return AquilaReadRamp(ramp, index);
 }
 
-/// Lights a colour by moving it along its own ramp. `offset` is in whole index
-/// steps; fractional values dither between adjacent entries so a transition
-/// reads as gradual rather than as the whole screen switching at once.
-float3 LightWithPaletteHard(float3 rgb, float offset)
+/// Takes a pixel colour and darkness, figures out which ramp it belongs to, then shifts it proportionally up or down the ramp depending on it's darkness level. 
+float3 LightWithPaletteHard(float3 rgb, float darkness)
 {
     float ramp, index, rampLength;
     AquilaLookup(rgb, ramp, index, rampLength);
-
-    float shifted = clamp(round(index + offset), 0.0, rampLength - 1.0);
+    
+    float offset = round(darkness * (rampLength - 1.0));
+    float shifted = clamp(index - offset, 0.0, rampLength - 1.0); // to land somewhere on the ramp we need to be between light index 0 and rampLength - 1
+    
+    if (_DebugMode == 1) return HueFromID(ramp);
+    if (_DebugMode == 2) return HueFromID(shifted);
+    if (_DebugMode == 3) return HueFromID(ramp * 16.0 + shifted);
+    if (_DebugMode == 4) return (ramp == _DebugRamp) ? HueFromID(shifted) : 0.15;
+    if (_DebugMode == 100) return float3(ramp, shifted, rampLength) / 255.0;
+    return AquilaReadRamp(ramp, shifted);
+    
     return AquilaReadRamp(ramp, shifted);
 }
 
 /// The common case: light by the current global level.
 float3 LightWithPaletteGlobal(float3 rgb)
 {
-    return LightWithPaletteHard(rgb, _GlobalLightOffset);
+    return LightWithPaletteHard(rgb, _GlobalDarkness);
 }
 
 #endif

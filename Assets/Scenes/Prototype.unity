@@ -809,13 +809,14 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
-  zenith: {r: 0.21820691, g: 0.34976292, b: 0.39468703, a: 1}
-  horizon: {r: 0.91119736, g: 0.7286029, b: 0.49040404, a: 1}
-  light: {r: 0.9452875, g: 0.6315776, b: 0.2885428, a: 1}
-  haze: {r: 0.69463784, g: 0.6102154, b: 0.46049246, a: 0.25}
-  currentSunrise: {fileID: 11400000, guid: 2c9ff037f9dedd84cbf182308f7202c1, type: 2}
-  currentSunset: {fileID: 11400000, guid: 324aa49761b32ce4bbb23b6c88415362, type: 2}
-  currentRampExponent: 1.6214429
+  shaderController: {fileID: 626013584}
+  zenith: {r: 0.15075606, g: 0.23100954, b: 0.26463228, a: 1}
+  horizon: {r: 0, g: 0, b: 0, a: 0}
+  light: {r: 0.39012074, g: 0.30455, b: 0.23381229, a: 1}
+  haze: {r: 0.15075606, g: 0.23100954, b: 0.26463228, a: 0.1875}
+  currentSunrise: {fileID: 11400000, guid: 237d61d4ea551ca4c88d1f9131371708, type: 2}
+  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
+  currentRampExponent: 1.4937454
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -988,8 +989,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2dc65f5e1429e46b78773d120a2fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalLight: {fileID: 0}
-  profile: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
 --- !u!114 &372887981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2763,6 +2762,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   palette: {fileID: 11400000, guid: b5cfdfd7dd3cccc4aad2ef8eaa9698c8, type: 2}
+  shaderDebugMode: 0
+  debugRamp: 0
   alphaSteps: 16
 --- !u!1 &626745556
 GameObject:
