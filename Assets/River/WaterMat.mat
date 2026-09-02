@@ -41,21 +41,34 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BandDensity: 1
+    - _BandFreqFar: 0.06
+    - _BandFreqNear: 0.12
+    - _BandOffset: 2
+    - _BandSpeedFar: 0.4
+    - _BandSpeedNear: 1.2
+    - _ClumpDrift: 0.05
+    - _ClumpFreq: 0.05
+    - _ClumpMin: 0.2
+    - _DashLength: 0.428
+    - _EdgeOffset: 3
+    - _EdgeWidth: 0.03
     - _EnableExternalAlpha: 0
+    - _MaxBandOffset: 2
     - _PlaneHeightPixels: 180
     - _ReflectionFade: 1
-    - _ReflectionSquash: 0.864
-    - _ReflectionStrength: 0.628
-    - _SkyInfluence: 0.676
+    - _ReflectionSquash: 0.8
+    - _ReflectionStrength: 0.4
+    - _SkyInfluence: 0.851
     - _SurfaceThickness: 0
     - _WaveAmpPixels: 1
     - _WaveFreq: 45
     - _WaveSpeed: 1.5
     - _ZWrite: 0
     m_Colors:
-    - _BaseColour: {r: 0.089999996, g: 0.13999996, b: 0.27999997, a: 1}
+    - _BaseColour: {r: 0.1254902, g: 0.16078432, b: 0.22745098, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SurfaceColour: {r: 0.45, g: 0.62, b: 0.75, a: 1}
+    - _SurfaceColour: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

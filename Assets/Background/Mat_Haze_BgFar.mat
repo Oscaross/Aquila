@@ -36,7 +36,7 @@ Material:
     - _HazeSteps: 20
     - _HighlightKeep: 0.25
     - _HorizonY: 0
-    - _LayerDepth: 0.35
+    - _LayerDepth: 0.5
     - _LayerHaze: 0.25
     - _LightAtDay: 0.9
     - _LightAtNight: 0.014
@@ -47,7 +47,7 @@ Material:
     - _PPU: 32
     - _RampAmount: 0.06
     - _RampCurve: 1.6
-    - _RampHeight: 12
+    - _RampHeight: 36.11
     - _Steps: 32
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -1,0 +1,135 @@
+GIMP Palette
+#
+116  99 115	Untitled
+145 125 138	Untitled
+164 142 152	Untitled
+189 167 172	Untitled
+214 190 192	Untitled
+239 214 212	Untitled
+255 240 237	Untitled
+ 15  22  17	Untitled
+ 24  30  26	Untitled
+ 37  44  36	Untitled
+ 64  71  58	Untitled
+ 95  97  77	Untitled
+123 123 104	Untitled
+151 149 131	Untitled
+174 168 148	Untitled
+ 11  13  19	Untitled
+ 24  25  39	Untitled
+ 40  39  56	Untitled
+ 65  59  78	Untitled
+ 89  79  98	Untitled
+113 100 117	Untitled
+137 120 135	Untitled
+170 148 159	Untitled
+ 18  25   8	Untitled
+ 36  42  15	Untitled
+ 46  51  21	Untitled
+ 76  74  21	Untitled
+108  95  10	Untitled
+142 113   6	Untitled
+175 132   4	Untitled
+208 149  32	Untitled
+237 163  35	Untitled
+ 20  18   6	Untitled
+ 47  39  17	Untitled
+ 72  59  25	Untitled
+106  84  31	Untitled
+142 107  32	Untitled
+180 129  34	Untitled
+210 151  78	Untitled
+241 173  99	Untitled
+ 19  16  12	Untitled
+ 35  25  18	Untitled
+ 51  36  25	Untitled
+ 85  55  38	Untitled
+127  74  43	Untitled
+166  92  46	Untitled
+196 116  56	Untitled
+227 137  65	Untitled
+255 156  83	Untitled
+ 20  21  24	Untitled
+ 33  32  36	Untitled
+ 54  51  59	Untitled
+ 76  71  79	Untitled
+ 99  91 100	Untitled
+125 110 118	Untitled
+148 130 136	Untitled
+172 149 153	Untitled
+192 170 171	Untitled
+ 19  15  11	Untitled
+ 38  27  18	Untitled
+ 53  38  25	Untitled
+ 84  58  38	Untitled
+117  80  47	Untitled
+149 101  59	Untitled
+178 123  75	Untitled
+205 145  95	Untitled
+224 162 112	Untitled
+ 73  63  48	Untitled
+106  91  73	Untitled
+142 121  99	Untitled
+165 141 119	Untitled
+196 168 145	Untitled
+225 195 171	Untitled
+255 222 198	Untitled
+255 229 212	Untitled
+ 18  19  24	Untitled
+ 31  27  34	Untitled
+ 43  35  41	Untitled
+ 53  44  48	Untitled
+ 63  41  27	Untitled
+113  69  41	Untitled
+146  85  46	Untitled
+178 109  62	Untitled
+207 134  83	Untitled
+236 157 105	Untitled
+254 187 143	Untitled
+255 206 176	Untitled
+ 11   6   5	Untitled
+ 25  14  12	Untitled
+ 76  27  25	Untitled
+117  34  24	Untitled
+162  38   5	Untitled
+187  61  13	Untitled
+209  77   1	Untitled
+228  97  15	Untitled
+253 118  42	Untitled
+ 55  41  19	Untitled
+ 76  55  22	Untitled
+103  70  22	Untitled
+150  95  23	Untitled
+198 117  10	Untitled
+243 142  24	Untitled
+255 181 122	Untitled
+255 195 149	Untitled
+ 15  42  42	Untitled
+ 24  44  43	Untitled
+ 34  55  52	Untitled
+ 62  86  74	Untitled
+ 95 116  93	Untitled
+132 142 116	Untitled
+168 168 142	Untitled
+192 186 160	Untitled
+204 196 170	Untitled
+ 30  10  22	Untitled
+ 46  25  36	Untitled
+ 53  32  43	Untitled
+ 87  50  64	Untitled
+120  71  82	Untitled
+152  91  96	Untitled
+178 110 109	Untitled
+ 94  32   1	Untitled
+125  48   2	Untitled
+147  59   4	Untitled
+189  85   4	Untitled
+228 113  22	Untitled
+254 144  55	Untitled
+255 160  91	Untitled
+254 174 106	Untitled
+254 196 151	Untitled
+255 206 168	Untitled
+255 223 201	Untitled
+255 240 230	Untitled
+255 247 240	Untitled

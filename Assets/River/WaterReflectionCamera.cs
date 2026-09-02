@@ -17,7 +17,7 @@ public class WaterReflectionCamera : MonoBehaviour
 
     private static readonly int ReflectionTex = Shader.PropertyToID("_WaterReflectionTex");
     private static readonly int ReflectionTexel = Shader.PropertyToID("_WaterReflectionTexelSize");
-    private static readonly int WaterlineScreenY = Shader.PropertyToID("_WaterlineScreenY");
+    private static readonly int WaterlineScreenUV = Shader.PropertyToID("_WaterlineScreenUV");
     private static readonly int PixelScaleID = Shader.PropertyToID("_GlobalPixelScale");
 
     private Camera cam;
@@ -69,8 +69,9 @@ public class WaterReflectionCamera : MonoBehaviour
             new Vector4(1f / target.width, 1f / target.height, target.width, target.height));
 
         // NEW: where the waterline currently appears on screen, 0-1 from viewport bottom.
-        float waterScreenY = mainCamera.WorldToViewportPoint(
+        float waterlineScreenUV = mainCamera.WorldToViewportPoint(
             new Vector3(0f, water.SurfaceY, 0f)).y;
-        Shader.SetGlobalFloat(WaterlineScreenY, waterScreenY);
+        
+        Shader.SetGlobalFloat(WaterlineScreenUV, waterlineScreenUV);
     }
 }

@@ -67,7 +67,6 @@ GIMP Palette
 162 130  89	Untitled
 185 154 111	Untitled
 202 171 129	Untitled
- 47  44  36	Untitled
  69  64  52	Untitled
 100  93  78	Untitled
 133 124 105	Untitled
@@ -128,7 +127,6 @@ GIMP Palette
 224 117  40	Untitled
 240 154  63	Untitled
 247 166  82	Untitled
-150 118  50	Untitled
 238 185  71	Untitled
 247 203 109	Untitled
 247 212 137	Untitled

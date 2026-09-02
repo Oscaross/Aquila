@@ -19,12 +19,17 @@ TEXTURE3D(_PaletteIndexLUT);
 TEXTURE2D(_PaletteRamps);
 SAMPLER(sampler_point_clamp);
 
-float _PaletteMaxRampLength;
-float _PaletteRampCount;
-float _PaletteAlphaSteps;
-int _DebugMode;
-float _DebugRamp;
-float _GlobalDarkness;
+#define PIXELS_PER_UNIT 16.0
+
+float _PaletteMaxRampLength; // computed by the ShaderController and is just the number of entries in the longest ramp to prevent index overflows
+float _PaletteRampCount; // the number of unique ramps loaded from the engine's palette
+float _PaletteAlphaSteps; // how many discrete alpha steps from 0..255 we are allowed to take
+float _PaletteBlockCount; // how many unique palettes for coloured light there are, for example, neutral lit, cool lit, warm lit
+float _GlobalBlock; // 0 = coolest, BlockCount-1 = warmest block
+float _GlobalDarkness; // what is the current global brightness level published by the SkyController system?
+
+int _DebugMode; // the type of debug view we want to see i.e. hue grouped by ramps, index, ramp and index, etc...
+float _DebugRamp; // if we are looking at behaviour of a singular ramp, which one should be shown?
 
 // ---- Bayer ------------------------------------------------------------------
 // One matrix and one indexing convention for the whole project, so every
@@ -91,13 +96,23 @@ void AquilaLookup(float3 rgb, out float ramp, out float index, out float rampLen
     rampLength = floor(hit.b * 255.0 + 0.5);
 }
 
-/// Reads a colour back out of the ramp texture at a given position.
-float3 AquilaReadRamp(float ramp, float index)
+/// Returns the on-palette colour for this ramp, at the correct index on the correct block palette.
+/// A block palette is the type of light colour, e.g. neutral light (sunlit) or mild warm light (torch/fire/sunset/sunrise lighting).
+float3 AquilaReadRamp(float ramp, float index, float block)
 {
+    float row = block * _PaletteRampCount + ramp;
     float2 uv = float2((index + 0.5) / _PaletteMaxRampLength,
-                       (ramp  + 0.5) / _PaletteRampCount);
+                       (row + 0.5) / (_PaletteRampCount * _PaletteBlockCount));
     return SAMPLE_TEXTURE2D(_PaletteRamps, sampler_point_clamp, uv).rgb;
 }
+
+/// Returns the on-palette colour for this ramp, at the correct index.
+/// e.g. if we are on the wood ramp at idx = 0, this returns the darkest wood colour on the current palette.
+float3 AquilaReadRamp(float ramp, float index)
+{
+    return AquilaReadRamp(ramp, index, _GlobalBlock);
+}
+
 
 float3 HueFromID(float id)
 {
@@ -134,7 +149,15 @@ float3 LightWithPaletteHard(float3 rgb, float darkness)
     if (_DebugMode == 4) return (ramp == _DebugRamp) ? HueFromID(shifted) : 0.15;
     if (_DebugMode == 100) return float3(ramp, shifted, rampLength) / 255.0;
     return AquilaReadRamp(ramp, shifted);
+}
+
+/// Shifts a colour along its ramp by an explicit number of steps. Positive steps move to the light end, negative to the dark end. 
+float3 ShiftPaletteSteps(float3 rgb, float steps)
+{
+    float ramp, index, rampLength;
+    AquilaLookup(rgb, ramp, index, rampLength);
     
+    float shifted = clamp(index + steps, 0.0, rampLength - 1.0);
     return AquilaReadRamp(ramp, shifted);
 }
 

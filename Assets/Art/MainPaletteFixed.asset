@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a82ec7c1fd9cd14daafe62a2636b906, type: 3}
   m_Name: MainPaletteFixed
   m_EditorClassIdentifier: 
-  paletteFile: {fileID: 4900000, guid: 5b7bda7ec99ffc94cb76e6fb2b3cf88a, type: 3}
   stepsBetweenColours: 4
+  blocks:
+  - name: Neutral
+    gpl: {fileID: 4900000, guid: 63b054e781331d04a84bda5a43a864e6, type: 3}
+  - name: MildWarm
+    gpl: {fileID: 4900000, guid: fb1438863f8b99c4d81f21d5c8b2ed8e, type: 3}
+  - name: StrongWarm
+    gpl: {fileID: 4900000, guid: 52f2e3fe5a13761408e0f7a69caa53dd, type: 3}
   ramps:
   - name: CoolGrey
     count: 7
@@ -32,7 +38,7 @@ MonoBehaviour:
   - name: Wood
     count: 9
   - name: WarmStone
-    count: 9
+    count: 8
   - name: Darkness
     count: 4
   - name: Earth
@@ -48,4 +54,4 @@ MonoBehaviour:
   - name: Orange
     count: 7
   - name: Yellow
-    count: 7
+    count: 6

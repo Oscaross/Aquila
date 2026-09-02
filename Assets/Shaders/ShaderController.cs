@@ -48,6 +48,7 @@ public class ShaderController : MonoBehaviour
     private static readonly int MaxRampLenID  = Shader.PropertyToID("_PaletteMaxRampLength");
     private static readonly int RampCountID   = Shader.PropertyToID("_PaletteRampCount");
     private static readonly int AlphaStepsID  = Shader.PropertyToID("_PaletteAlphaSteps");
+    private static readonly int BlockCountID = Shader.PropertyToID("_PaletteBlockCount");
 
     private static readonly int DebugModeID = Shader.PropertyToID("_DebugMode");
     private static readonly int DebugRampID = Shader.PropertyToID("_DebugRamp");
@@ -55,23 +56,18 @@ public class ShaderController : MonoBehaviour
     private Texture3D indexLut;
     private Texture2D rampTexture;
 
-    // ---- Quantisation ------------------------------------------------------------
-    // Everything published to a shader goes through one of these, so the whole scene
-    // steps at the same moments rather than each shader drifting across its own
-    // boundaries independently.
-
     public static float QuantiseAlpha(float value) =>
         Quantise(value, Instance != null ? Instance.alphaSteps : 16);
     
     private static float Quantise(float value, int steps) =>
         steps <= 1 ? value : Mathf.Round(value * steps) / steps;
-
-    // ---- Lifecycle ---------------------------------------------------------------
+    
 
     private void OnEnable()
     {
         Instance = this;
         RebuildPalette();
+        PublishSettings();
     }
 
     private void OnDisable()
@@ -80,44 +76,78 @@ public class ShaderController : MonoBehaviour
         ReleaseTextures();
     }
 
-    private void LateUpdate()
+    private void OnValidate() => PublishSettings();
+
+    private void PublishSettings()
     {
         Shader.SetGlobalFloat(AlphaStepsID, alphaSteps);
         Shader.SetGlobalFloat(DebugRampID, debugRamp);
         Shader.SetGlobalFloat(DebugModeID, shaderDebugMode);
     }
-
-    /// <summary>
-    /// Rebuilds both lookup textures from the palette asset. Call after editing the
-    /// palette — OnValidate here won't catch changes made to the asset itself.
-    /// </summary>
+    
     [ContextMenu("Rebuild Palette")]
     public void RebuildPalette()
     {
         if (palette == null) return;
-
-        List<Color[]> ramps = palette.GetRamps();
-        if (ramps == null || ramps.Count == 0)
+        if (palette.BlockCount == 0)
         {
-            Debug.LogWarning($"{name}: palette produced no ramps — check the definitions.", this);
+            Debug.LogWarning($"{name}: palette has no blocks.", this);
             return;
         }
 
+        // Gather every block. Index in this list is the block index the shader uses.
+        var blocks = new List<List<Color[]>>();
+        for (int b = 0; b < palette.BlockCount; b++)
+        {
+            List<Color[]> ramps = palette.GetRamps(b);
+            if (ramps == null || ramps.Count == 0)
+            {
+                Debug.LogWarning($"{name}: block '{palette.BlockName(b)}' produced no ramps.", this);
+                return;
+            }
+            blocks.Add(ramps);
+        }
+
+        // Structure must be identical across blocks or the row arithmetic is meaningless:
+        // the shader reads (block * rampCount + ramp), and an index valid in one block
+        // has to be valid in every other.
+        List<Color[]> reference = blocks[palette.ReferenceBlock];
+        for (int b = 0; b < blocks.Count; b++)
+        {
+            if (blocks[b].Count != reference.Count)
+            {
+                Debug.LogError($"{name}: block '{palette.BlockName(b)}' has {blocks[b].Count} ramps, " +
+                               $"reference has {reference.Count}. Aborting bake.", this);
+                return;
+            }
+            for (int y = 0; y < reference.Count; y++)
+                if (blocks[b][y].Length != reference[y].Length)
+                {
+                    Debug.LogError($"{name}: block '{palette.BlockName(b)}' ramp {y} has " +
+                                   $"{blocks[b][y].Length} entries, reference has {reference[y].Length}. " +
+                                   $"Aborting bake.", this);
+                    return;
+                }
+        }
+
         int maxRampLength = 0;
-        foreach (Color[] ramp in ramps) maxRampLength = Mathf.Max(maxRampLength, ramp.Length);
+        foreach (Color[] ramp in reference) maxRampLength = Mathf.Max(maxRampLength, ramp.Length);
 
         ReleaseTextures();
 
-        rampTexture = BuildRampTexture(ramps, maxRampLength);
-        indexLut    = BuildIndexLut(ramps);
+        rampTexture = BuildRampTexture(blocks, maxRampLength);   // now takes every block
+        indexLut    = BuildIndexLut(reference);                  // reference only
 
         Shader.SetGlobalTexture(RampTexID, rampTexture);
         Shader.SetGlobalTexture(IndexLutID, indexLut);
         Shader.SetGlobalFloat(MaxRampLenID, maxRampLength);
-        Shader.SetGlobalFloat(RampCountID, ramps.Count);
+        Shader.SetGlobalFloat(RampCountID, reference.Count);
+        Shader.SetGlobalFloat(BlockCountID, blocks.Count);
 
-        Debug.Log($"{name}: baked {ramps.Count} ramps, longest {maxRampLength}.", this);
+        Debug.Log($"{name}: baked {blocks.Count} block(s) × {reference.Count} ramps, " +
+                  $"longest {maxRampLength}.", this);
     }
+    
     // ---- Ramp texture ------------------------------------------------------------
 
     /// <summary>
@@ -126,28 +156,32 @@ public class ShaderController : MonoBehaviour
     /// real length anyway, so the padding is never read, but it keeps the texture
     /// rectangular and avoids sampling undefined texels.
     /// </summary>
-    private static Texture2D BuildRampTexture(List<Color[]> ramps, int maxRampLength)
+    private Texture2D BuildRampTexture(List<List<Color[]>> blocks, int maxRampLength)
     {
-        var texture = new Texture2D(maxRampLength, ramps.Count,
-            TextureFormat.RGBA32, false, false)
+        int rampCount = blocks[0].Count;
+        int height = rampCount * blocks.Count;
+
+        var tex = new Texture2D(maxRampLength, height, TextureFormat.RGBA32, false, false)
         {
             filterMode = FilterMode.Point,
-            wrapMode = TextureWrapMode.Clamp,
-            hideFlags = HideFlags.HideAndDontSave
+            wrapMode   = TextureWrapMode.Clamp
         };
 
-        var pixels = new Color32[maxRampLength * ramps.Count];
-
-        for (int y = 0; y < ramps.Count; y++)
+        for (int b = 0; b < blocks.Count; b++)
+        for (int y = 0; y < rampCount; y++)
         {
-            Color[] ramp = ramps[y];
+            Color[] ramp = blocks[b][y];
+            int row = b * rampCount + y;
+
             for (int x = 0; x < maxRampLength; x++)
-                pixels[y * maxRampLength + x] = ramp[Mathf.Min(x, ramp.Length - 1)];
+                // Pad short ramps with their last entry. Nothing should read past
+                // rampLength, but a clamped read then lands on a legal colour
+                // rather than whatever was left in the buffer.
+                tex.SetPixel(x, row, ramp[Mathf.Min(x, ramp.Length - 1)]);
         }
 
-        texture.SetPixels32(pixels);
-        texture.Apply();
-        return texture;
+        tex.Apply(false, false);
+        return tex;
     }
 
     // ---- Index LUT ---------------------------------------------------------------
@@ -221,43 +255,74 @@ public class ShaderController : MonoBehaviour
         texture.Apply();
         return texture;
     }
-    
-        /// <summary>
-    /// Dumps every ramp and the hex values the bake actually produced, then verifies each
-    /// authored colour resolves back to its own ramp and index through the LUT. A colour
-    /// that doesn't round-trip is one that shares a LUT cell with an entry from another
-    /// ramp — it can never be lit correctly, and raising LutSize is the fix.
+    /// <summary>
+    /// Dumps every block's ramps and the hex values the bake actually produced, then verifies
+    /// each authored colour in the reference block resolves back to its own ramp and index
+    /// through the LUT. A colour that doesn't round-trip shares a LUT cell with an entry from
+    /// another ramp — it can never be lit correctly, and raising LutSize is the fix.
+    /// Non-reference blocks are checked for structural agreement instead: same ramp count,
+    /// same length per ramp. A mismatch there diverges silently as the scene darkens.
     /// </summary>
     [ContextMenu("Log Palette")]
     public void LogPalette()
     {
         if (palette == null) { Debug.LogWarning($"{name}: no palette assigned.", this); return; }
-        
-        List<Color[]> ramps = palette.GetRamps();
-        if (ramps == null || ramps.Count == 0) { Debug.LogWarning($"{name}: no ramps.", this); return; }
-        
-        int total = 0;
-        for (int y = 0; y < ramps.Count; y++)
-        {
-            var hex = new List<string>();
-            foreach (Color c in ramps[y]) hex.Add(ColorUtility.ToHtmlStringRGB(c));
-            total += ramps[y].Length;
+        if (palette.BlockCount == 0) { Debug.LogWarning($"{name}: no blocks.", this); return; }
 
-            Debug.Log($"Ramp {y} ({ramps[y].Length}): {string.Join(" ", hex)}");
+        int reference = palette.ReferenceBlock;
+        List<Color[]> referenceRamps = null;
+
+        for (int b = 0; b < palette.BlockCount; b++)
+        {
+            List<Color[]> ramps = palette.GetRamps(b);
+            if (ramps == null || ramps.Count == 0)
+            {
+                Debug.LogWarning($"Block {b} '{palette.BlockName(b)}': no ramps.", this);
+                continue;
+            }
+
+            string tag = b == reference ? " [LUT reference]" : "";
+            Debug.Log($"===== Block {b}: {palette.BlockName(b)}{tag} =====");
+
+            int total = 0;
+            for (int y = 0; y < ramps.Count; y++)
+            {
+                var hex = new List<string>();
+                foreach (Color c in ramps[y]) hex.Add(ColorUtility.ToHtmlStringRGB(c));
+                total += ramps[y].Length;
+
+                Debug.Log($"  Ramp {y} ({ramps[y].Length}): {string.Join(" ", hex)}");
+            }
+
+            Debug.Log($"  {ramps.Count} ramps, {total} colours total.");
+
+            if (b == reference) { referenceRamps = ramps; continue; }
+
+            // ---- Structural check against the reference ----
+            if (ramps.Count != referenceRamps.Count)
+            {
+                Debug.LogError($"  Block '{palette.BlockName(b)}' has {ramps.Count} ramps, " +
+                               $"reference has {referenceRamps.Count}.", this);
+                continue;
+            }
+
+            for (int y = 0; y < ramps.Count; y++)
+                if (ramps[y].Length != referenceRamps[y].Length)
+                    Debug.LogError($"  Ramp {y} has {ramps[y].Length} entries, " +
+                                   $"reference has {referenceRamps[y].Length}.", this);
         }
 
-        Debug.Log($"{ramps.Count} ramps, {total} colours total.");
-
-        // ---- Round-trip check ----
+        // ---- Round-trip check, reference block only ----
         if (indexLut == null) { Debug.LogWarning("No LUT baked — run Rebuild Palette first."); return; }
+        if (referenceRamps == null) { Debug.LogWarning("Reference block produced no ramps."); return; }
 
         Color32[] cells = indexLut.GetPixels32();
         int collisions = 0;
 
-        for (int y = 0; y < ramps.Count; y++)
-        for (int x = 0; x < ramps[y].Length; x++)
+        for (int y = 0; y < referenceRamps.Count; y++)
+        for (int x = 0; x < referenceRamps[y].Length; x++)
         {
-            Color c = ramps[y][x];
+            Color c = referenceRamps[y][x];
             int cr = Mathf.Clamp(Mathf.RoundToInt(c.r * (LutSize - 1)), 0, LutSize - 1);
             int cg = Mathf.Clamp(Mathf.RoundToInt(c.g * (LutSize - 1)), 0, LutSize - 1);
             int cb = Mathf.Clamp(Mathf.RoundToInt(c.b * (LutSize - 1)), 0, LutSize - 1);
@@ -268,14 +333,14 @@ public class ShaderController : MonoBehaviour
             {
                 collisions++;
                 Debug.LogWarning(
-                    $"#{ColorUtility.ToHtmlStringRGB(ramps[y][x])} (ramp {y}, index {x}) " +
+                    $"#{ColorUtility.ToHtmlStringRGB(referenceRamps[y][x])} (ramp {y}, index {x}) " +
                     $"resolves to ramp {stored.r}, index {stored.g} " +
                     $"— cell [{cr},{cg},{cb}] is shared.");
             }
         }
 
         Debug.Log(collisions == 0
-            ? "All colours round-trip correctly."
+            ? "All reference colours round-trip correctly."
             : $"{collisions} colour(s) collide in the LUT — raise LutSize to 64.");
     }
         

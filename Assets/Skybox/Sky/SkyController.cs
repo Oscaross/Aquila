@@ -1,10 +1,6 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-/**
- * 
-*/
-
 [ExecuteAlways]
 public class SkyController : MonoBehaviour
 {
@@ -18,14 +14,14 @@ public class SkyController : MonoBehaviour
     
     [SerializeField] private IlluminationProfile illumination;
     [SerializeField] private float horizonY = 0f;
-
-    [SerializeField] private ShaderController shaderController;
-
+    
     [Header("Runtime (read-only)")]
+    // These properties are serialised meaning we can see what's going on with the sky in the inspector if things aren't behaving.
     [SerializeField] private Color zenith;
     [SerializeField] private Color horizon;
     [SerializeField] private Color light;
     [SerializeField] private Color haze;
+    [SerializeField] private float currentLightBlock;
     
     public Color Zenith { get => zenith; private set => zenith = value; }
     public Color Horizon { get => horizon; private set => horizon = value; }
@@ -39,18 +35,22 @@ public class SkyController : MonoBehaviour
     private static readonly int LightColorID = Shader.PropertyToID("_GlobalLightColor");
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
-    private static readonly int LightOffsetID = Shader.PropertyToID("_GlobalLightOffset");
     // This allows shaders like lit shaders to figure out, globally, where they should land on the ramp. Darkness peaks at midnight, and is a minimum at midday.
     private static readonly int DarknessID = Shader.PropertyToID("_GlobalDarkness");
-
-
+    private static readonly int GlobalBlockID = Shader.PropertyToID("_GlobalBlock");
+    
     [SerializeField] private HorizonPreset currentSunrise;
     [SerializeField] private HorizonPreset currentSunset;
     [SerializeField] private float currentRampExponent;
 
-
     private void OnEnable()
     {
+        if (illumination == null || currentSunrise == null || currentSunset == null)
+        {
+            Debug.LogError($"{name}: SkyController missing references: sky will not update properly.", this);
+            enabled = false;
+        }
+        
         ConfigureNewHorizonPreset();
         Instance = this;
         TimeOfDay.OnNoon += ConfigureNewHorizonPreset;
@@ -63,16 +63,56 @@ public class SkyController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (illumination == null || currentSunrise == null || currentSunset == null) return;
-        
         float t = GameTime.Now;
-        // We only want the horizon to be "strong" and present in the visuals at sunrise/sunset where it's at its peak, and fade in and out from those moments.
-        float horizonStrength = 0f;
-        // The haze bias is how much the horizon colour contributes towards the haze. This is determined by the specific Sunset/Sunrise we've picked.
-        float hazeBias;
 
+        UpdateIllumination(t);
+        UpdateHorizon(t);
+        PublishGlobals(t);
+    }
+    
+    /// <summary>
+    /// Advances the global illumination and zenith sky colour forwards based on the current illumination profile.
+    /// </summary>
+    /// <param name="t">The time.</param>
+    private void UpdateIllumination(float t)
+    {
+        zenith = illumination.zenithColour.Evaluate(t);
+        light  = illumination.lightColour.Evaluate(t);
+    }
+
+    /// <summary>
+    /// Sends required variables to shaders so that they can react to the day/night cycle changing.
+    /// </summary>
+    /// <param name="t">The time.</param>
+    private void PublishGlobals(float t)
+    {
+        float intensity = illumination.intensity.Evaluate(t);
+        float darkness = 1f - intensity;
+        
+        Shader.SetGlobalFloat(DarknessID, darkness);
+        Shader.SetGlobalFloat(LightIntensityID, intensity);
+        Shader.SetGlobalFloat(GlobalBlockID, currentLightBlock);
+        Shader.SetGlobalColor(HazeColorID, Haze);
+        Shader.SetGlobalFloat(HorizonYID, horizonY);
+        Shader.SetGlobalColor(HorizonColorID, Horizon);
+        Shader.SetGlobalColor(ZenithColorID, Zenith);
+        Shader.SetGlobalColor(LightColorID, Light);
+        Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
+    }
+
+    /// <summary>
+    /// Based on the time, determines how strong the horizon should be (strongest in the middle of a sunrise/sunset) and derives the haze from this horizon value.
+    /// </summary>
+    /// <param name="t">The time.</param>
+    private void UpdateHorizon(float t)
+    {
+        float horizonStrength = 0f;
+        float hazeBias;
+        currentLightBlock = 0f; // the block is neutral colour unless we enter the sunrise/sunset progress code
+        
         if (GameTime.TryGetSunriseProgress(t, out float p1))
         {
+            currentLightBlock = 1f;
             Color c = currentSunrise.horizonColour.Evaluate(p1);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p1 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
@@ -80,6 +120,7 @@ public class SkyController : MonoBehaviour
         }
         else if (GameTime.TryGetSunsetProgress(t, out float p2))
         {
+            currentLightBlock = 1f;
             Color c = currentSunset.horizonColour.Evaluate(p2);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p2 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
@@ -91,28 +132,9 @@ public class SkyController : MonoBehaviour
             horizon = new Color(0f, 0f, 0f, 0f);
         }
         
-        zenith = illumination.zenithColour.Evaluate(t);
-        light = illumination.lightColour.Evaluate(t);
-
         // The colour of the haze, a linear interpolation between the top and bottom of the sky (zenith, horizon). The higher the horizon strength & haze bias the closer this is to the horizon colour.
         Color hazeRgb = Color.Lerp(Zenith, Horizon, ShaderController.QuantiseAlpha(horizonStrength * hazeBias));
-
         haze = new Color(hazeRgb.r, hazeRgb.g, hazeRgb.b, ShaderController.QuantiseAlpha(illumination.hazeStrength.Evaluate(t)));
-        
-        Shader.SetGlobalColor(HazeColorID, Haze);
-        Shader.SetGlobalFloat(HorizonYID, horizonY);
-        Shader.SetGlobalColor(HorizonColorID, Horizon);
-        Shader.SetGlobalColor(ZenithColorID, Zenith);
-        Shader.SetGlobalColor(LightColorID, Light);
-        Shader.SetGlobalFloat(LightIntensityID, illumination.intensity.Evaluate(t));
-        Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
-
-        
-        float intensity = illumination.intensity.Evaluate(t);
-        float darkness = 1f - intensity;
-        
-        Shader.SetGlobalFloat(DarknessID, darkness);
-        Shader.SetGlobalFloat(LightIntensityID, intensity);
     }
 
     /// <summary>

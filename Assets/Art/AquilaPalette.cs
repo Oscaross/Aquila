@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsible for holding data on colour-perfect RGBA snapping for the world. All colour ramps are programmed in here, and the engine uses this object to know which colour each pixel should be
+/// based on its indexed lighting value and its light colour profile. Palettes are serialised here through Aseprite, meaning the palette the engine uses is just an extension of the same palette that
+/// we author all of our sprites in.
+/// </summary>
+
 [CreateAssetMenu(menuName = "Scriptable Objects/Palette")]
 public class AquilaPalette : ScriptableObject
 {
-    public TextAsset paletteFile;
     [Tooltip("Within each ramp, linearly interpolates between each colour this number of additional steps. The higher this value, the less sharp the steps are between darker colours and their lighter counterparts.")]
     [SerializeField, Range(0, 8)] public int stepsBetweenColours = 2;
 
@@ -14,13 +19,28 @@ public class AquilaPalette : ScriptableObject
         public string name;
         public int count;
     }
+    [System.Serializable]
+    public class PaletteBlock
+    {
+        public string name;
+        public TextAsset gpl;
+    }
+    
+    [Tooltip("A block is a whole palette that is hue shifted. For example, the warm block is just a list of all on-palette colours but hue-shifted towards a warm orange light. [IMPORTANT] THIS LIST IS ORDER DEPENDENT. YOU MUST DECLARE BLOCKS IN THE ORDER THEY SHOULD PROGRESS, THE TOP OF THE LIST BEING THE COOLEST AND THE BOTTOM BEING THE WARMEST.")]
+    [SerializeField] private List<PaletteBlock> blocks;
 
+    [Tooltip("A ramp is a sequence of colours within a block that form a light progression, for example, a wood ramp with dark brown progressing to mid brown and lastly a lighter brown. [IMPORTANT]: THIS LIST IS ORDER DEPENDENT. YOU MUST DECLARE RAMPS IN THE ORDER THAT THEY OCCUR IN THE PALETTE GPL, DARKEST -> LIGHTEST AND ALL RAMPS IN THE ORDER THEY ARE DECLARED!")]
     public Ramp[] ramps;
 
-    private Color[] ParseGpl()
+    /// <summary>
+    /// Helper that opens a .txt GPL file and parses it.
+    /// </summary>
+    /// <returns>Color objects of the colours found in this file.</returns>
+    private Color[] ParseGpl(TextAsset gpl)
     {
         var colours = new List<Color>();
-        foreach (string line in paletteFile.text.Split('\n'))
+        
+        foreach (string line in gpl.text.Split('\n'))
         {
             string s = line.Trim();
             if (s.Length == 0 || s.StartsWith("#") || s.StartsWith("GIMP")
@@ -37,9 +57,15 @@ public class AquilaPalette : ScriptableObject
         return colours.ToArray();
     }
     
-    public List<Color[]> GetRamps()
+    /// <summary>
+    /// Opens the Palette GPL file and parses it for the colours present. Then, generates the extra colours according to the number of steps between colours.
+    /// Example: the wood ramp has 6 colours on palette from a dark brown to a light brown. The system opens the wood ramp, reads it then generates evenly interpolated steps between each wood colour and its lighter neighbour,
+    /// returning the whole wood ramp with all 6 colours plus their discrete steps between. It then moves onto the next ramp, e.g. the gold ramp and does this for the whole palette.
+    /// </summary>
+    /// <returns>A list of ramps, where a ramp is just a colour array of all on-palette colours that a pixel can occupy in this specific ramp.</returns>
+    public List<Color[]> GetRamps(int block)
     {
-        Color[] source = ParseGpl();
+        Color[] source = ParseGpl(blocks[block].gpl);
         Debug.Log($"GPL parsed: {source.Length}. Ramps array: {ramps.Length}.");
 
         int declared = 0;
@@ -47,7 +73,7 @@ public class AquilaPalette : ScriptableObject
         Debug.Log($"Ramp counts sum to {declared}.");
 
         if (declared != source.Length)
-            Debug.LogError($"Ramps cover {declared} of {source.Length} — " +
+            Debug.LogError($"Block {blocks[block].name} cover {declared} of {source.Length} — " +
                            $"{source.Length - declared} colours unreachable.");
         
         var result = new List<Color[]>();
@@ -75,4 +101,8 @@ public class AquilaPalette : ScriptableObject
 
         return result;
     }
+
+    public int BlockCount => blocks.Count;
+    public string BlockName(int i) => blocks[i].name;
+    public int ReferenceBlock => 0;
 }

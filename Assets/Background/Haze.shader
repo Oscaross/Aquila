@@ -70,7 +70,6 @@ Shader "Aquila/Haze"
             // don't redeclare it here, that's the duplicate-declaration compile error.
             float4 _GlobalHazeColor;         // rgb = snapped haze tint, a = atmospheric strength
             float  _GlobalHorizonY;          // world y of the horizon line
-            float  _GlobalPixelsPerUnit;     // 16 — for world-space dither anchoring
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
@@ -100,58 +99,24 @@ Shader "Aquila/Haze"
                 UNITY_SETUP_INSTANCE_ID(IN);
 
                 half4 c = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                c.a *= IN.color.a;   // alpha only — an rgb tint here would feed a modified
-                                     // colour into the LUT and land it on the wrong ramp
+                c.a *= IN.color.a; // alpha only since an rgb tint here would feed a modified colour into the LUT and land it on the wrong ramp
                 clip(c.a - _Cutoff);
                 
                 // Snap the RGB value to the correct ramp and lighting index based on the current global lighting level
                 c.rgb = LightWithPaletteHard(c.rgb, _GlobalDarkness);
-
-                // ---- 2. DISTANCE --------------------------------------------------------
-                // How far back is this pixel? _LayerDepth is the layer's own distance;
-                // the vertical ramp adds to it so parts of a sprite further from the
-                // horizon line sit deeper into the haze.
-                //
-                // Decide the sign here. Ramping upward (what the old code did) fogs the
-                // peaks and leaves the bases clear. Ramping by |y - horizonY| fogs the
-                // bases and leaves peaks clear, which is what real aerial perspective
-                // does. Try both, but the second is the physical one.
-                //
-                // Scale the ramp by the remaining headroom (1 - _LayerDepth) so it can
-                // never push past 1.
+                
                 float dy = abs(IN.positionWS.y - _GlobalHorizonY); // how many y world units above the horizon does this background sit?
                 float ramp = saturate(1.0 - dy / max(_RampHeight, 0.0001)); // ramp is 1 at the horizon and 0 at _RampHeight
                 ramp = pow(ramp, HAZE_RAMP_CURVE); // concentrate the haze towards the horizon line with exponential falloff above
                 
-                float distance = _LayerDepth + (1.0 - _LayerDepth) * ramp * HAZE_RAMP_STRENGTH;
+                float hazeAmount = _LayerDepth + (1.0 - _LayerDepth) * ramp * HAZE_RAMP_STRENGTH; // baseline haze is the layer depth, add more haze to texels that are at the base of the mountain closer to the horizon
                 
-                // ---- 3. QUANTISE DISTANCE, NOT THE FINAL AMOUNT -------------------------
-                // Distance is fixed per pixel, so the bands stay locked to the sprite.
-                // Quantise after multiplying by the time-varying strength and the band
-                // edges sweep across the sprite as the day passes — same failure as
-                // banding the sky ramp after the horizon multiply.
+                float quantisedHaze = round(hazeAmount * _HazeSteps) / _HazeSteps; 
+                // Recall that global haze alpha is the intensity of the haze, and is set by SkyController.
+                float amount = saturate(quantisedHaze * _GlobalHazeColor.a); // snaps the quantised haze to 0-1 based on the global haze alpha
+                float alpha = floor(amount * _PaletteAlphaSteps + 0.5) / _PaletteAlphaSteps;
                 
-                float quantisedDistance = round(distance * _HazeSteps) / _HazeSteps;
-
-
-                // ---- 4. HAZE AMOUNT -----------------------------------------------------
-                // Quantised distance times the current atmospheric strength
-                // (_GlobalHazeColor.a). This is the fog's opacity at this pixel.
-
-
-                // ---- 5. COMPOSITE — SELECT, NEVER BLEND ---------------------------------
-                // Every pixel must end up as either the lit sprite colour or the haze
-                // colour, both already on-palette. A lerp between them produces an
-                // off-palette in-between, and snapping the result afterwards is the
-                // thing the conventions forbid.
-                //
-                // Compare AquilaBayerThreshold against the haze amount and pick one.
-                //
-                // The threshold needs WORLD pixels — positionWS.xy * _GlobalPixelsPerUnit
-                // — because parallax layers move relative to the camera. Screen-space
-                // anchoring would make the dither crawl across the mountains as you pan.
-
-
+                c.rgb = lerp(c.rgb, _GlobalHazeColor.rgb, alpha);
                 return c;
             }
             ENDHLSL
