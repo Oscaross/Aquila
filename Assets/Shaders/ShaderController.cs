@@ -2,31 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
-/// <summary>
-/// Owns the project's colour discipline.
-///
-/// Bakes two lookup textures from the authored palette:
-///
-///   _PaletteIndexLUT — a 32x32x32 RGB cube. Each cell holds the RAMP and INDEX of the
-///                      nearest palette entry rather than the colour itself, so shaders
-///                      can move a pixel ALONG its own ramp instead of searching the
-///                      whole palette for a lit result. That's what stops a dimmed brown
-///                      landing on a neutral dark or a hazed grey picking up cyan.
-///
-///   _PaletteRamps    — a small 2D texture holding the ramps themselves. One row per
-///                      ramp, one texel per entry. Later this grows downward to hold
-///                      warm and cool rows of the same ramps.
-///
-/// Lighting is then an index offset: intensity moves a pixel down or up its ramp, and
-/// colour temperature (once authored) selects which row block to read from. Nothing
-/// multiplies, so nothing can produce a colour that isn't in the palette.
-///
-/// Both textures are rebuilt on enable and on demand, never per frame.
-/// </summary>
 [ExecuteAlways]
 public class ShaderController : MonoBehaviour
 {
-    private const int LutSize = 64;   // cells per axis; n^3 entries
+    private const int LutSize = 64; // cells per axis; n^3 entries
     public static ShaderController Instance { get; private set; }
     [SerializeField] private AquilaPalette palette;
     [Tooltip("Debug mode for analysing shader lighting behaviour. ZERO for no debug. " +
@@ -52,9 +31,18 @@ public class ShaderController : MonoBehaviour
 
     private static readonly int DebugModeID = Shader.PropertyToID("_DebugMode");
     private static readonly int DebugRampID = Shader.PropertyToID("_DebugRamp");
+    
+    #if UNITY_EDITOR
+    private const string LutPath  = "Assets/Shaders/Generated/PaletteIndexLUT.asset";
+    private const string RampPath = "Assets/Shaders/Generated/PaletteRamps.asset";
+    #endif
 
-    private Texture3D indexLut;
-    private Texture2D rampTexture;
+    [SerializeField] private Texture3D indexLut;
+    [SerializeField] private Texture2D rampTexture;
+    
+    [SerializeField, HideInInspector] private int maxRampLength;
+    [SerializeField, HideInInspector] private int rampCount;
+    [SerializeField, HideInInspector] private int blockCount;
 
     public static float QuantiseAlpha(float value) =>
         Quantise(value, Instance != null ? Instance.alphaSteps : 16);
@@ -66,14 +54,32 @@ public class ShaderController : MonoBehaviour
     private void OnEnable()
     {
         Instance = this;
-        RebuildPalette();
+        
+        if (indexLut == null || rampTexture == null)
+        {
+            Debug.LogWarning($"{name}: palette not baked — run Rebuild Palette.", this);
+            return;
+        }
+
+        PublishTextures();
         PublishSettings();
+    }
+    
+    private void PublishTextures()
+    {
+        Shader.SetGlobalTexture(RampTexID, rampTexture);
+        Shader.SetGlobalTexture(IndexLutID, indexLut);
+        Shader.SetGlobalFloat(MaxRampLenID, maxRampLength);
+        Shader.SetGlobalFloat(RampCountID, rampCount);
+        Shader.SetGlobalFloat(BlockCountID, blockCount);
+        
+        Debug.Assert(Shader.GetGlobalFloat(RampCountID) > 0, "_PaletteRampCount published as 0");
+        Debug.Assert(Shader.GetGlobalFloat(BlockCountID) > 0, "_PaletteBlockCount published as 0");
     }
 
     private void OnDisable()
     {
         if (Instance == this) Instance = null;
-        ReleaseTextures();
     }
 
     private void OnValidate() => PublishSettings();
@@ -130,22 +136,26 @@ public class ShaderController : MonoBehaviour
                 }
         }
 
-        int maxRampLength = 0;
+        maxRampLength = 0;
         foreach (Color[] ramp in reference) maxRampLength = Mathf.Max(maxRampLength, ramp.Length);
 
-        ReleaseTextures();
+        rampCount = reference.Count;
+        blockCount = blocks.Count;
 
         rampTexture = BuildRampTexture(blocks, maxRampLength);   // now takes every block
         indexLut    = BuildIndexLut(reference);                  // reference only
-
-        Shader.SetGlobalTexture(RampTexID, rampTexture);
-        Shader.SetGlobalTexture(IndexLutID, indexLut);
-        Shader.SetGlobalFloat(MaxRampLenID, maxRampLength);
-        Shader.SetGlobalFloat(RampCountID, reference.Count);
-        Shader.SetGlobalFloat(BlockCountID, blocks.Count);
-
+        
+        PublishTextures();
         Debug.Log($"{name}: baked {blocks.Count} block(s) × {reference.Count} ramps, " +
                   $"longest {maxRampLength}.", this);
+        
+        #if UNITY_EDITOR
+        System.IO.Directory.CreateDirectory("Assets/Shaders/Generated");
+        UnityEditor.AssetDatabase.CreateAsset(indexLut, LutPath);
+        UnityEditor.AssetDatabase.CreateAsset(rampTexture, RampPath);
+        UnityEditor.AssetDatabase.SaveAssets();
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
     }
     
     // ---- Ramp texture ------------------------------------------------------------
@@ -158,7 +168,6 @@ public class ShaderController : MonoBehaviour
     /// </summary>
     private Texture2D BuildRampTexture(List<List<Color[]>> blocks, int maxRampLength)
     {
-        int rampCount = blocks[0].Count;
         int height = rampCount * blocks.Count;
 
         var tex = new Texture2D(maxRampLength, height, TextureFormat.RGBA32, false, false)
@@ -199,7 +208,6 @@ public class ShaderController : MonoBehaviour
         {
             filterMode = FilterMode.Point,
             wrapMode = TextureWrapMode.Clamp,
-            hideFlags = HideFlags.HideAndDontSave
         };
 
         // Flatten to a lookup of (lab, ramp, index) so the inner loop is a simple scan.
@@ -312,41 +320,67 @@ public class ShaderController : MonoBehaviour
                                    $"reference has {referenceRamps[y].Length}.", this);
         }
 
-        // ---- Round-trip check, reference block only ----
-        if (indexLut == null) { Debug.LogWarning("No LUT baked — run Rebuild Palette first."); return; }
-        if (referenceRamps == null) { Debug.LogWarning("Reference block produced no ramps."); return; }
+    // ---- Round-trip check, reference block only ----
+    if (indexLut == null) { Debug.LogWarning("No LUT baked — run Rebuild Palette first."); return; }
+    if (referenceRamps == null) { Debug.LogWarning("Reference block produced no ramps."); return; }
 
-        Color32[] cells = indexLut.GetPixels32();
-        int collisions = 0;
+    Color32[] cells = indexLut.GetPixels32();
 
-        for (int y = 0; y < referenceRamps.Count; y++)
-        for (int x = 0; x < referenceRamps[y].Length; x++)
+    int crossRamp = 0;
+    int sameRamp = 0;
+    int worstDrift = 0;
+
+    for (int y = 0; y < referenceRamps.Count; y++)
+    for (int x = 0; x < referenceRamps[y].Length; x++)
+    {
+        Color c = referenceRamps[y][x];
+        int cr = Mathf.Clamp(Mathf.RoundToInt(c.r * (LutSize - 1)), 0, LutSize - 1);
+        int cg = Mathf.Clamp(Mathf.RoundToInt(c.g * (LutSize - 1)), 0, LutSize - 1);
+        int cb = Mathf.Clamp(Mathf.RoundToInt(c.b * (LutSize - 1)), 0, LutSize - 1);
+
+        Color32 stored = cells[cr + cg * LutSize + cb * LutSize * LutSize];
+
+        if (stored.r == y && stored.g == x) continue;
+
+        string hex = ColorUtility.ToHtmlStringRGB(referenceRamps[y][x]);
+
+        if (stored.r != y)
         {
-            Color c = referenceRamps[y][x];
-            int cr = Mathf.Clamp(Mathf.RoundToInt(c.r * (LutSize - 1)), 0, LutSize - 1);
-            int cg = Mathf.Clamp(Mathf.RoundToInt(c.g * (LutSize - 1)), 0, LutSize - 1);
-            int cb = Mathf.Clamp(Mathf.RoundToInt(c.b * (LutSize - 1)), 0, LutSize - 1);
-
-            Color32 stored = cells[cr + cg * LutSize + cb * LutSize * LutSize];
-
-            if (stored.r != y || stored.g != x)
-            {
-                collisions++;
-                Debug.LogWarning(
-                    $"#{ColorUtility.ToHtmlStringRGB(referenceRamps[y][x])} (ramp {y}, index {x}) " +
-                    $"resolves to ramp {stored.r}, index {stored.g} " +
-                    $"— cell [{cr},{cg},{cb}] is shared.");
-            }
+            // Serious. The colour resolves to a different ramp entirely, so lighting it
+            // moves it along the wrong progression — a brown dims toward a green.
+            crossRamp++;
+            Debug.LogWarning(
+                $"CROSS-RAMP  #{hex} (ramp {y}, index {x}) resolves to ramp {stored.r}, " +
+                $"index {stored.g} — cell [{cr},{cg},{cb}] is shared with another ramp.", this);
         }
+        else
+        {
+            // Expected with subdivisions: adjacent entries on the same ramp are close
+            // enough to share a cell. Harmless as long as the drift is small.
+            sameRamp++;
+            worstDrift = Mathf.Max(worstDrift, Mathf.Abs(stored.g - x));
+        }
+    }
 
-        Debug.Log(collisions == 0
-            ? "All reference colours round-trip correctly."
-            : $"{collisions} colour(s) collide in the LUT — raise LutSize to 64.");
+    int totalEntries = 0;
+    foreach (Color[] ramp in referenceRamps) totalEntries += ramp.Length;
+
+    if (crossRamp > 0)
+        Debug.LogError($"{crossRamp} CROSS-RAMP collision(s) of {totalEntries} entries. " +
+                       $"These cannot be lit correctly — nudge the offending colours apart " +
+                       $"in Aseprite, or raise LutSize (currently {LutSize}; memory is cubic).", this);
+    else
+        Debug.Log($"No cross-ramp collisions across {totalEntries} entries.", this);
+
+    if (sameRamp > 0)
+        Debug.Log($"{sameRamp} same-ramp drift(s), worst {worstDrift} index/indices. " +
+                  $"Expected with stepsBetweenColours > 0 — intermediates genuinely share cells.", this);
     }
         
     [ContextMenu("Trace Dirt Colours")]
     public void TraceColours()
     {
+        if (indexLut == null) Debug.Log("Can't trace colours because there is no LUT to index from!", this);
         string[] hexes = { "33261B", "513C29", "6E5336", "8A6A46" };
 
         Color32[] cells = indexLut.GetPixels32();
@@ -395,27 +429,5 @@ public class ShaderController : MonoBehaviour
             0.2104542553f * lc + 0.7936177850f * mc - 0.0040720468f * sc,   // L, lightness
             1.9779984951f * lc - 2.4285922050f * mc + 0.4505937099f * sc,   // a, green-red
             0.0259040371f * lc + 0.7827717662f * mc - 0.8086757660f * sc);  // b, blue-yellow
-    }
-
-    // ---- Cleanup -----------------------------------------------------------------
-
-    /// <summary>
-    /// Textures hold unmanaged memory that isn't collected. With ExecuteAlways these
-    /// rebuild on every assembly reload, so the old ones must go explicitly.
-    /// </summary>
-    private void ReleaseTextures()
-    {
-        Release(ref indexLut);
-        Release(ref rampTexture);
-    }
-
-    private void Release<T>(ref T texture) where T : Object
-    {
-        if (texture == null) return;
-
-        if (Application.isPlaying) Destroy(texture);
-        else DestroyImmediate(texture);
-
-        texture = null;
     }
 }

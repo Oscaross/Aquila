@@ -1,12 +1,15 @@
 using UnityEngine;
 using System;
 using NUnit.Framework;
+using Unity.VisualScripting;
 
 /**
  * Responsible for maintaining the correct GameTime and firing events when certain time-related milestones are reached. 
 */
 public class TimeOfDay : MonoBehaviour
 {
+    public static TimeOfDay Instance;
+    
     [Header("Day-Night Cycle")]
     [SerializeField] private float dayLengthSeconds = 600; // one day = 10 IRL minutes
     [SerializeField] private float timeMultiplier = 1.0f;
@@ -27,6 +30,11 @@ public class TimeOfDay : MonoBehaviour
     public static event Action OnNoon;
     public static event Action OnSeasonChanged;
 
+    /// <summary>
+    /// The conversion between realtime seconds and in-game seconds. e.g. TimeMultiplier = 1.0 means every 1 second in real life is 1 second in the game, = 2.0 means every 1 second in real life is 0.5 seconds in game etc...
+    /// </summary>
+    public float TimeMultiplier => timeMultiplier;
+
     private bool didSunriseHappen = false;
     private bool didSunsetHappen = false;
     private bool didNoonHappen = false;
@@ -37,6 +45,7 @@ public class TimeOfDay : MonoBehaviour
         QualitySettings.vSyncCount = 1;
 
         GameTime.CurrentSeason = startSeason;
+        if (Instance == null) Instance = this;
     }
 
     void Update()

@@ -41,6 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BandBrightness: 0.02
     - _BandDensity: 1
     - _BandFreqFar: 0.06
     - _BandFreqNear: 0.12
@@ -56,14 +57,14 @@ Material:
     - _EnableExternalAlpha: 0
     - _MaxBandOffset: 2
     - _PlaneHeightPixels: 180
-    - _ReflectionFade: 1
+    - _ReflectionFade: 0.785
     - _ReflectionSquash: 0.8
     - _ReflectionStrength: 0.4
     - _SkyInfluence: 0.851
     - _SurfaceThickness: 0
     - _WaveAmpPixels: 1
     - _WaveFreq: 45
-    - _WaveSpeed: 1.5
+    - _WaveSpeed: 1.98
     - _ZWrite: 0
     m_Colors:
     - _BaseColour: {r: 0.1254902, g: 0.16078432, b: 0.22745098, a: 1}
