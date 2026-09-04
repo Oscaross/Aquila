@@ -14,7 +14,6 @@ public class Lumberjack : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private float chopIntervalSeconds = 0.7f; // the number of seconds we must wait between chops
-    [SerializeField] private float lookForJobProbability = 0.3f;
 
     [SerializeField] private SoundDefinition soundDefinition;
 
@@ -23,7 +22,6 @@ public class Lumberjack : MonoBehaviour
     private float chopTimerSeconds; // how many secs since we last did a chop
     private Legion legion;
     private Pathfinder pathfinder;
-    private LumberjackWorkQueue workQueue;
     private Vector2 logStorePos; // where the log store (horrea) is located
 
     private void Awake()
@@ -31,7 +29,6 @@ public class Lumberjack : MonoBehaviour
         SetState(LumberjackState.Idling);
         animator = GetComponentInChildren<Animator>();
         legion = GetComponentInParent<Legion>();
-        workQueue = GetComponentInParent<LumberjackWorkQueue>();
         pathfinder = GetComponent<Pathfinder>();
 
         logStorePos = legion.Resources.GetStore(Resource.Wood).transform.position; // TODO: Will throw null if the building isn't built yet, but idk whether lumberjacks can even exist if this building doesn't
@@ -100,17 +97,6 @@ public class Lumberjack : MonoBehaviour
     private void OnIdleTargetReached()
     {
         SetState(LumberjackState.Idling);
-        // Randomly look for a job once, if we get one great, go for it, otherwise continue idling.
-        if (Random.value < lookForJobProbability)
-        {
-            FunctionalTree target;
-            if (workQueue.TryGetJob(transform.position, out target))
-            {
-                AssignTarget(target);
-                return;
-            }
-        }
-
         currentCallback = Delay.WaitThen(this, idleWaitForSeconds, ChangeIdleTarget);
     }
 

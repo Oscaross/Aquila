@@ -117,7 +117,7 @@ Shader "Aquila/Water"
                 
                 // Our water colour is on the _BaseColour ramp, so shift it up or down that ramp depending on how dark it currently is so the river darkens at night
                 half4 refl = SAMPLE_TEXTURE2D(_WaterReflectionTex, sampler_point_clamp, screenUV);
-                half3 baseCol = LightWithPaletteHard(_BaseColour.rgb, _GlobalDarkness);
+                half3 baseCol = LightWithPaletteGlobally(_BaseColour.rgb, _GlobalDarkness);
                 
                 // Reflections should fade at the near bank
                 half fade = saturate(1.0 - depth / _ReflectionFade);

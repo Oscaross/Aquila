@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -94,43 +95,52 @@ public class ShaderController : MonoBehaviour
     [ContextMenu("Rebuild Palette")]
     public void RebuildPalette()
     {
-        if (palette == null) return;
-        if (palette.BlockCount == 0)
-        {
-            Debug.LogWarning($"{name}: palette has no blocks.", this);
-            return;
-        }
+        if (palette == null) { Debug.LogWarning($"{name}: no palette assigned.", this); return; }
 
-        // Gather every block. Index in this list is the block index the shader uses.
-        var blocks = new List<List<Color[]>>();
-        for (int b = 0; b < palette.BlockCount; b++)
+        var temperatures = (LightTemperature[])Enum.GetValues(typeof(LightTemperature));
+
+        // Gather every block. Position in this list is the block index the shader uses, and it
+        // matches the LightTemperature value because we walk the enum in declaration order.
+        var blocks = new List<List<Color[]>>(temperatures.Length);
+        foreach (LightTemperature temp in temperatures)
         {
-            List<Color[]> ramps = palette.GetRamps(b);
+            List<Color[]> ramps = palette.GetRamps(temp);
+
             if (ramps == null || ramps.Count == 0)
             {
-                Debug.LogWarning($"{name}: block '{palette.BlockName(b)}' produced no ramps.", this);
+                Debug.LogError($"{name}: light temperature '{temp}' produced no ramps. " +
+                               $"Every temperature needs a GPL assigned on the palette, or block " +
+                               $"indices will not line up with LightTemperature values. Aborting bake.", this);
                 return;
             }
+
             blocks.Add(ramps);
         }
 
         // Structure must be identical across blocks or the row arithmetic is meaningless:
         // the shader reads (block * rampCount + ramp), and an index valid in one block
         // has to be valid in every other.
-        List<Color[]> reference = blocks[palette.ReferenceBlock];
+        LightTemperature referenceTemp = palette.ReferenceBlock;
+        List<Color[]> reference = blocks[(int)referenceTemp];
+
         for (int b = 0; b < blocks.Count; b++)
         {
+            LightTemperature temp = temperatures[b];
+
             if (blocks[b].Count != reference.Count)
             {
-                Debug.LogError($"{name}: block '{palette.BlockName(b)}' has {blocks[b].Count} ramps, " +
-                               $"reference has {reference.Count}. Aborting bake.", this);
+                Debug.LogError($"{name}: block '{temp}' has {blocks[b].Count} ramps, " +
+                               $"reference '{referenceTemp}' has {reference.Count}. " +
+                               $"Aborting bake.", this);
                 return;
             }
+
             for (int y = 0; y < reference.Count; y++)
                 if (blocks[b][y].Length != reference[y].Length)
                 {
-                    Debug.LogError($"{name}: block '{palette.BlockName(b)}' ramp {y} has " +
-                                   $"{blocks[b][y].Length} entries, reference has {reference[y].Length}. " +
+                    Debug.LogError($"{name}: block '{temp}' ramp {y} has " +
+                                   $"{blocks[b][y].Length} entries, reference " +
+                                   $"'{referenceTemp}' has {reference[y].Length}. " +
                                    $"Aborting bake.", this);
                     return;
                 }
@@ -139,23 +149,23 @@ public class ShaderController : MonoBehaviour
         maxRampLength = 0;
         foreach (Color[] ramp in reference) maxRampLength = Mathf.Max(maxRampLength, ramp.Length);
 
-        rampCount = reference.Count;
+        rampCount  = reference.Count;
         blockCount = blocks.Count;
 
-        rampTexture = BuildRampTexture(blocks, maxRampLength);   // now takes every block
+        rampTexture = BuildRampTexture(blocks, maxRampLength);   // every block
         indexLut    = BuildIndexLut(reference);                  // reference only
-        
+
         PublishTextures();
         Debug.Log($"{name}: baked {blocks.Count} block(s) × {reference.Count} ramps, " +
-                  $"longest {maxRampLength}.", this);
-        
-        #if UNITY_EDITOR
+                  $"longest {maxRampLength}. Reference: {referenceTemp}.", this);
+
+    #if UNITY_EDITOR
         System.IO.Directory.CreateDirectory("Assets/Shaders/Generated");
         UnityEditor.AssetDatabase.CreateAsset(indexLut, LutPath);
         UnityEditor.AssetDatabase.CreateAsset(rampTexture, RampPath);
         UnityEditor.AssetDatabase.SaveAssets();
         UnityEditor.EditorUtility.SetDirty(this);
-        #endif
+    #endif
     }
     
     // ---- Ramp texture ------------------------------------------------------------
@@ -263,6 +273,7 @@ public class ShaderController : MonoBehaviour
         texture.Apply();
         return texture;
     }
+    
     /// <summary>
     /// Dumps every block's ramps and the hex values the bake actually produced, then verifies
     /// each authored colour in the reference block resolves back to its own ramp and index
@@ -275,106 +286,136 @@ public class ShaderController : MonoBehaviour
     public void LogPalette()
     {
         if (palette == null) { Debug.LogWarning($"{name}: no palette assigned.", this); return; }
-        if (palette.BlockCount == 0) { Debug.LogWarning($"{name}: no blocks.", this); return; }
 
-        int reference = palette.ReferenceBlock;
-        List<Color[]> referenceRamps = null;
+        LightTemperature reference = palette.ReferenceBlock;
 
-        for (int b = 0; b < palette.BlockCount; b++)
+        // Fetch the reference up front: the enum may visit other blocks first, and every
+        // structural comparison below needs it already resolved.
+        List<Color[]> referenceRamps = palette.GetRamps(reference);
+        if (referenceRamps == null || referenceRamps.Count == 0)
         {
-            List<Color[]> ramps = palette.GetRamps(b);
+            Debug.LogError($"{name}: reference block '{reference}' produced no ramps. " +
+                           $"Nothing else can be verified against it.", this);
+            return;
+        }
+
+        foreach (LightTemperature temp in System.Enum.GetValues(typeof(LightTemperature)))
+        {
+            List<Color[]> ramps = temp == reference ? referenceRamps : palette.GetRamps(temp);
             if (ramps == null || ramps.Count == 0)
             {
-                Debug.LogWarning($"Block {b} '{palette.BlockName(b)}': no ramps.", this);
+                Debug.LogWarning($"Block '{temp}': produced no ramps.", this);
                 continue;
             }
 
-            string tag = b == reference ? " [LUT reference]" : "";
-            Debug.Log($"===== Block {b}: {palette.BlockName(b)}{tag} =====");
+            LogBlock(temp, ramps, temp == reference);
 
-            int total = 0;
-            for (int y = 0; y < ramps.Count; y++)
-            {
-                var hex = new List<string>();
-                foreach (Color c in ramps[y]) hex.Add(ColorUtility.ToHtmlStringRGB(c));
-                total += ramps[y].Length;
-
-                Debug.Log($"  Ramp {y} ({ramps[y].Length}): {string.Join(" ", hex)}");
-            }
-
-            Debug.Log($"  {ramps.Count} ramps, {total} colours total.");
-
-            if (b == reference) { referenceRamps = ramps; continue; }
-
-            // ---- Structural check against the reference ----
-            if (ramps.Count != referenceRamps.Count)
-            {
-                Debug.LogError($"  Block '{palette.BlockName(b)}' has {ramps.Count} ramps, " +
-                               $"reference has {referenceRamps.Count}.", this);
-                continue;
-            }
-
-            for (int y = 0; y < ramps.Count; y++)
-                if (ramps[y].Length != referenceRamps[y].Length)
-                    Debug.LogError($"  Ramp {y} has {ramps[y].Length} entries, " +
-                                   $"reference has {referenceRamps[y].Length}.", this);
+            if (temp != reference)
+                CompareStructure(temp, ramps, referenceRamps);
         }
 
-    // ---- Round-trip check, reference block only ----
-    if (indexLut == null) { Debug.LogWarning("No LUT baked — run Rebuild Palette first."); return; }
-    if (referenceRamps == null) { Debug.LogWarning("Reference block produced no ramps."); return; }
-
-    Color32[] cells = indexLut.GetPixels32();
-
-    int crossRamp = 0;
-    int sameRamp = 0;
-    int worstDrift = 0;
-
-    for (int y = 0; y < referenceRamps.Count; y++)
-    for (int x = 0; x < referenceRamps[y].Length; x++)
-    {
-        Color c = referenceRamps[y][x];
-        int cr = Mathf.Clamp(Mathf.RoundToInt(c.r * (LutSize - 1)), 0, LutSize - 1);
-        int cg = Mathf.Clamp(Mathf.RoundToInt(c.g * (LutSize - 1)), 0, LutSize - 1);
-        int cb = Mathf.Clamp(Mathf.RoundToInt(c.b * (LutSize - 1)), 0, LutSize - 1);
-
-        Color32 stored = cells[cr + cg * LutSize + cb * LutSize * LutSize];
-
-        if (stored.r == y && stored.g == x) continue;
-
-        string hex = ColorUtility.ToHtmlStringRGB(referenceRamps[y][x]);
-
-        if (stored.r != y)
-        {
-            // Serious. The colour resolves to a different ramp entirely, so lighting it
-            // moves it along the wrong progression — a brown dims toward a green.
-            crossRamp++;
-            Debug.LogWarning(
-                $"CROSS-RAMP  #{hex} (ramp {y}, index {x}) resolves to ramp {stored.r}, " +
-                $"index {stored.g} — cell [{cr},{cg},{cb}] is shared with another ramp.", this);
-        }
-        else
-        {
-            // Expected with subdivisions: adjacent entries on the same ramp are close
-            // enough to share a cell. Harmless as long as the drift is small.
-            sameRamp++;
-            worstDrift = Mathf.Max(worstDrift, Mathf.Abs(stored.g - x));
-        }
+        VerifyRoundTrip(referenceRamps);
     }
 
-    int totalEntries = 0;
-    foreach (Color[] ramp in referenceRamps) totalEntries += ramp.Length;
+    /// <summary>Dumps one block's ramps as hex, one line per ramp.</summary>
+    private void LogBlock(LightTemperature temp, List<Color[]> ramps, bool isReference)
+    {
+        string tag = isReference ? " [LUT reference]" : "";
+        Debug.Log($"{temp}{tag} =====", this);
 
-    if (crossRamp > 0)
-        Debug.LogError($"{crossRamp} CROSS-RAMP collision(s) of {totalEntries} entries. " +
-                       $"These cannot be lit correctly — nudge the offending colours apart " +
-                       $"in Aseprite, or raise LutSize (currently {LutSize}; memory is cubic).", this);
-    else
-        Debug.Log($"No cross-ramp collisions across {totalEntries} entries.", this);
+        int total = 0;
+        for (int y = 0; y < ramps.Count; y++)
+        {
+            var hex = new List<string>(ramps[y].Length);
+            foreach (Color c in ramps[y]) hex.Add(ColorUtility.ToHtmlStringRGB(c));
+            total += ramps[y].Length;
 
-    if (sameRamp > 0)
-        Debug.Log($"{sameRamp} same-ramp drift(s), worst {worstDrift} index/indices. " +
-                  $"Expected with stepsBetweenColours > 0 — intermediates genuinely share cells.", this);
+            Debug.Log($"  Ramp {y} ({ramps[y].Length}): {string.Join(" ", hex)}", this);
+        }
+
+        Debug.Log($"  {ramps.Count} ramps, {total} colours total.", this);
+    }
+
+    /// <summary>
+    /// Every block must be the same shape, because the shader resolves one (ramp, index) pair
+    /// and uses it against whichever block the light temperature selects.
+    /// </summary>
+    private void CompareStructure(LightTemperature temp, List<Color[]> ramps, List<Color[]> referenceRamps)
+    {
+        if (ramps.Count != referenceRamps.Count)
+        {
+            Debug.LogError($"  Block '{temp}' has {ramps.Count} ramps, " +
+                           $"reference has {referenceRamps.Count}.", this);
+            return;
+        }
+
+        for (int y = 0; y < ramps.Count; y++)
+            if (ramps[y].Length != referenceRamps[y].Length)
+                Debug.LogError($"  Block '{temp}' ramp {y} has {ramps[y].Length} " +
+                               $"entries, reference has {referenceRamps[y].Length}.", this);
+    }
+
+    /// <summary>
+    /// Pushes every reference-block colour through the baked LUT and checks it comes back as
+    /// itself. Cross-ramp collisions are fatal to lighting; same-ramp drift is expected once
+    /// stepsBetweenColours subdivides the authored entries.
+    /// </summary>
+    private void VerifyRoundTrip(List<Color[]> referenceRamps)
+    {
+        if (indexLut == null) { Debug.LogWarning("No LUT baked — run Rebuild Palette first.", this); return; }
+
+        Color32[] cells = indexLut.GetPixels32();
+
+        int crossRamp = 0;
+        int sameRamp = 0;
+        int worstDrift = 0;
+        int totalEntries = 0;
+
+        for (int y = 0; y < referenceRamps.Count; y++)
+        {
+            totalEntries += referenceRamps[y].Length;
+
+            for (int x = 0; x < referenceRamps[y].Length; x++)
+            {
+                Color c = referenceRamps[y][x];
+                int cr = Mathf.Clamp(Mathf.RoundToInt(c.r * (LutSize - 1)), 0, LutSize - 1);
+                int cg = Mathf.Clamp(Mathf.RoundToInt(c.g * (LutSize - 1)), 0, LutSize - 1);
+                int cb = Mathf.Clamp(Mathf.RoundToInt(c.b * (LutSize - 1)), 0, LutSize - 1);
+
+                Color32 stored = cells[cr + cg * LutSize + cb * LutSize * LutSize];
+
+                if (stored.r == y && stored.g == x) continue;
+
+                if (stored.r != y)
+                {
+                    // Serious: this colour resolves into a different ramp, so lighting it walks
+                    // the wrong value progression entirely.
+                    crossRamp++;
+                    string hex = ColorUtility.ToHtmlStringRGB(c);
+                    Debug.LogWarning(
+                        $"CROSS-RAMP  #{hex} (ramp {y}, index {x}) resolves to ramp {stored.r}, " +
+                        $"index {stored.g}; cell [{cr},{cg},{cb}] is shared with another ramp.", this);
+                }
+                else
+                {
+                    // Expected with subdivisions: adjacent entries on one ramp are close enough
+                    // to land in the same cell. Harmless while the drift stays small.
+                    sameRamp++;
+                    worstDrift = Mathf.Max(worstDrift, Mathf.Abs(stored.g - x));
+                }
+            }
+        }
+
+        if (crossRamp > 0)
+            Debug.LogError($"{crossRamp} CROSS-RAMP collision(s) of {totalEntries} entries. " +
+                           $"These cannot be lit correctly — nudge the offending colours apart " +
+                           $"in Aseprite, or raise LutSize (currently {LutSize}; memory is cubic).", this);
+        else
+            Debug.Log($"No cross-ramp collisions across {totalEntries} entries.", this);
+
+        if (sameRamp > 0)
+            Debug.Log($"{sameRamp} same-ramp drift(s), worst {worstDrift} index/indices. " +
+                      $"Expected with stepsBetweenColours > 0 — intermediates genuinely share cells.", this);
     }
         
     [ContextMenu("Trace Dirt Colours")]

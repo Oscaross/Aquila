@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepsBetweenColours: 4
   blocks:
-  - name: Neutral
+  - temperature: 0
     gpl: {fileID: 4900000, guid: 63b054e781331d04a84bda5a43a864e6, type: 3}
-  - name: MildWarm
+  - temperature: 1
     gpl: {fileID: 4900000, guid: fb1438863f8b99c4d81f21d5c8b2ed8e, type: 3}
-  - name: StrongWarm
+  - temperature: 2
     gpl: {fileID: 4900000, guid: 52f2e3fe5a13761408e0f7a69caa53dd, type: 3}
   ramps:
   - name: CoolGrey

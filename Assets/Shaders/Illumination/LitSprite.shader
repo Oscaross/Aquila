@@ -45,17 +45,14 @@ Shader "Aquila/LitSprite"
                 float4 positionHCS : SV_POSITION;
                 float4 color       : COLOR;
                 float2 uv          : TEXCOORD0;
+                float2 positionWS  : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
-            // Published by SkyController, already quantised there.
-            float4 _GlobalLightColor;
-
             CBUFFER_START(UnityPerMaterial)
-                float4 _MainTex_ST;
                 float4 _Color;
                 float  _Cutoff;
             CBUFFER_END
@@ -66,8 +63,11 @@ Shader "Aquila/LitSprite"
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
-                OUT.positionHCS = TransformObjectToHClip(IN.positionOS);
-                OUT.uv          = TRANSFORM_TEX(IN.uv, _MainTex);
+                float3 positionWS = TransformObjectToWorld(IN.positionOS);
+
+                OUT.positionHCS = TransformWorldToHClip(positionWS);
+                OUT.positionWS  = positionWS.xy;
+                OUT.uv          = IN.uv;
                 OUT.color       = IN.color * _Color;
                 return OUT;
             }
@@ -79,7 +79,7 @@ Shader "Aquila/LitSprite"
                 half4 c = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 c *= IN.color;
                 clip(c.a - _Cutoff);
-                c.rgb = LightWithPaletteHard(c.rgb, _GlobalDarkness);
+                c.rgb = LightWithPaletteLocal(c.rgb, IN.positionWS);
 
                 return c;
             }

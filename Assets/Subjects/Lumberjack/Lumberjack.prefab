@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 8731681925425424445}
   - component: {fileID: 8195466164246745974}
   - component: {fileID: 4109035397841535350}
+  - component: {fileID: -8701331123093151959}
   m_Layer: 6
   m_Name: Lumberjack
   m_TagString: Untagged
@@ -319,3 +320,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.8, y: 1.74}
   m_EdgeRadius: 0
+--- !u!114 &-8701331123093151959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8746358427664073566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd56125d39664ac4db8c51d7094bd5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  morale: 1
+  profession: 2

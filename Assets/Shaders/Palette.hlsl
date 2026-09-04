@@ -9,11 +9,6 @@
 // the light level shifts it along that ramp; the result is read back out. The
 // ramp never changes, so a dimmed brown lands on a darker brown rather than on
 // whatever neutral happened to be nearest in RGB space.
-//
-// Uploaded by ShaderController:
-//   _PaletteIndexLUT — 32^3 RGB cube. r = ramp, g = index in ramp, b = ramp length.
-//   _PaletteRamps    — one row per ramp, one texel per entry, dark to light.
-// ----------------------------------------------------------------------------
 
 TEXTURE3D(_PaletteIndexLUT);
 TEXTURE2D(_PaletteRamps);
@@ -21,13 +16,22 @@ SAMPLER(sampler_point_clamp);
 
 #define PIXELS_PER_UNIT 16.0
 
+// CORE
 float _PaletteMaxRampLength; // computed by the ShaderController and is just the number of entries in the longest ramp to prevent index overflows
 float _PaletteRampCount; // the number of unique ramps loaded from the engine's palette
 float _PaletteAlphaSteps; // how many discrete alpha steps from 0..255 we are allowed to take
 float _PaletteBlockCount; // how many unique palettes for coloured light there are, for example, neutral lit, cool lit, warm lit
-float _GlobalBlock; // 0 = coolest, BlockCount-1 = warmest block
+float _GlobalLightTemperatureBlock; // what temperature preset the global light colour is. Warm during sunset/sunrise, cool during nighttime, neutral at the day etc...
 float _GlobalDarkness; // what is the current global brightness level published by the SkyController system?
 
+// LOCAL LIGHTING
+#define AQUILA_MAX_LIGHTS 32
+
+float4 _LightData[AQUILA_MAX_LIGHTS]; // contains the x = pos.x, y = pos.y, z = radius and w = intensity
+float4 _LightMeta[AQUILA_MAX_LIGHTS]; // auxilliary data about how the light source behaves. x = temperature push (i.e. strong warm light or weak warm light)
+int _LightCount; // how many lights we are publishing data for
+
+// DEBUG
 int _DebugMode; // the type of debug view we want to see i.e. hue grouped by ramps, index, ramp and index, etc...
 float _DebugRamp; // if we are looking at behaviour of a singular ramp, which one should be shown?
 
@@ -110,7 +114,7 @@ float3 AquilaReadRamp(float ramp, float index, float block)
 /// e.g. if we are on the wood ramp at idx = 0, this returns the darkest wood colour on the current palette.
 float3 AquilaReadRamp(float ramp, float index)
 {
-    return AquilaReadRamp(ramp, index, _GlobalBlock);
+    return AquilaReadRamp(ramp, index, _GlobalLightTemperatureBlock);
 }
 
 
@@ -124,6 +128,26 @@ float3 HueFromID(float id)
     return saturate(p - 1.0);
 }
 
+/// Debug visualisations, shared by every lighting path so switching a shader
+/// between global and local lighting doesn't silently lose the debug views.
+/// Returns true when a mode is active; callers return `result` immediately.
+bool AquilaDebugOverride(float ramp, float shifted, float rampLength,
+                         float brightness, float block, out float3 result)
+{
+    result = 0.0;
+    if (_DebugMode == 0) return false;
+
+    if (_DebugMode == 1)   result = HueFromID(ramp);                        // ramp identity
+    if (_DebugMode == 2)   result = HueFromID(shifted);                     // index within ramp
+    if (_DebugMode == 3)   result = HueFromID(ramp * 16.0 + shifted);       // both combined
+    if (_DebugMode == 4)   result = (ramp == _DebugRamp) ? HueFromID(shifted) : 0.15;
+    if (_DebugMode == 5)   result = saturate(brightness);                   // local light field
+    if (_DebugMode == 6)   result = HueFromID(block);                       // resolved block
+    if (_DebugMode == 100) result = float3(ramp, shifted, rampLength) / 255.0;
+
+    return true;
+}
+
 /// Snaps a colour to the palette without changing its brightness. For shaders
 /// that only need the output on-palette — generated colours like the water
 /// bands or the sun glimmer.
@@ -135,19 +159,19 @@ float3 SnapToPalette(float3 rgb)
 }
 
 /// Takes a pixel colour and darkness, figures out which ramp it belongs to, then shifts it proportionally up or down the ramp depending on it's darkness level. 
-float3 LightWithPaletteHard(float3 rgb, float darkness)
+/// IGNORES LOCAL LIGHT SOURCES - OBJECTS THAT USE THIS PATH WILL NOT BE ILLUMINATED BY LOCAL LIGHT SOURCES.
+float3 LightWithPaletteGlobally(float3 rgb, float darkness)
 {
     float ramp, index, rampLength;
     AquilaLookup(rgb, ramp, index, rampLength);
-    
-    float offset = round(darkness * (rampLength - 1.0));
-    float shifted = clamp(index - offset, 0.0, rampLength - 1.0); // to land somewhere on the ramp we need to be between light index 0 and rampLength - 1
-    
-    if (_DebugMode == 1) return HueFromID(ramp);
-    if (_DebugMode == 2) return HueFromID(shifted);
-    if (_DebugMode == 3) return HueFromID(ramp * 16.0 + shifted);
-    if (_DebugMode == 4) return (ramp == _DebugRamp) ? HueFromID(shifted) : 0.15;
-    if (_DebugMode == 100) return float3(ramp, shifted, rampLength) / 255.0;
+
+    float offset  = round(darkness * (rampLength - 1.0));
+    float shifted = clamp(index - offset, 0.0, rampLength - 1.0);
+
+    float3 dbg;
+    if (AquilaDebugOverride(ramp, shifted, rampLength,
+                            0.0, _GlobalLightTemperatureBlock, dbg)) return dbg;
+
     return AquilaReadRamp(ramp, shifted);
 }
 
@@ -161,10 +185,47 @@ float3 ShiftPaletteSteps(float3 rgb, float steps)
     return AquilaReadRamp(ramp, shifted);
 }
 
-/// The common case: light by the current global level.
-float3 LightWithPaletteGlobal(float3 rgb)
+/// Accumulates every local light reaching this world position.
+/// brightness adds to the lit level; temperature pushes the block selection warmer.
+void AquilaAccumulateLights(float2 worldPos, out float brightness, out float temperature)
 {
-    return LightWithPaletteHard(rgb, _GlobalDarkness);
+    brightness  = 0.0;
+    temperature = 0.0;
+
+    for (int i = 0; i < _LightCount; i++)
+    {
+        float2 delta = worldPos - _LightData[i].xy;
+        float  r     = _LightData[i].z;
+
+        float atten = saturate(1.0 - dot(delta, delta) / (r * r));
+        atten = atten * atten * _LightData[i].w;
+
+        brightness  += atten;
+        temperature += atten * _LightMeta[i].x; // recall that _LightMeta.x is just the temperature value of the light source 
+    }
+}
+
+/// The full local-lighting path: global darkness as the floor, lights on top,
+/// one ramp lookup and one block decision at the end.
+float3 LightWithPaletteLocal(float3 rgb, float2 worldPos)
+{
+    float ramp, index, rampLength;
+    AquilaLookup(rgb, ramp, index, rampLength);
+
+    float brightness, temperature;
+    AquilaAccumulateLights(worldPos, brightness, temperature);
+
+    float darkness = saturate(_GlobalDarkness - brightness);
+    float block    = clamp(round(_GlobalLightTemperatureBlock + temperature),
+                           0.0, _PaletteBlockCount - 1.0);
+
+    float offset  = round(darkness * (rampLength - 1.0));
+    float shifted = clamp(index - offset, 0.0, rampLength - 1.0);
+
+    float3 dbg;
+    if (AquilaDebugOverride(ramp, shifted, rampLength, brightness, block, dbg)) return dbg;
+
+    return AquilaReadRamp(ramp, shifted, block);
 }
 
 #endif

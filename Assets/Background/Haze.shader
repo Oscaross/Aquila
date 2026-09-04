@@ -103,7 +103,7 @@ Shader "Aquila/Haze"
                 clip(c.a - _Cutoff);
                 
                 // Snap the RGB value to the correct ramp and lighting index based on the current global lighting level
-                c.rgb = LightWithPaletteHard(c.rgb, _GlobalDarkness);
+                c.rgb = LightWithPaletteGlobally(c.rgb, _GlobalDarkness);
                 
                 float dy = abs(IN.positionWS.y - _GlobalHorizonY); // how many y world units above the horizon does this background sit?
                 float ramp = saturate(1.0 - dy / max(_RampHeight, 0.0001)); // ramp is 1 at the horizon and 0 at _RampHeight

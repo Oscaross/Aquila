@@ -22,7 +22,7 @@ public class AquilaPalette : ScriptableObject
     [System.Serializable]
     public class PaletteBlock
     {
-        public string name;
+        public LightTemperature temperature;
         public TextAsset gpl;
     }
     
@@ -35,7 +35,7 @@ public class AquilaPalette : ScriptableObject
     /// <summary>
     /// Helper that opens a .txt GPL file and parses it.
     /// </summary>
-    /// <returns>Color objects of the colours found in this file.</returns>
+    /// <returns>Colour objects of the colours found in this file.</returns>
     private Color[] ParseGpl(TextAsset gpl)
     {
         var colours = new List<Color>();
@@ -63,8 +63,11 @@ public class AquilaPalette : ScriptableObject
     /// returning the whole wood ramp with all 6 colours plus their discrete steps between. It then moves onto the next ramp, e.g. the gold ramp and does this for the whole palette.
     /// </summary>
     /// <returns>A list of ramps, where a ramp is just a colour array of all on-palette colours that a pixel can occupy in this specific ramp.</returns>
-    public List<Color[]> GetRamps(int block)
+    public List<Color[]> GetRamps(LightTemperature forTemp)
     {
+        // Cast a LightTemperature to a block idx.
+        int block = (int)forTemp;
+        
         Color[] source = ParseGpl(blocks[block].gpl);
         Debug.Log($"GPL parsed: {source.Length}. Ramps array: {ramps.Length}.");
 
@@ -73,7 +76,7 @@ public class AquilaPalette : ScriptableObject
         Debug.Log($"Ramp counts sum to {declared}.");
 
         if (declared != source.Length)
-            Debug.LogError($"Block {blocks[block].name} cover {declared} of {source.Length} — " +
+            Debug.LogError($"Block {blocks[block].temperature} cover {declared} of {source.Length} — " +
                            $"{source.Length - declared} colours unreachable.");
         
         var result = new List<Color[]>();
@@ -102,7 +105,21 @@ public class AquilaPalette : ScriptableObject
         return result;
     }
 
-    public int BlockCount => blocks.Count;
-    public string BlockName(int i) => blocks[i].name;
-    public int ReferenceBlock => 0;
+    private void OnValidate()
+    {
+        if (blocks.Count != System.Enum.GetValues(typeof(LightTemperature)).Length)
+            Debug.LogError($"Palette has {blocks.Count} blocks; every temperature must be authored " +
+                           $"or block indices will not match LightTemperature values.", this);
+
+        for (int i = 0; i < blocks.Count; i++)
+            if ((int)blocks[i].temperature != i)
+                Debug.LogError($"Block at index {i} is {blocks[i].temperature}, " +
+                               $"expected {((LightTemperature)i)}.", this);
+    }
+
+    public int BlockCount => System.Enum.GetValues(typeof(LightTemperature)).Length;
+    /// <summary>
+    /// This is the block that the LUT uses to map colours from RGBA space to Indexed space. 
+    /// </summary>
+    public LightTemperature ReferenceBlock => LightTemperature.NEUTRAL;
 }

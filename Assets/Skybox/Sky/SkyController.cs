@@ -1,12 +1,10 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[ExecuteAlways]
 public class SkyController : MonoBehaviour
 {
     public static SkyController Instance { get; private set; }
-
-
+    
     [SerializeField] private HorizonPreset[] sunrises;
     [SerializeField] private HorizonPreset[] sunsets;
     [SerializeField] private float minRampExponent;
@@ -15,13 +13,12 @@ public class SkyController : MonoBehaviour
     [SerializeField] private IlluminationProfile illumination;
     [SerializeField] private float horizonY = 0f;
     
-    [Header("Runtime (read-only)")]
-    // These properties are serialised meaning we can see what's going on with the sky in the inspector if things aren't behaving.
+    [Header("Runtime - FOR INSPECTION ONLY")]
     [SerializeField] private Color zenith;
     [SerializeField] private Color horizon;
     [SerializeField] private Color light;
     [SerializeField] private Color haze;
-    [SerializeField] private float currentLightBlock;
+    [SerializeField] private LightTemperature globalLightTemperature;
     
     public Color Zenith { get => zenith; private set => zenith = value; }
     public Color Horizon { get => horizon; private set => horizon = value; }
@@ -37,7 +34,7 @@ public class SkyController : MonoBehaviour
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
     // This allows shaders like lit shaders to figure out, globally, where they should land on the ramp. Darkness peaks at midnight, and is a minimum at midday.
     private static readonly int DarknessID = Shader.PropertyToID("_GlobalDarkness");
-    private static readonly int GlobalBlockID = Shader.PropertyToID("_GlobalBlock");
+    private static readonly int GlobalLightTemperatureID = Shader.PropertyToID("_GlobalLightTemperatureBlock");
     
     [SerializeField] private HorizonPreset currentSunrise;
     [SerializeField] private HorizonPreset currentSunset;
@@ -91,7 +88,7 @@ public class SkyController : MonoBehaviour
         
         Shader.SetGlobalFloat(DarknessID, darkness);
         Shader.SetGlobalFloat(LightIntensityID, intensity);
-        Shader.SetGlobalFloat(GlobalBlockID, currentLightBlock);
+        Shader.SetGlobalFloat(GlobalLightTemperatureID, (int) globalLightTemperature);
         Shader.SetGlobalColor(HazeColorID, Haze);
         Shader.SetGlobalFloat(HorizonYID, horizonY);
         Shader.SetGlobalColor(HorizonColorID, Horizon);
@@ -108,11 +105,11 @@ public class SkyController : MonoBehaviour
     {
         float horizonStrength = 0f;
         float hazeBias;
-        currentLightBlock = 0f; // the block is neutral colour unless we enter the sunrise/sunset progress code
+        globalLightTemperature = LightTemperature.NEUTRAL; // the block is neutral colour unless we enter the sunrise/sunset progress code
         
         if (GameTime.TryGetSunriseProgress(t, out float p1))
         {
-            currentLightBlock = 1f;
+            globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunrise.horizonColour.Evaluate(p1);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p1 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
@@ -120,7 +117,7 @@ public class SkyController : MonoBehaviour
         }
         else if (GameTime.TryGetSunsetProgress(t, out float p2))
         {
-            currentLightBlock = 1f;
+            globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunset.horizonColour.Evaluate(p2);
             horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p2 * Mathf.PI));
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
