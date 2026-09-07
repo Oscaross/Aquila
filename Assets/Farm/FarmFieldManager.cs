@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
-/// <summary>
-/// 
-/// </summary>
 
 public class FarmFieldManager : MonoBehaviour
 {
@@ -28,7 +23,7 @@ public class FarmFieldManager : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            FarmField field = Instantiate(fieldPrefab, new Vector2(Random.Range(-10f, 10f), 0f), Quaternion.identity, transform);
+            FarmField field = Instantiate(fieldPrefab, new Vector2(Random.Range(-25f, 25f), -0.1f), Quaternion.identity, transform);
             Register(field);
         }
     }

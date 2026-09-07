@@ -53,6 +53,9 @@ TagManager:
   - name: Buildings
     uniqueID: 2296751211
     locked: 0
+  - name: Foreground
+    uniqueID: 4128097613
+    locked: 0
   - name: Character
     uniqueID: 1938204889
     locked: 0

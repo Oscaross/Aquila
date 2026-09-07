@@ -96,8 +96,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2097420455761956001}
-  - component: {fileID: 494517304212621247}
   - component: {fileID: 4951602857418980969}
+  - component: {fileID: 494517304212621247}
   m_Layer: 0
   m_Name: Field
   m_TagString: Untagged
@@ -121,6 +121,30 @@ Transform:
   - {fileID: 8733893148580219800}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4951602857418980969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559477821406755291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832d8a3373de4d6468ded810eb27c2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xSize: 10
+  currentCropGrowthPhase: 0
+  growthPhases:
+  - {fileID: 0}
+  - {fileID: -5142326010215066187, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
+  - {fileID: 594394766200335333, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
+  - {fileID: 2083522032371737339, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
+  phasesUntilWilting: 2
+  wiltedSprite: {fileID: 1891659179965030140, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
+  currentGrowthPhaseRenderer: {fileID: 9135764557570210898}
+  timeBetweenGrowthPhasesSeconds: 10
+  baseGrainYield: 10
 --- !u!212 &494517304212621247
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -162,8 +186,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -166869683
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7163797072667518306, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -176,26 +200,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4951602857418980969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8559477821406755291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832d8a3373de4d6468ded810eb27c2cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentCropGrowthPhase: 0
-  growthPhases:
-  - {fileID: 0}
-  - {fileID: -5142326010215066187, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
-  - {fileID: 594394766200335333, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
-  - {fileID: 2083522032371737339, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
-  phasesUntilWilting: 2
-  wiltedSprite: {fileID: 1891659179965030140, guid: 7f0b12b8034bc3949a7c4c20b46deb0a, type: 3}
-  currentGrowthPhaseRenderer: {fileID: 9135764557570210898}
-  timeBetweenGrowthPhasesSeconds: 10
-  baseGrainYield: 10

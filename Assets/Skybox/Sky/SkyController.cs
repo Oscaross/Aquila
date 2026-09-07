@@ -1,6 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[ExecuteAlways]
 public class SkyController : MonoBehaviour
 {
     public static SkyController Instance { get; private set; }
@@ -24,6 +25,8 @@ public class SkyController : MonoBehaviour
     public Color Horizon { get => horizon; private set => horizon = value; }
     public Color Light { get => light; private set => light = value; }
     public Color Haze { get => haze; private set => haze = value; }
+
+    public float GetCurrentLightSourceLevel(float t) => illumination.lightSourceIntensity.Evaluate(t);
 
     static readonly int HazeColorID = Shader.PropertyToID("_GlobalHazeColor");
     private static readonly int HorizonYID = Shader.PropertyToID("_GlobalHorizonY");

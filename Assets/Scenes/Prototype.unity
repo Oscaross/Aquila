@@ -315,7 +315,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1938204889
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -5009351758753655452, guid: 1c82e86f9a6e9c94e8752b35bd734577, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -681,9 +681,9 @@ MonoBehaviour:
   light: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
   haze: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 0.375}
   globalLightTemperature: 0
-  currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
-  currentSunset: {fileID: 11400000, guid: 324aa49761b32ce4bbb23b6c88415362, type: 2}
-  currentRampExponent: 1.0866435
+  currentSunrise: {fileID: 11400000, guid: 237d61d4ea551ca4c88d1f9131371708, type: 2}
+  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
+  currentRampExponent: 1.2106693
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -2141,6 +2141,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 503026732}
   smoothTime: 0.0313
+--- !u!1 &523121392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 523121393}
+  - component: {fileID: 523121394}
+  m_Layer: 0
+  m_Name: ZoneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &523121393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523121392}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 564239049}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &523121394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523121392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1ba6bf693cf3341a1f2e1480c250a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zones: []
 --- !u!1 &524032131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2265,6 +2310,7 @@ Transform:
   - {fileID: 2047811901}
   - {fileID: 2127830480}
   - {fileID: 1868031255}
+  - {fileID: 523121393}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &564239050
@@ -2281,6 +2327,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resources: {fileID: 1173209239}
   projectileManager: {fileID: 2127830481}
+  subjectManager: {fileID: 1868031256}
+  legionBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 10, y: 10, z: 0}
+  zoneManager: {fileID: 523121394}
 --- !u!1 &564855179
 GameObject:
   m_ObjectHideFlags: 0
@@ -3325,13 +3376,21 @@ PrefabInstance:
       propertyPath: temperature
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
+      propertyPath: flickerSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
+      propertyPath: flickerIntensity
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 6103546221978047739, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.24
       objectReference: {fileID: 0}
     - target: {fileID: 6103546221978047739, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.99
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 6103546221978047739, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3450,7 +3509,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 208194957
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 3588997651308108596, guid: 62a75ef244fe6aa4bbdf742b47199ab8, type: 3}
   m_Color: {r: 0.13333334, g: 0.21176471, b: 0.23921569, a: 1}
@@ -3553,9 +3612,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cbec91b3c135a24cae88a67fa26082e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subjectPrefabs:
-  - {fileID: -8701331123093151959, guid: 9a889eb289818c24eaf677f707cf7819, type: 3}
-  - {fileID: 320295450195615179, guid: 4081f74e9def5a64ba67e537349fb40a, type: 3}
+  baseSubjectPrefab: {fileID: -6567341167364343380, guid: 8e107b4c3f7c4a44d9ee60d8560b1f1a, type: 3}
+  subjects: []
 --- !u!1 &1918056064
 GameObject:
   m_ObjectHideFlags: 0

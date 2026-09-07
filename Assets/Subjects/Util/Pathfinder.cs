@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
  * Generic component for anything that must move towards some point. 
 */
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Pathfinder : MonoBehaviour
 {
     [Tooltip("Any asset that must flip when the sprite flips during pathfinding must be a child of this transform.")]
@@ -35,24 +36,6 @@ public class Pathfinder : MonoBehaviour
         destination = target;
         onArrive = onArrived;
         isMoving = true;
-    }
-
-    /// <summary>
-    /// Instructs the NPC to choose a random idle point between the given bounds. The NPC will then choose a random position, walk to it, then wait, then call the change callback.
-    /// </summary>
-    /// <param name="bounds">The minimum and maximum x coordinates that the NPC is allowed to choose for its idle point to walk to.</param>
-    /// <param name="idleTimeSeconds">How long the NPC waits after it reaches its idle point.</param>
-    /// <param name="onBeginIdleCycle">The function dictating what to do before the NPC starts waiting for its idle time (i.e. set the correct state for idling).</param>
-    /// <param name="onFinishIdleCycle">The function dictating what to do after the NPC reaches its idle point (idle again, look for a job, etc...)</param>
-    public void IdleBetween(Vector2 bounds, float idleTimeSeconds, Action onBeginIdleCycle, Action onFinishIdleCycle)
-    {
-        float newIdleX = Random.Range(bounds.x, bounds.y);
-        onBeginIdleCycle.Invoke();
-        Delay.WaitThen(
-            this, 
-            idleTimeSeconds, 
-            () => PathfindTo(new Vector2(transform.position.y, newIdleX), onFinishIdleCycle)
-            );
     }
 
     /// <summary>

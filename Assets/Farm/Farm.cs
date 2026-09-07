@@ -17,9 +17,4 @@ public class Farm : MonoBehaviour
 
             currentGrainStore = Mathf.Min(projected, maxGrainBuffer);
       }
-
-      public void OnboardFarmer(Farmer farmer)
-      {
-            
-      }
 }

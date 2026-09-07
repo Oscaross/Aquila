@@ -11,6 +11,6 @@ public class IlluminationProfile : ScriptableObject
     public AnimationCurve intensity;
     [Tooltip("How much atmospheric hazing is present throughout the day/night cycle.")]
     public AnimationCurve hazeStrength;
-    
-    public float GetLightSourceIntensity(float t) => 1 - intensity.Evaluate(t);
+    [Tooltip("The level that light sources like torches and lanterns should follow throughout the cycle.")]
+    public AnimationCurve lightSourceIntensity;
 }

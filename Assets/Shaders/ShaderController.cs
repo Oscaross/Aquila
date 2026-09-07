@@ -421,7 +421,12 @@ public class ShaderController : MonoBehaviour
     [ContextMenu("Trace Dirt Colours")]
     public void TraceColours()
     {
-        if (indexLut == null) Debug.Log("Can't trace colours because there is no LUT to index from!", this);
+        if (indexLut == null)
+        {
+            Debug.Log("Can't trace colours because there is no LUT to index from!", this);
+            return;
+        }
+        
         string[] hexes = { "33261B", "513C29", "6E5336", "8A6A46" };
 
         Color32[] cells = indexLut.GetPixels32();
