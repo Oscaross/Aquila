@@ -7,17 +7,18 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 5f;
+    private float moveSpeed = 4f;
+
+    [SerializeField] private float sprintingMoveSpeed = 8f;
     private Rigidbody2D rb;
     private float moveInput;
+    private bool isSprinting;
 
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void Awake() {  rb = GetComponent<Rigidbody2D>(); }
@@ -26,7 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         moveInput = Input.GetAxisRaw("Horizontal");
-
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
+        
         animator.SetFloat("Speed", Mathf.Abs(moveInput)); // update the animator state machine to know we are now moving
 
         if (moveInput != 0)
@@ -39,6 +41,6 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Actually moves the character left/right.
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); // the velocity is the direction (+1/-1) multiplied by the move speed which is defined at the top of the class or in the inspector
+        rb.linearVelocity = new Vector2(moveInput * ((isSprinting) ? sprintingMoveSpeed : moveSpeed), rb.linearVelocity.y); // the velocity is the direction (+1/-1) multiplied by the move speed which is defined at the top of the class or in the inspector
     }
 }

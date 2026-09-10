@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e145fdb9858adf94a966620db9128bd3, type: 3}
+  m_Name: WildernessTileset
+  m_EditorClassIdentifier: 
+  zone: 3
+  middleTiles:
+  - tile: {fileID: 11400000, guid: 8ae04290be1dff04aa6c77cd04517bdb, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 5c50e38ddf22f104b9cf9b92df1316fe, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 10e37823db9623a4aa248ceb1a47b54a, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 5b903c49908aa7c47983ad2d489f4970, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 1b25846144ed0ad47bc3934d6b3a5948, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 3db3ea926ac932e4a895ddf52ddc8c0b, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 7387372600e80644dabfa40638ec3fac, type: 2}
+    allowMirror: 1
+  leftEdgeTiles:
+  - tile: {fileID: 11400000, guid: 8ae04290be1dff04aa6c77cd04517bdb, type: 2}
+    allowMirror: 0
+  rightEdgeTiles:
+  - tile: {fileID: 11400000, guid: 8ae04290be1dff04aa6c77cd04517bdb, type: 2}
+    allowMirror: 0
+  minIslandWidth: 5
+  maxIslandWidth: 10
+  minIslandSeparation: 1
+  maxIslandSeparation: 8

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e145fdb9858adf94a966620db9128bd3, type: 3}
+  m_Name: ForestTileset
+  m_EditorClassIdentifier: 
+  zone: 1
+  middleTiles:
+  - tile: {fileID: 11400000, guid: edef296fc09e18647bc76a54d816a171, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: e0b0441dc5111c0418d3d08b29462237, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 31c70c4a4e5168b46ac1eed492368634, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: d98eac4e1d9937944b3b87fd7325c8b1, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: e60ae53bad278874582c0f05270adbe0, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: c2cd5c93abc46e14295a419e232e7cbf, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 9221adc913b33154baae6dc9474df477, type: 2}
+    allowMirror: 1
+  leftEdgeTiles:
+  - tile: {fileID: 11400000, guid: edef296fc09e18647bc76a54d816a171, type: 2}
+    allowMirror: 0
+  rightEdgeTiles:
+  - tile: {fileID: 11400000, guid: edef296fc09e18647bc76a54d816a171, type: 2}
+    allowMirror: 0
+  minIslandWidth: 5
+  maxIslandWidth: 10
+  minIslandSeparation: 5
+  maxIslandSeparation: 12

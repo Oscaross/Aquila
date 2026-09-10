@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e145fdb9858adf94a966620db9128bd3, type: 3}
+  m_Name: ArableTileset
+  m_EditorClassIdentifier: 
+  zone: 0
+  middleTiles:
+  - tile: {fileID: 11400000, guid: 974475de461e37b4dbe09fad3abda659, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 830cedcd1f2fcae40afb452a4da28866, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 2712ade9ba914a0429b8fc9b92ed367e, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 5d365e323b51cca498c5ba798aa2aa71, type: 2}
+    allowMirror: 1
+  leftEdgeTiles:
+  - tile: {fileID: 11400000, guid: 974475de461e37b4dbe09fad3abda659, type: 2}
+    allowMirror: 0
+  rightEdgeTiles:
+  - tile: {fileID: 11400000, guid: 974475de461e37b4dbe09fad3abda659, type: 2}
+    allowMirror: 0
+  minIslandWidth: 4
+  maxIslandWidth: 6
+  minIslandSeparation: 1
+  maxIslandSeparation: 3

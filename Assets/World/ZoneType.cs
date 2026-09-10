@@ -1,7 +1,7 @@
 public enum ZoneType
 {
-    Legion,
     Arable,
     Forest,
+    Legion,
     Wilderness
 }

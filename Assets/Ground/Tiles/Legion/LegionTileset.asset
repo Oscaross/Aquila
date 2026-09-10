@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e145fdb9858adf94a966620db9128bd3, type: 3}
+  m_Name: LegionTileset
+  m_EditorClassIdentifier: 
+  zone: 2
+  middleTiles:
+  - tile: {fileID: 11400000, guid: 7ba16af70acc745489fe962efd7571f5, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 2b9af741de6ae9d47871692abc9162e2, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 8d09dbee8a25bcf4ea236e7188777821, type: 2}
+    allowMirror: 1
+  - tile: {fileID: 11400000, guid: 1f4d5be9927619e4d9faa9313d9333c3, type: 2}
+    allowMirror: 1
+  leftEdgeTiles:
+  - tile: {fileID: 11400000, guid: 06cfa8379de93384abcb8ca93434202e, type: 2}
+    allowMirror: 0
+  rightEdgeTiles:
+  - tile: {fileID: 11400000, guid: 269ab25e0db91374ca1ef3bb52362d23, type: 2}
+    allowMirror: 0
+  minIslandWidth: 2
+  maxIslandWidth: 5
+  minIslandSeparation: 2
+  maxIslandSeparation: 6

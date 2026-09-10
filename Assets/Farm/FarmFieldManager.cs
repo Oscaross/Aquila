@@ -18,13 +18,4 @@ public class FarmFieldManager : MonoBehaviour
             field.Tick(delta);
         }
     }
-
-    private void Awake()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            FarmField field = Instantiate(fieldPrefab, new Vector2(Random.Range(-25f, 25f), -0.1f), Quaternion.identity, transform);
-            Register(field);
-        }
-    }
 }
