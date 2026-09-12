@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class Pseudorandom : MonoBehaviour
 {
-    private static int _seed = 910;
+    private static int _seed = 1;
 
     public const int TilePainterIslandSalt = 0x1B873593;
     public const int TilePainterGapSalt = unchecked((int)0x9E3779B9); // this hack gets around overflowing the int limit, we only care about bit position and not value, so this is fine

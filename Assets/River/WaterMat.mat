@@ -42,29 +42,29 @@ Material:
     m_Ints: []
     m_Floats:
     - _BandBrightness: 0.02
-    - _BandDensity: 1
+    - _BandDensity: 0.797
     - _BandFreqFar: 0.06
     - _BandFreqNear: 0.12
     - _BandOffset: 2
-    - _BandSpeedFar: 0.4
+    - _BandSpeedFar: 0.24
     - _BandSpeedNear: 1.2
-    - _ClumpDrift: 0.05
-    - _ClumpFreq: 0.05
-    - _ClumpMin: 0.2
-    - _DashLength: 0.428
+    - _ClumpDrift: 0.03
+    - _ClumpFreq: 0.76
+    - _ClumpMin: 0.12
+    - _DashLength: 0.35
     - _EdgeOffset: 3
-    - _EdgeWidth: 0.03
+    - _EdgeWidth: 0.097
     - _EnableExternalAlpha: 0
     - _MaxBandOffset: 2
     - _PlaneHeightPixels: 180
     - _ReflectionFade: 0.785
-    - _ReflectionSquash: 0.8
-    - _ReflectionStrength: 0.4
+    - _ReflectionSquash: 0.76
+    - _ReflectionStrength: 0.167
     - _SkyInfluence: 0.851
     - _SurfaceThickness: 0
     - _WaveAmpPixels: 1
     - _WaveFreq: 45
-    - _WaveSpeed: 1.98
+    - _WaveSpeed: 2.1
     - _ZWrite: 0
     m_Colors:
     - _BaseColour: {r: 0.1254902, g: 0.16078432, b: 0.22745098, a: 1}

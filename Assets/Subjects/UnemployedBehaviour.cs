@@ -16,6 +16,6 @@ public class UnemployedBehaviour : ProfessionBehaviour
 
     private void IdleLoop()
     {
-        IdleWithin(Legion.LegionBounds, idleSeconds, IdleLoop);
+       //  IdleWithin(Legion.LegionBounds, idleSeconds, IdleLoop);
     }
 }

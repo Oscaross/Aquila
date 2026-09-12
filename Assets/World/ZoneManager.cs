@@ -50,6 +50,24 @@ public class ZoneManager : MonoBehaviour
         RebuildCoordinateList();
     }
 
+    /// <summary>
+    /// Checks whether a rectangular area is fully contained within the bounds of a zone of type.
+    /// </summary>
+    /// <param name="bounds">The rectangular area to check within, in world coordinates.</param>
+    /// <param name="type">The zone type to search for.</param>
+    /// <returns>True if it fully is contained within a zone of type, false otherwise. Returns false if the bounds have zero-width.</returns>
+    public bool DoesAreaFullyOverlapType(RectInt bounds, ZoneType type)
+    {
+        if (bounds.width <= 0) return false;
+        
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            if (GetZoneTypeAt(x) != type) return false;
+        }
+
+        return true;
+    }
+
     private void RemoveZone(Zone existing)
     {
         zones.Remove(existing);
