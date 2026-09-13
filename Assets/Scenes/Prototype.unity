@@ -676,14 +676,14 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
-  zenith: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
+  zenith: {r: 0.1681051, g: 0.23956555, b: 0.27607977, a: 1}
   horizon: {r: 0, g: 0, b: 0, a: 0}
-  light: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
-  haze: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 0.375}
+  light: {r: 0.3526328, g: 0.24967965, b: 0.16616894, a: 1}
+  haze: {r: 0.1681051, g: 0.23956555, b: 0.27607977, a: 0.625}
   globalLightTemperature: 0
   currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
-  currentSunset: {fileID: 11400000, guid: 324aa49761b32ce4bbb23b6c88415362, type: 2}
-  currentRampExponent: 0.8314412
+  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
+  currentRampExponent: 0.8426998
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -2963,15 +2963,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: temperature
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
-      propertyPath: flickerSpeed
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
+      propertyPath: flickerSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441043703849568949, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: flickerIntensity
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6103546221978047739, guid: c9231061f63f66442913f054b2e4d8c5, type: 3}
       propertyPath: m_LocalPosition.x

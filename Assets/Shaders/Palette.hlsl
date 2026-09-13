@@ -187,39 +187,77 @@ float3 ShiftPaletteSteps(float3 rgb, float steps)
 
 /// Accumulates every local light reaching this world position.
 /// brightness adds to the lit level; temperature pushes the block selection warmer.
+/// Bounds temperature by the strongest light's temperature, rather than additive increase beyond the maximum temperature
 void AquilaAccumulateLights(float2 worldPos, out float brightness, out float temperature)
 {
-    brightness  = 0.0;
-    temperature = 0.0;
+    brightness = 0.0;
+    float tempWeighted = 0.0;
+    float totalWeight = 0.0;
 
     for (int i = 0; i < _LightCount; i++)
     {
         float2 delta = worldPos - _LightData[i].xy;
-        float  r     = _LightData[i].z;
+        float radius = max(_LightData[i].z, 1e-4);
 
-        float atten = saturate(1.0 - dot(delta, delta) / (r * r));
+        float atten = saturate(1.0 - dot(delta, delta) / (radius * radius));
         atten = atten * atten * _LightData[i].w;
 
-        brightness  += atten;
-        temperature += atten * _LightMeta[i].x; // recall that _LightMeta.x is just the temperature value of the light source 
+        brightness   += atten;
+        tempWeighted += atten * _LightMeta[i].x;
+        totalWeight  += atten;
     }
+
+    temperature = tempWeighted / max(1.0, totalWeight);
+}
+
+/// Before lighting, snap screen fragments to a quantised pixel position so we still get crisp, pixel perfect lighting.
+float2 SnapToGrid(float2 worldPos)
+{
+    return (floor(worldPos * PIXELS_PER_UNIT) + 0.5) / PIXELS_PER_UNIT;
+}
+
+float AquilaHash(int2 cell)
+{
+    float2 p = frac(float2(cell) * float2(0.1031, 0.1030));
+    p += dot(p, p.yx + 33.33);
+    return frac((p.x + p.y) * p.x);
 }
 
 /// The full local-lighting path: global darkness as the floor, lights on top,
 /// one ramp lookup and one block decision at the end.
 float3 LightWithPaletteLocal(float3 rgb, float2 worldPos)
 {
+    worldPos = SnapToGrid(worldPos); // quantise pixel positions so we don't get internal pixel fragments being illuminated differently
+    
     float ramp, index, rampLength;
     AquilaLookup(rgb, ramp, index, rampLength);
 
     float brightness, temperature;
     AquilaAccumulateLights(worldPos, brightness, temperature);
 
+    int2 cell = int2(floor(worldPos * PIXELS_PER_UNIT));
+    
+    // Dither index is the light intensity offset. We connect this to the time elapsed so that all pixels brighten and darken at psuedorandom times to give the flicker effect.
+    int tick = (int)floor(_Time.y * 8.0); // 8 discrete ticks for 8 discrete states for each pixel as time varies
+    
+    float churn = saturate(brightness * 2.0); // a pixel that isn't illuminated at all by a local light source should not have the dither effect applied to it => clamps to 0 for brightness = 0
+    // If churn is 0 we land on float a which is the static dithered value of the cell, which just matches its light level. Otherwise, we lerp toward the light-offset shimmer.
+    float ditherIndex = lerp(AquilaHash(cell), 
+        AquilaHash(cell + int2(tick * 37, tick * 101)),
+        churn);
+    
+    
+    float ditherBlock = AquilaHash(cell + int2(17, 31));
+    
     float darkness = saturate(_GlobalDarkness - brightness);
-    float block    = clamp(round(_GlobalLightTemperatureBlock + temperature),
-                           0.0, _PaletteBlockCount - 1.0);
-
-    float offset  = round(darkness * (rampLength - 1.0));
+    
+    // Whatever block this pixel is on, plus the additional temperature that the light source is emitting
+    float blockRaw = _GlobalLightTemperatureBlock + temperature;
+    float blockBase = floor(blockRaw);
+    float block = clamp(blockBase + step(ditherBlock, blockRaw - blockBase),
+                            0.0, _PaletteBlockCount - 1.0);
+    
+    float offset  = floor(darkness * (rampLength - 1.0) + ditherIndex);
     float shifted = clamp(index - offset, 0.0, rampLength - 1.0);
 
     float3 dbg;

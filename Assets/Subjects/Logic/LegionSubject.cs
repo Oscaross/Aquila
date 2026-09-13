@@ -29,7 +29,7 @@ public class LegionSubject : MonoBehaviour
 
     public void WitnessMoraleEvent(MoraleEvent e)
     {
-        Debug.Log(e.DisplayName());
+        
     }
 
     public void ChangeProfession(SubjectWorkspace newWorkspace)

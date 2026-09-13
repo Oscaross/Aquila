@@ -52,7 +52,8 @@ public class BuildingModeManager : MonoBehaviour
 
     public void Build(BuildingConstraints building, Vector2 buildPos)
     {
-        // if (!CanBuildThisHere(buildPos.x, building)) return;
+        // Has to pass final validation before we build.
+        if (Validate(lastCell, currentBuildableSelected) != BuildingFailureReason.None) return; 
         
         Instantiate(building.buildingPrefab, buildPos, Quaternion.identity, transform);
         

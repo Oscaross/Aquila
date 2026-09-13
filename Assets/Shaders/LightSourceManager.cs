@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [ExecuteAlways]
 public class LightSourceManager : MonoBehaviour
@@ -10,20 +12,19 @@ public class LightSourceManager : MonoBehaviour
     private readonly Vector4[] _lightData = new Vector4[MaxLights];
     /// <summary>
     /// x = temperature (warm/cool light)
-    /// y, z, w are all unused right now, they can be used in the future for stuff like flicker or other properties about the light source
-    /// We give a Vector4 because the GPU won't accept something that's not a 4-dimensional array. We might as well use the space that we have to use here anyway.
+    /// y, z and w are unused and come for free given we have to transmit a Vector4
     /// </summary>
     private readonly Vector4[] _lightMeta = new Vector4[MaxLights];
     
     private static readonly int GlobalLightDataID = Shader.PropertyToID("_LightData");
     private static readonly int GlobalLightMetaID = Shader.PropertyToID("_LightMeta");
     private static readonly int GlobalLightCountID = Shader.PropertyToID("_LightCount");
-
+    
     private float time; // we need this to apply flicker
 
     private void LateUpdate()
     {
-        time = (Application.isPlaying) ? Time.time : (float)UnityEditor.EditorApplication.timeSinceStartup;
+        time = (Application.isPlaying) ? Time.time : 0f;
         int count = Mathf.Min(LightSource.Active.Count, MaxLights);
 
         for (int i = 0; i < count; i++)

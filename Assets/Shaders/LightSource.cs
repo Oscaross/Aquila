@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// This component integrates with the custom pixel art shader by setting and computing light at a given world pos for a given source and then exposing the light levels to the LitShader; so that
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 [ExecuteAlways]
 public class LightSource : MonoBehaviour
 {
-    public static readonly List<LightSource> Active = new List<LightSource>();
+    public static readonly List<LightSource> Active = new();
 
     [Tooltip("How far in world units the light source extends.")]
     public float radius = 6f;
@@ -27,6 +28,7 @@ public class LightSource : MonoBehaviour
     private void OnEnable()
     {
         Active.Add(this);
+        flickerPhase = Random.Range(0f, 8f);
     }
 
     private void OnDisable()
