@@ -70,12 +70,12 @@ public class FunctionalTree : MonoBehaviour
 
     private void OnEnable()
     {
-        TimeOfDay.OnSunrise += OnNewDay;
+        GameClock.OnSunrise += OnNewDay;
     }
 
     private void OnDisable()
     {
-        TimeOfDay.OnSunrise -= OnNewDay;
+        GameClock.OnSunrise -= OnNewDay;
     }
 
     private void OnNewDay()

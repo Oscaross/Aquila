@@ -53,17 +53,17 @@ public class SkyController : MonoBehaviour
         
         ConfigureNewHorizonPreset();
         Instance = this;
-        TimeOfDay.OnNoon += ConfigureNewHorizonPreset;
+        GameClock.OnNoon += ConfigureNewHorizonPreset;
     }
 
     private void OnDisable()
     {
-        TimeOfDay.OnNoon -= ConfigureNewHorizonPreset;
+        GameClock.OnNoon -= ConfigureNewHorizonPreset;
     }
 
     private void LateUpdate()
     {
-        float t = GameTime.Now;
+        float t = GameClock.Now;
 
         UpdateIllumination(t);
         UpdateHorizon(t);
@@ -110,7 +110,7 @@ public class SkyController : MonoBehaviour
         float hazeBias;
         globalLightTemperature = LightTemperature.NEUTRAL; // the block is neutral colour unless we enter the sunrise/sunset progress code
         
-        if (GameTime.TryGetSunriseProgress(t, out float p1))
+        if (GameClock.TryGetSunriseProgress(t, out float p1))
         {
             globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunrise.horizonColour.Evaluate(p1);
@@ -118,7 +118,7 @@ public class SkyController : MonoBehaviour
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
             hazeBias = currentSunrise.hazeHorizonBias;
         }
-        else if (GameTime.TryGetSunsetProgress(t, out float p2))
+        else if (GameClock.TryGetSunsetProgress(t, out float p2))
         {
             globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunset.horizonColour.Evaluate(p2);

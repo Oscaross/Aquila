@@ -43,5 +43,5 @@ public class SeasonTable : ScriptableObject
     /// Returns the data table for the current season.
     /// </summary>
     /// <returns>The current season's data table.</returns>
-    public SeasonData GetCurrentSeasonData() => Get(GameTime.CurrentSeason);
+    public SeasonData GetCurrentSeasonData() => Get(GameClock.CurrentSeason);
 }

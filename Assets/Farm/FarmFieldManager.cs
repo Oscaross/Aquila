@@ -12,7 +12,7 @@ public class FarmFieldManager : MonoBehaviour
 
     private void Update()
     {
-        float delta = Time.deltaTime * TimeOfDay.Instance.TimeMultiplier;
+        float delta = Time.deltaTime * GameClock.TimeMultiplier;
         foreach (var field in fields)
         {
             field.Tick(delta);

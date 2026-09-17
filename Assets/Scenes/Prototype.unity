@@ -682,8 +682,8 @@ MonoBehaviour:
   haze: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 0.375}
   globalLightTemperature: 0
   currentSunrise: {fileID: 11400000, guid: 9e4a54915e00e2945831e29199a477ea, type: 2}
-  currentSunset: {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
-  currentRampExponent: 1.3528242
+  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
+  currentRampExponent: 1.1451845
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -801,7 +801,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 372887979}
-  - component: {fileID: 372887978}
+  - component: {fileID: 372887980}
   m_Layer: 0
   m_Name: TimeManager
   m_TagString: Untagged
@@ -809,23 +809,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &372887978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372887977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db72586261629b84f9bc62c09925d044, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dayLengthSeconds: 600
-  timeMultiplier: 1
-  timeNow: 0.2
-  daysInASeason: 18
-  startSeason: 1
 --- !u!4 &372887979
 Transform:
   m_ObjectHideFlags: 0
@@ -841,6 +824,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &372887980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372887977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322aae58efc9a0244ac6f12ad5104185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayLengthSeconds: 600
+  timeMultiplier: 1
+  startTime: 0.25
+  daysInASeason: 18
+  startSeason: 0
+  scrubTime: 0.25
 --- !u!1 &377189077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2240,17 +2241,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3947006301470628040, guid: 6fbf77e0aed0e6c4e870b097663c7b4e, type: 3}
   m_PrefabInstance: {fileID: 767060796}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &767060798 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3067428512517119992, guid: 6fbf77e0aed0e6c4e870b097663c7b4e, type: 3}
-  m_PrefabInstance: {fileID: 767060796}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e80360e1a764c3247a05ec325576b968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &779053494
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2334,17 +2324,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3947006301470628040, guid: 6fbf77e0aed0e6c4e870b097663c7b4e, type: 3}
   m_PrefabInstance: {fileID: 5551299663956053221}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &800373887 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3067428512517119992, guid: 6fbf77e0aed0e6c4e870b097663c7b4e, type: 3}
-  m_PrefabInstance: {fileID: 5551299663956053221}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e80360e1a764c3247a05ec325576b968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &880614886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2637,7 +2616,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1875331657
   m_SortingLayer: -3
-  m_SortingOrder: 25
+  m_SortingOrder: 100
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2745,12 +2724,16 @@ MonoBehaviour:
   starsToChooseFrom:
   - {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
   - {fileID: 6832151173873317867, guid: 4646e1c312569294f89db052bf773b23, type: 3}
-  weakStarCount: 20
-  strongStarCount: 3
+  - {fileID: 4166230981230223852, guid: 0f0f2c35266c8854abf6da47050a2fdf, type: 3}
+  weakStarCount: 30
+  strongStarCount: 6
+  giantStarCount: 2
   twinkleProportion: 0.3
-  framesPerSecond: 10
+  framesPerSecond: 3
   rateVariation: {x: 0.8, y: 1.2}
-  holdTimeRange: {x: 1, y: 5}
+  holdTimeRange: {x: 3, y: 20}
+  rotationCentre: {x: 0, y: 0}
+  degreesPerNight: 10
   skyRenderer: {fileID: 564855181}
 --- !u!1 &1376409915
 GameObject:
@@ -2990,7 +2973,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1875331657
   m_SortingLayer: -3
-  m_SortingOrder: 25
+  m_SortingOrder: 100
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3554,7 +3537,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2084906055}
-  - component: {fileID: 2084906056}
   m_Layer: 0
   m_Name: Trees
   m_TagString: Untagged
@@ -3579,22 +3561,6 @@ Transform:
   - {fileID: 767060797}
   m_Father: {fileID: 581792742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2084906056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084906054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3fca6b72f271e34ea5e87d8174d73ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnZones:
-  - {fileID: 800373887}
-  - {fileID: 767060798}
-  maxTreeSpawnAttempts: 12
 --- !u!1 &2127830479
 GameObject:
   m_ObjectHideFlags: 0

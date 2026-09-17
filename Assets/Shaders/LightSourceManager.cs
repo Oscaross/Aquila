@@ -47,7 +47,7 @@ public class LightSourceManager : MonoBehaviour
     /// <returns>Light intensity at this timestep, as a float.</returns>
     private float GetIntensity(LightSource src)
     {
-        float currentIntensity = src.maxIntensity * SkyController.Instance.GetCurrentLightSourceLevel(GameTime.Now);
+        float currentIntensity = src.maxIntensity * SkyController.Instance.GetCurrentLightSourceLevel(GameClock.Now);
         if (src.flickerIntensity <= 0f || src.flickerSpeed <= 0f) return currentIntensity;
 
         // sin maps to 0..1 so the light oscillates between (1 - flickerIntensity) and 1.

@@ -14,7 +14,7 @@ public class SunMoonTint : MonoBehaviour
 
     private void LateUpdate()
     {
-        float t = GameTime.Now;
+        float t = GameClock.Now;
 
         Gradient discPreset = (body == CelestialBody.Sun) ? preset.sunColour : preset.moonColour;
         Gradient glowPreset = (body == CelestialBody.Sun) ? preset.sunGlowColour : preset.moonGlowColour;

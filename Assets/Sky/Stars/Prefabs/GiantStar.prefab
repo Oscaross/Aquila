@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &7059496447828035303
+--- !u!1001 &502607477333086432
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,60 +10,44 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2686623896033573706, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: m_Name
-      value: StrongStar
+      value: GiantStar
       objectReference: {fileID: 0}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: type
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: frames.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: 'frames.Array.data[0]'
       value: 
-      objectReference: {fileID: 7258287455724872887, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+      objectReference: {fileID: 8345804818508066975, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: 'frames.Array.data[1]'
       value: 
-      objectReference: {fileID: -6179389824257892351, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+      objectReference: {fileID: 7747710918890787932, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: 'frames.Array.data[2]'
       value: 
-      objectReference: {fileID: -1033736830673723548, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+      objectReference: {fileID: -8395198261718738860, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: 'frames.Array.data[3]'
       value: 
-      objectReference: {fileID: -5191211268980556261, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+      objectReference: {fileID: -8395198261718738860, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
+      propertyPath: 'frames.Array.data[4]'
+      value: 
+      objectReference: {fileID: 7747710918890787932, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
+      propertyPath: 'frames.Array.data[5]'
+      value: 
+      objectReference: {fileID: -8395198261718738860, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
     - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: minSeparationWorldUnits
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: animationPhases.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: 'animationPhases.Array.data[0]'
-      value: 
-      objectReference: {fileID: 7258287455724872887, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: 'animationPhases.Array.data[1]'
-      value: 
-      objectReference: {fileID: -6179389824257892351, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: 'animationPhases.Array.data[2]'
-      value: 
-      objectReference: {fileID: -1033736830673723548, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: 'animationPhases.Array.data[3]'
-      value: 
-      objectReference: {fileID: -5191211268980556261, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
-    - target: {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
-      propertyPath: 'animationPhases.Array.data[4]'
-      value: 
-      objectReference: {fileID: -5011964332962557951, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
     - target: {fileID: 6292323425832159341, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

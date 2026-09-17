@@ -12,7 +12,7 @@ public class AnimateSunMoon : MonoBehaviour
     {
         float timeToSubtract = (body == CelestialBody.Sun) ? 0.25f : 0.75f;
         // Animates the sun/moon in its arc across the sky from dawn to dusk. Uses sin x and cos x to mimic circular movement across a parameter x (horizontal arc) and y (vertical arc).
-        float angle = (GameTime.Now - timeToSubtract) * 2f * Mathf.PI;
+        float angle = (GameClock.Now - timeToSubtract) * 2f * Mathf.PI;
         transform.localPosition = new Vector3(
             Mathf.Cos(angle) * -radiusX,
             horizonY + Mathf.Sin(angle) * arcHeight,

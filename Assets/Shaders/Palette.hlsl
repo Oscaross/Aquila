@@ -236,18 +236,19 @@ float3 LightWithPaletteLocal(float3 rgb, float2 worldPos)
     AquilaAccumulateLights(worldPos, brightness, temperature);
 
     int2 cell = int2(floor(worldPos * PIXELS_PER_UNIT));
+    float cellSize = max(2, 1.0);
+    int2 ditherCell = int2(floor(float2(cell) / cellSize));
     
     // Dither index is the light intensity offset. We connect this to the time elapsed so that all pixels brighten and darken at psuedorandom times to give the flicker effect.
     int tick = (int)floor(_Time.y * 4.0); // 4 discrete ticks for 4 discrete states for each pixel as time varies
     
     float churn = saturate(brightness * 2.0); // a pixel that isn't illuminated at all by a local light source should not have the dither effect applied to it => clamps to 0 for brightness = 0
     // If churn is 0 we land on float a which is the static dithered value of the cell, which just matches its light level. Otherwise, we lerp toward the light-offset shimmer.
-    float ditherIndex = lerp(AquilaHash(cell), 
-        AquilaHash(cell + int2(tick * 37, tick * 101)),
-        churn);
+    float shimmer = AquilaHash(ditherCell + int2(tick * 37, tick * 101));
+    float ditherIndex = lerp(0.5, shimmer, churn);
     
     
-    float ditherBlock = AquilaHash(cell + int2(17, 31));
+    float ditherBlock = lerp(0.5, AquilaHash(ditherCell + int2(17, 31)), churn);
     
     float darkness = saturate(_GlobalDarkness - brightness);
     

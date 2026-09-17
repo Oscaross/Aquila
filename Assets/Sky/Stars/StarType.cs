@@ -1,5 +1,6 @@
 public enum StarType
 {
     Weak,
-    Strong
+    Strong,
+    Giant
 }

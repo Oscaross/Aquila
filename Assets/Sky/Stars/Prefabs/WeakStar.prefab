@@ -101,7 +101,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  minSeparationWorldUnits: 0.25
   frames:
   - {fileID: -2111150978931411448, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
   - {fileID: 6107354497873537841, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
   - {fileID: -5011964332962557951, guid: 885b6dee01d78d44ebed41d38f759f9d, type: 3}
+  rate: 0
+  offset: 0
+  animTime: 0
+  cycleTime: 0
+  currentFrame: -1

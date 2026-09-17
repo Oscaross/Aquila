@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,41 +12,65 @@ public class StarField : MonoBehaviour
     [SerializeField] private List<Star> starsToChooseFrom;
     [SerializeField] private int weakStarCount;
     [SerializeField] private int strongStarCount;
+    [SerializeField] private int giantStarCount;
 
     [SerializeField, Range(0f, 1f)] private float twinkleProportion = 0.5f;
     [SerializeField] private float framesPerSecond = 10f;
     [SerializeField] private Vector2 rateVariation = new(0.8f, 1.2f);
     [SerializeField] private Vector2 holdTimeRange = new(1f, 5f);
 
+    [SerializeField] private Vector2 rotationCentre;
+    [Tooltip("The field rotates throughout the day night cycle, resetting at noon so it doesn't visibly snap.")]
+    [SerializeField] private float degreesPerDayNightCycle = 15f;
+
     [SerializeField] private SpriteRenderer skyRenderer;
 
     private List<Star> stars = new();
-    private float t;
+    private Vector2[] basePositions;
     private Bounds sky;
+
+    private const int MaxSpawnAttemptsPerStar = 30;
     
     private void Awake()
     {
         sky = skyRenderer.bounds;
-        RebuildStarfield();
+        // Order matters here, we want the largest stars to get the best positions first.
+        CreateStars(StarType.Giant, giantStarCount);
+        CreateStars(StarType.Strong, strongStarCount);
+        CreateStars(StarType.Weak, weakStarCount);
+
+        // Store the original positions so that we don't rotate our stars and deform them as the star field rotates in the night
+        basePositions = new Vector2[stars.Count];
+
+        for (int i = 0; i < stars.Count; i++)
+        {
+            var star = stars.ElementAt(i);
+            basePositions[i] = new Vector2(star.transform.localPosition.x, star.transform.localPosition.y);
+        }
     }
 
     private void LateUpdate()
     {
-        foreach (Star s in stars)
-        {
-            s.UpdateStar(GameTime.Now);
-        }
-    }
+        float a = GameClock.SinceNoon * degreesPerDayNightCycle * Mathf.Deg2Rad;
+        float sin = Mathf.Sin(a), cos = Mathf.Cos(a);
+        float ppu = GlobalConstants.PixelsPerUnit;
 
-    private void RebuildStarfield()
-    {
-        CreateStars(StarType.Weak, weakStarCount);
-        CreateStars(StarType.Strong, strongStarCount);
+        for (int i = 0; i < basePositions.Length; i++)
+        {
+            Vector2 d = basePositions[i] - rotationCentre;
+            Vector2 p = rotationCentre + new Vector2(d.x * cos - d.y * sin, d.x * sin + d.y * cos);
+            
+            stars[i].transform.localPosition = new Vector3(Mathf.Round(p.x * ppu) / ppu,
+                Mathf.Round(p.y * ppu) / ppu,
+                stars[i].transform.localPosition.z);
+            
+            stars[i].UpdateStar(GameClock.ElapsedSeconds);
+        }
     }
 
     private void CreateStars(StarType type, int numStars)
     {
-        var choices = starsToChooseFrom.FindAll((s) => s.GetComponent<Star>().type == type);
+        var choices = starsToChooseFrom.FindAll(s => s.type == type);
 
         if (choices.Count <= 0)
         {
@@ -56,22 +80,18 @@ public class StarField : MonoBehaviour
         
         for (int i = 0; i < numStars; i++)
         {
-            // Get a position for this star by sampling a random Vector2 inside the SkySprite rectangular bounds
-            float randomX = Random.Range(sky.min.x, sky.max.x);
-            float randomY = Random.Range(sky.min.y, sky.max.y);
-
-            Vector2 pos = new Vector2(randomX, randomY);
-
-            float ppu = GlobalConstants.PixelsPerUnit; // we must place them in quantised positions on the sprite otherwise arbitrary pixels may be chosen by the renderer
-            
-            pos.x = Mathf.Round(pos.x * ppu) / ppu;
-            pos.y = Mathf.Round(pos.y * ppu) / ppu;
-            
             var starPrefab = choices[Random.Range(0, choices.Count)];
+            
+            if (!GenerateStarPos(starPrefab, out Vector2 pos))
+            {
+                Debug.LogWarning($"StarField: placed {i} of {numStars} {type} stars before running out of room. " +
+                                 $"Reduce the count or the separation radius.", this);
+                break;
+            }
             
             Star star = Instantiate(starPrefab, pos, Quaternion.identity, transform);
 
-            bool shouldTwinkle = Random.value < twinkleProportion;
+            bool shouldTwinkle = (type == StarType.Giant) || (Random.value < twinkleProportion);
             float fps = shouldTwinkle ? framesPerSecond * Random.Range(rateVariation.x, rateVariation.y) : 0f;
             float hold = Random.Range(holdTimeRange.x, holdTimeRange.y);
 
@@ -79,4 +99,45 @@ public class StarField : MonoBehaviour
             stars.Add(star);
         }
     }
+
+    private bool GenerateStarPos(Star starPrefab, out Vector2 spawnPos)
+    {
+        float ppu = GlobalConstants.PixelsPerUnit;
+        float minSeparation = starPrefab.minSeparationWorldUnits;
+
+        for (int i = 0; i < MaxSpawnAttemptsPerStar; i++)
+        {
+            // Quantise to the pixel grid it will be placed on, rather than relying on the camera to move it slightly.
+            Vector2 candidate = new(Mathf.Round(SampleX() * ppu) / ppu,
+                Mathf.Round(SampleY() * ppu) / ppu);
+
+            float clumpMultiplier = Random.Range(0.7f, 1.3f); // create natural clumping behaviour
+            bool canSpawn = true;
+
+            foreach (Star s in stars)
+            {
+                float threshold = Mathf.Max(s.minSeparationWorldUnits, minSeparation) * clumpMultiplier;
+
+                // Squared magnitude to avoid expensive sqrt() calls.
+                if (((Vector2)s.transform.position - candidate).sqrMagnitude < threshold * threshold)
+                {
+                    canSpawn = false;
+                    break;
+                }
+            }
+
+            if (canSpawn)
+            {
+                spawnPos = candidate;
+                return true;
+            }
+        }
+
+        spawnPos = default;
+        return false;
+    }
+
+    private float SampleX() => Random.Range(sky.min.x, sky.max.x);
+    // bias stars to spawn more towards the higher y values (further from the horizon).
+    private float SampleY() => Mathf.Lerp(sky.min.y, sky.max.y, Mathf.Sqrt(Random.value));
 }
