@@ -64,7 +64,7 @@ Material:
     - _SurfaceThickness: 0
     - _WaveAmpPixels: 1
     - _WaveFreq: 45
-    - _WaveSpeed: 2.1
+    - _WaveSpeed: 1.5
     - _ZWrite: 0
     m_Colors:
     - _BaseColour: {r: 0.1254902, g: 0.16078432, b: 0.22745098, a: 1}

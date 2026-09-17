@@ -35,15 +35,6 @@ Shader "Aquila/SkyGradient"
             float4 _GlobalHorizonColor; 
             float4 _GlobalZenithColor;
             float  _GlobalRampExponent;
-            float _GlobalPixelScale;
-
-            static const float bayer4[16] =
-            {
-                 0.0,  8.0,  2.0, 10.0,
-                12.0,  4.0, 14.0,  6.0,
-                 3.0, 11.0,  1.0,  9.0,
-                15.0,  7.0, 13.0,  5.0
-            };
 
             struct Attributes
             {
@@ -69,8 +60,7 @@ Shader "Aquila/SkyGradient"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float2 screenUV = IN.screenPos.xy / max(IN.screenPos.w, 0.0001);
-                float2 gamePx = screenUV * _ScreenParams.xy / max(_GlobalPixelScale, 1.0);
+                float2 gamePx = floor(IN.positionCS.xy);
                 float threshold = AquilaBayerThreshold(gamePx);
 
                 float a = pow(saturate(1.0 - IN.uv.y), max(_GlobalRampExponent, 0.01));

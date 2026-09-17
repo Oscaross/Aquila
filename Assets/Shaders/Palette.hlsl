@@ -238,7 +238,7 @@ float3 LightWithPaletteLocal(float3 rgb, float2 worldPos)
     int2 cell = int2(floor(worldPos * PIXELS_PER_UNIT));
     
     // Dither index is the light intensity offset. We connect this to the time elapsed so that all pixels brighten and darken at psuedorandom times to give the flicker effect.
-    int tick = (int)floor(_Time.y * 8.0); // 8 discrete ticks for 8 discrete states for each pixel as time varies
+    int tick = (int)floor(_Time.y * 4.0); // 4 discrete ticks for 4 discrete states for each pixel as time varies
     
     float churn = saturate(brightness * 2.0); // a pixel that isn't illuminated at all by a local light source should not have the dither effect applied to it => clamps to 0 for brightness = 0
     // If churn is 0 we land on float a which is the static dithered value of the cell, which just matches its light level. Otherwise, we lerp toward the light-offset shimmer.

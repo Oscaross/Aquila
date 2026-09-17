@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zenithColour:
     serializedVersion: 2
-    key0: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
+    key0: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 1}
     key1: {r: 0.20784314, g: 0.3372549, b: 0.38039216, a: 1}
-    key2: {r: 0.43529412, g: 0.6117647, b: 0.69411767, a: 0}
+    key2: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 0}
     key3: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 0}
-    key4: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 0}
-    key5: {r: 0.43529412, g: 0.6117647, b: 0.69411767, a: 0}
-    key6: {r: 0.20784314, g: 0.3372549, b: 0.38039216, a: 0}
-    key7: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 0}
-    ctime0: 10717
-    ctime1: 15343
+    key4: {r: 0.20784314, g: 0.3372549, b: 0.38039216, a: 0}
+    key5: {r: 0.023529412, g: 0.023529412, b: 0.02745098, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 11796
+    ctime1: 15497
     ctime2: 18581
-    ctime3: 21357
-    ctime4: 42791
-    ctime5: 47262
-    ctime6: 50655
-    ctime7: 53276
+    ctime3: 46029
+    ctime4: 49575
+    ctime5: 52505
+    ctime6: 0
+    ctime7: 0
     atime0: 0
     atime1: 65535
     atime2: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: -1
-    m_NumColorKeys: 8
+    m_NumColorKeys: 6
     m_NumAlphaKeys: 2
   lightColour:
     serializedVersion: 2

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingPrefab: {fileID: -2253911629886400664, guid: b23e7c8ea681c52449332085376e542f, type: 3}
   width: 13
+  height: 5
   zonesBuildableIn: 00000000
   resourceCosts:
-  - Resource: 1
-    Amount: 5
+  - resource: 1
+    amount: 10
+  proximityRules: []

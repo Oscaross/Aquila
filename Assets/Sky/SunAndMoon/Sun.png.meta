@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a0a14784705e40945adab733d5437b32
+guid: 36d181a4ea2f8a24682841cbf761c8d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -830337555005889898
-    second: MoonRadialGlow_0
+      213: 8740491524576469797
+    second: Sun_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MoonRadialGlow_0
+      name: Sun_0
       rect:
         serializedVersion: 2
-        x: 65
-        y: 65
-        width: 70
-        height: 69
+        x: 81
+        y: 81
+        width: 39
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 692253e946c0a74f0800000000000000
-      internalID: -830337555005889898
+      spriteID: 52361b48bb67c4970800000000000000
+      internalID: 8740491524576469797
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MoonRadialGlow_0: -830337555005889898
+      Sun_0: 8740491524576469797
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

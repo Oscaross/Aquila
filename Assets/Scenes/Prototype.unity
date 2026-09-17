@@ -676,14 +676,14 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
-  zenith: {r: 0.1681051, g: 0.23956555, b: 0.27607977, a: 1}
+  zenith: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 1}
   horizon: {r: 0, g: 0, b: 0, a: 0}
-  light: {r: 0.3526328, g: 0.24967965, b: 0.16616894, a: 1}
-  haze: {r: 0.1681051, g: 0.23956555, b: 0.27607977, a: 0.625}
+  light: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
+  haze: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 0.375}
   globalLightTemperature: 0
-  currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
-  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
-  currentRampExponent: 0.8426998
+  currentSunrise: {fileID: 11400000, guid: 9e4a54915e00e2945831e29199a477ea, type: 2}
+  currentSunset: {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
+  currentRampExponent: 1.3528242
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -693,11 +693,11 @@ Transform:
   m_GameObject: {fileID: 214148984}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1863114210}
+  m_Father: {fileID: 1376409916}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &262229541
 GameObject:
@@ -1380,7 +1380,7 @@ MonoBehaviour:
   m_RefResolutionX: 640
   m_RefResolutionY: 360
   m_CropFrame: 0
-  m_GridSnapping: 1
+  m_GridSnapping: 2
   m_FilterMode: 0
   m_UpscaleRT: 0
   m_PixelSnapping: 0
@@ -1811,12 +1811,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564855179}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10.06, z: 10}
-  m_LocalScale: {x: 40, y: 14.11938, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.7033, z: 10}
+  m_LocalScale: {x: 40, y: 13.406352, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1863114210}
+  m_Father: {fileID: 1376409916}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &564855181
 SpriteRenderer:
@@ -1861,7 +1861,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1875331657
   m_SortingLayer: -3
-  m_SortingOrder: -9
+  m_SortingOrder: -100
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1963,6 +1963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allBuildables:
   - {fileID: 11400000, guid: 8efb6fe80706a5247b51c70808380093, type: 2}
+  hologramOffsetWorldUnits: 0
 --- !u!1 &581792741
 GameObject:
   m_ObjectHideFlags: 0
@@ -2636,7 +2637,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1875331657
   m_SortingLayer: -3
-  m_SortingOrder: 0
+  m_SortingOrder: 25
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2697,6 +2698,60 @@ Transform:
   - {fileID: 155825473}
   m_Father: {fileID: 2068988034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1335300795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1335300796}
+  - component: {fileID: 1335300797}
+  m_Layer: 8
+  m_Name: Starfield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1335300796
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335300795}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1376409916}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1335300797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335300795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbfbb06cd3f367e4babc2257d654e3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starsToChooseFrom:
+  - {fileID: 4551155526247952652, guid: f8111f49f1cd4594688c71d9e1ed99fd, type: 3}
+  - {fileID: 6832151173873317867, guid: 4646e1c312569294f89db052bf773b23, type: 3}
+  weakStarCount: 20
+  strongStarCount: 3
+  twinkleProportion: 0.3
+  framesPerSecond: 10
+  rateVariation: {x: 0.8, y: 1.2}
+  holdTimeRange: {x: 1, y: 5}
+  skyRenderer: {fileID: 564855181}
 --- !u!1 &1376409915
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,7 +2762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1376409916}
   m_Layer: 0
-  m_Name: Skybox
+  m_Name: Sky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2727,8 +2782,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1163645808}
-  - {fileID: 1863114210}
   - {fileID: 1525152452}
+  - {fileID: 214148986}
+  - {fileID: 564855180}
+  - {fileID: 1335300796}
   m_Father: {fileID: 519420032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1433556395
@@ -2931,9 +2988,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1875331657
+  m_SortingLayer: -3
+  m_SortingOrder: 25
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3124,39 +3181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plane: {fileID: 1834280104}
---- !u!1 &1863114209
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1863114210}
-  m_Layer: 8
-  m_Name: Sky
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1863114210
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1863114209}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 214148986}
-  - {fileID: 564855180}
-  m_Father: {fileID: 1376409916}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868031254
 GameObject:
   m_ObjectHideFlags: 0

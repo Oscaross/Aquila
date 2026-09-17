@@ -9,7 +9,7 @@ using UnityEngine;
 /// we need two classes to ensure they pick random values differently, or reuse one if doing multiple random calls within the same system/system subset.
 /// </summary>
 
-public class Pseudorandom : MonoBehaviour
+public class Pseudorandom
 {
     private static int _seed = 1;
 
