@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Responsible for assigning workers to job sites when the demand presents itself.

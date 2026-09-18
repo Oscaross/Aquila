@@ -28,7 +28,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""82104c94-74ba-4482-a9b7-205bee0eaa30"",
             ""actions"": [
                 {
-                    ""name"": ""Place Building"",
+                    ""name"": ""PlaceBuilding"",
                     ""type"": ""Button"",
                     ""id"": ""ec4cffd6-af01-4ce9-9f9d-bbfce708aa30"",
                     ""expectedControlType"": """",
@@ -37,7 +37,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Cycle Hologram Up"",
+                    ""name"": ""CycleHologramUp"",
                     ""type"": ""Button"",
                     ""id"": ""1c1a51d9-12f8-4a8c-8d55-ba791fca738f"",
                     ""expectedControlType"": """",
@@ -46,7 +46,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Cycle Hologram Down"",
+                    ""name"": ""CycleHologramDown"",
                     ""type"": ""Button"",
                     ""id"": ""c31f4cff-c7b8-4cb6-aaf7-18ded8a207b1"",
                     ""expectedControlType"": """",
@@ -55,7 +55,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move Hologram"",
+                    ""name"": ""MoveHologram"",
                     ""type"": ""Value"",
                     ""id"": ""20a03cac-f001-441a-94ae-db34d7bb12ea"",
                     ""expectedControlType"": ""Vector2"",
@@ -72,7 +72,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Place Building"",
+                    ""action"": ""PlaceBuilding"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -83,7 +83,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Cycle Hologram Up"",
+                    ""action"": ""CycleHologramUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -94,7 +94,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Cycle Hologram Down"",
+                    ""action"": ""CycleHologramDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ee97cb4-bef6-4f9d-b394-d2c7aba3735e"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveHologram"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -105,7 +116,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""d3c0bea0-aaa8-40fe-8d39-441822571673"",
             ""actions"": [
                 {
-                    ""name"": ""Move Left"",
+                    ""name"": ""MoveLeft"",
                     ""type"": ""Button"",
                     ""id"": ""3dbe5eca-ab0a-4325-9a63-fb1ef30b1c43"",
                     ""expectedControlType"": """",
@@ -114,7 +125,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move Right"",
+                    ""name"": ""MoveRight"",
                     ""type"": ""Button"",
                     ""id"": ""a6cb6598-5d6e-49b7-8969-8286518042fe"",
                     ""expectedControlType"": """",
@@ -130,6 +141,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleBuildMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""325a77a9-f2ea-4322-87e5-f68e265b7052"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -140,7 +160,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Left"",
+                    ""action"": ""MoveLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -151,7 +171,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Right"",
+                    ""action"": ""MoveRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -165,6 +185,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""693996fd-9fe6-413b-937d-a3a04af60924"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleBuildMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -173,15 +204,16 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Building
         m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
-        m_Building_PlaceBuilding = m_Building.FindAction("Place Building", throwIfNotFound: true);
-        m_Building_CycleHologramUp = m_Building.FindAction("Cycle Hologram Up", throwIfNotFound: true);
-        m_Building_CycleHologramDown = m_Building.FindAction("Cycle Hologram Down", throwIfNotFound: true);
-        m_Building_MoveHologram = m_Building.FindAction("Move Hologram", throwIfNotFound: true);
+        m_Building_PlaceBuilding = m_Building.FindAction("PlaceBuilding", throwIfNotFound: true);
+        m_Building_CycleHologramUp = m_Building.FindAction("CycleHologramUp", throwIfNotFound: true);
+        m_Building_CycleHologramDown = m_Building.FindAction("CycleHologramDown", throwIfNotFound: true);
+        m_Building_MoveHologram = m_Building.FindAction("MoveHologram", throwIfNotFound: true);
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_MoveLeft = m_Gameplay.FindAction("Move Left", throwIfNotFound: true);
-        m_Gameplay_MoveRight = m_Gameplay.FindAction("Move Right", throwIfNotFound: true);
+        m_Gameplay_MoveLeft = m_Gameplay.FindAction("MoveLeft", throwIfNotFound: true);
+        m_Gameplay_MoveRight = m_Gameplay.FindAction("MoveRight", throwIfNotFound: true);
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
+        m_Gameplay_ToggleBuildMode = m_Gameplay.FindAction("ToggleBuildMode", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -322,6 +354,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_MoveLeft;
     private readonly InputAction m_Gameplay_MoveRight;
     private readonly InputAction m_Gameplay_Sprint;
+    private readonly InputAction m_Gameplay_ToggleBuildMode;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -329,6 +362,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @MoveLeft => m_Wrapper.m_Gameplay_MoveLeft;
         public InputAction @MoveRight => m_Wrapper.m_Gameplay_MoveRight;
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
+        public InputAction @ToggleBuildMode => m_Wrapper.m_Gameplay_ToggleBuildMode;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -347,6 +381,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @ToggleBuildMode.started += instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed += instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled += instance.OnToggleBuildMode;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -360,6 +397,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @ToggleBuildMode.started -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled -= instance.OnToggleBuildMode;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -389,5 +429,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnMoveLeft(InputAction.CallbackContext context);
         void OnMoveRight(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnToggleBuildMode(InputAction.CallbackContext context);
     }
 }

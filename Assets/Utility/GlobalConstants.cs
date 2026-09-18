@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /**
  * Global source of truth for game constants.
 */

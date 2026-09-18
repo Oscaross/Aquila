@@ -30,14 +30,14 @@ public class Star : MonoBehaviour
             offset = Random.Range(0f, cycleTime);
         }
 
-        dayNightCycleOffset = Random.Range(-0.05f, 0.05f);
+        dayNightCycleOffset = Random.Range(-0.04f, 0.04f);
 
         SetFrame(0);
     }
 
     public void UpdateStar(float elapsedSeconds)
     {
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, sky.GetCurrentLightSourceLevel(GameClock.NowOffsetBy(dayNightCycleOffset)));
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, ShaderController.QuantiseAlpha(sky.GetCurrentLightSourceLevel(GameClock.NowOffsetBy(dayNightCycleOffset))));
         if (rate <= 0f) return; // static (no twinkle) so our job here is done
 
         float local = Mathf.Repeat(elapsedSeconds + offset, cycleTime); // how many seconds this star is into its animation loop

@@ -30,11 +30,6 @@ public class PlayerInput : MonoBehaviour
         {
             FacingDirection = (MoveInput > 0) ? Direction.Right : Direction.Left;
         }
-        
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            player.BuildingModeManager.ToggleBuildingMode();
-        }
 
         if (Input.GetMouseButtonDown(1))
         {

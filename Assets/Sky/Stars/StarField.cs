@@ -54,7 +54,8 @@ public class StarField : MonoBehaviour
         float a = GameClock.SinceNoon * degreesPerDayNightCycle * Mathf.Deg2Rad;
         float sin = Mathf.Sin(a), cos = Mathf.Cos(a);
         float ppu = GlobalConstants.PixelsPerUnit;
-
+        
+        // rotate star field about the pivot
         for (int i = 0; i < basePositions.Length; i++)
         {
             Vector2 d = basePositions[i] - rotationCentre;

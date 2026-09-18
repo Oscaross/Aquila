@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38b14df3e89ab3f46ad9019d2446b39e, type: 3}
-  m_Name: FarmBuildingConstraints
+  m_Name: FieldBuildingConstraints
   m_EditorClassIdentifier: 
-  buildingPrefab: {fileID: -2253911629886400664, guid: b23e7c8ea681c52449332085376e542f, type: 3}
-  width: 11
-  height: 5
+  buildingPrefab: {fileID: 8559477821406755291, guid: 55b859384db0c114d83415d689483eee, type: 3}
+  width: 10
+  height: 1
   zonesBuildableIn: 00000000
-  resourceCosts:
-  - resource: 1
-    amount: 10
+  resourceCosts: []
   proximityRules: []
