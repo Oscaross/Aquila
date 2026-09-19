@@ -1,28 +1,28 @@
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private PlayerMovement movementSystem;
-    [SerializeField] private BuildingModeManager buildingModeManager;
-    [SerializeField] private PlayerInput inputManager;
     [SerializeField] private Animator animator;
-    
-    public PlayerMovement MovementSystem => movementSystem;
-    public BuildingModeManager BuildingModeManager => buildingModeManager;
-    public PlayerInput InputManager => inputManager;
     public Animator Animator => animator;
     public Rigidbody2D Rigidbody { get; private set; }
+
+    private Direction facing = Direction.Left;
 
     private void Awake()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    public void SetFacing(Direction faceDir)
+    {
+        if (faceDir.Sign() == 0) return;
+        facing = faceDir;
+    }
+
     private void LateUpdate()
     {
         Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * -inputManager.FacingDirection.Sign();
+        scale.x = Mathf.Abs(scale.x) * -facing.Sign();
         transform.localScale = scale;
     }
 }
