@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 public class LegionSubjectManager : MonoBehaviour
 {
-    [SerializeField] private LegionSubject baseSubjectPrefab;
+    [SerializeField] private LegionSubject subjectPrefab;
     [SerializeField] private List<LegionSubject> subjects = new();
     private Queue<SubjectWorkspace> jobQueue = new();
 
@@ -18,6 +19,11 @@ public class LegionSubjectManager : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             CreateNewSubject();
+        }
+
+        foreach (LegionSubject s in subjects)
+        {
+            s.MakeUnemployed();
         }
     }
 
@@ -37,7 +43,7 @@ public class LegionSubjectManager : MonoBehaviour
     /// </summary>
     public void CreateNewSubject()
     {
-        LegionSubject subject = Instantiate(baseSubjectPrefab, new Vector2(0f, 1f), Quaternion.identity, transform);
+        LegionSubject subject = Instantiate(subjectPrefab, new Vector2(0f, 1f), Quaternion.identity, transform);
         subjects.Add(subject);
         MatchUnemployedToJob();
     }

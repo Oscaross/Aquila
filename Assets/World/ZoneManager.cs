@@ -24,8 +24,30 @@ public class ZoneManager : MonoBehaviour
     private void Awake()
     {
         CreateNewZone(new RectInt(new Vector2Int(-40, 0), new Vector2Int(80, 10)), ZoneType.Legion);
-        CreateNewZone(new RectInt(new Vector2Int(-90, 0), new Vector2Int(50, 10)), ZoneType.Arable);
+        CreateNewZone(new RectInt(new Vector2Int(-150, 0), new Vector2Int(100, 10)), ZoneType.Arable);
         CreateNewZone(new RectInt(new Vector2Int(70, 0), new Vector2Int(55, 10)), ZoneType.Forest);
+    }
+
+    public RectInt GetLegionBounds()
+    {
+        var matching = new List<Zone>();
+        
+        foreach (Zone z in zones)
+        {
+            if (z.type == ZoneType.Legion) matching.Add(z);
+        }
+
+        if (matching.Count == 0)
+        {
+            Debug.LogError("No legion zone exists! The game must have one zone of type Legion.", this);
+        }
+
+        if (matching.Count > 1)
+        {
+            Debug.LogError($"{matching.Count} legion zones exist! The legion can only have one contiguous legion zone.", this);
+        }
+
+        return matching.First().bounds;
     }
 
     private void CreateNewZone(RectInt bounds, ZoneType type)

@@ -22,16 +22,16 @@ public class FarmField : SubjectWorkspace
     [SerializeField] private float baseGrainYield = 10f;
     
     private int phasesSinceDesertion = 0;
-    private bool isFieldDeserted = false;
+    private bool isFieldDeserted;
+    private bool hasFieldBeenWorkedBefore;
     private float timeSinceLastPhaseSeconds;
-    
     
     public Action<float> OnHarvestReady;
 
     public override Profession RequiredProfession => Profession.Farmer;
+    public override RectInt WorkingBounds => Building.FootprintInWorldSpace;
 
-
-    public void Tick(float deltaGameSeconds)
+    public override void Tick(float deltaGameSeconds)
     {
         timeSinceLastPhaseSeconds += deltaGameSeconds;
         
@@ -40,6 +40,15 @@ public class FarmField : SubjectWorkspace
             timeSinceLastPhaseSeconds -= timeBetweenGrowthPhasesSeconds;
             AdvancePhase();
         }
+    }
+
+    protected override void OnWorkerAssigned()
+    {
+        hasFieldBeenWorkedBefore = true;
+        isFieldDeserted = false;
+        timeSinceLastPhaseSeconds = 0f;
+        
+        UpdateGrowthPhase(0);
     }
     
     private void AdvancePhase()
@@ -58,6 +67,8 @@ public class FarmField : SubjectWorkspace
             UpdateGrowthPhase(currentCropGrowthPhase);
             return;
         }
+
+        if (!hasFieldBeenWorkedBefore) return; // if the field hasn't ever been worked it can't wilt, so just early return here rather than wilting 
 
         phasesSinceDesertion++;
         if (phasesSinceDesertion >= phasesUntilWilting)

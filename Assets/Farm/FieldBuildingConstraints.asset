@@ -17,4 +17,10 @@ MonoBehaviour:
   height: 1
   zonesBuildableIn: 00000000
   resourceCosts: []
-  proximityRules: []
+  proximityRules:
+  - mode: 0
+    buildingsThisAppliesTo:
+    - {fileID: 11400000, guid: 8efb6fe80706a5247b51c70808380093, type: 2}
+    distanceWorldUnits: 20
+  buildingsThisCanOverlap:
+  - {fileID: 11400000, guid: 8efb6fe80706a5247b51c70808380093, type: 2}

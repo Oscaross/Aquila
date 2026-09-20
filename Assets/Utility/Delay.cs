@@ -15,10 +15,10 @@ public static class Delay
     /// <param name="action">The callback after the delay elapses.</param>
     /// <returns></returns>
     public static Coroutine WaitThen(MonoBehaviour host, float seconds, System.Action action)
-        => host.StartCoroutine(Wait(seconds, action));
+        => host.StartCoroutine(WaitRoutine(seconds, action));
 
     public static Coroutine Wait(MonoBehaviour host, float seconds)
-        => host.StartCoroutine(Wait(seconds, null));
+        => host.StartCoroutine(WaitRoutine(seconds, null));
 
     /// <summary>
     /// Cancels a given delay timer so that the callback is not executed.
@@ -30,7 +30,7 @@ public static class Delay
         if (handle != null) host.StopCoroutine(handle);
     }
 
-    private static IEnumerator Wait(float seconds, System.Action action)
+    private static IEnumerator WaitRoutine(float seconds, System.Action action)
     {
         yield return new WaitForSeconds(seconds);
         action?.Invoke(); // null actions are never invoked and instead ignored thanks to ?.()

@@ -4,8 +4,7 @@ public enum Profession
 {
     Unemployed,
     Farmer,
-    Lumberjack,
-    Archer,
+    Lumberjack
 }
 
 public static class ProfessionExtensions

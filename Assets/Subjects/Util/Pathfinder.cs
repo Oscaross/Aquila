@@ -33,6 +33,8 @@ public class Pathfinder : MonoBehaviour
     /// <param name="onArrived">The callback function that is called when the GameObject is within threshold distance of the target vector.</param>
     public void PathfindTo(Vector2 target, System.Action onArrived = null)
     {
+        StopPathfinding();
+        
         destination = target;
         onArrive = onArrived;
         isMoving = true;

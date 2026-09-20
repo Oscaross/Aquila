@@ -14,4 +14,6 @@ public class BuildingConstraints : ScriptableObject
     public ResourceTransaction[] resourceCosts;
     [Tooltip("Rules that dictate which other buildings this building must be built within a certain range of, either closer than some value or further than some value. All constraints must be met for the player to place the building.")]
     public ProximityRule[] proximityRules;
+    [Tooltip("The buildings that this building will be permitted to overlap the footprint of.")]
+    public BuildingConstraints[] buildingsThisCanOverlap;
 }

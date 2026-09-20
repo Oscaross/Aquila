@@ -18,7 +18,7 @@ public abstract class ProfessionBehaviour : MonoBehaviour
     protected SubjectWorkspace Workspace
     {
         get;
-        private set;
+        set;
     }
 
     protected Legion Legion
@@ -36,7 +36,6 @@ public abstract class ProfessionBehaviour : MonoBehaviour
         if (Pathfinder ==null) Debug.LogError($"{name}: no Pathfinder component.", this);
         if (Subject ==null) Debug.LogError($"{name}: no LegionSubject component.", this);
     }
-
     
     /// <summary>
     /// Assigns this subject to the given workspace. Handles the bookkeeping every
@@ -50,15 +49,22 @@ public abstract class ProfessionBehaviour : MonoBehaviour
             return;
         }
 
-        if (Workspace != null) ReleaseWorkspace(); 
-        
-        Workspace = workspace;
-        workspace.AssignWorker(Subject);
+        if (Workspace != null) ReleaseWorkspace();
 
-        OnWorkspaceAssigned();
+        Pathfinder.StopPathfinding(); // prevent the pathfinder from calling anything else
+        Workspace = workspace;
+        
+        // Below gets us around the issue of a workspace thinking it has a worker before the worker is physically at it yet
+        Pathfinder.PathfindTo(Workspace.WorkingBounds.center, () =>
+        {
+            // Once we reach the job, officially assign the worker
+            workspace.AssignWorker(Subject);
+            OnWorkspaceReached();
+        });
     }
 
-    protected abstract void OnWorkspaceAssigned();
+    protected abstract void OnWorkspaceReached();
+    public abstract void OnChangedFromThisProfession();
 
     protected void ReleaseWorkspace()
     {
@@ -72,7 +78,7 @@ public abstract class ProfessionBehaviour : MonoBehaviour
     /// profession — the wandering behaviour is the same regardless of what the NPC does
     /// for work.
     /// </summary>
-    protected void IdleWithin(Bounds area, float idleSeconds, Action onFinished)
+    protected void IdleWithin(RectInt area, float idleSeconds, Action onFinished)
     {
         Vector2 point = new Vector2(
             UnityEngine.Random.Range(area.min.x, area.max.x),

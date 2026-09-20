@@ -19,4 +19,9 @@ MonoBehaviour:
   resourceCosts:
   - resource: 1
     amount: 10
-  proximityRules: []
+  proximityRules:
+  - mode: 1
+    buildingsThisAppliesTo:
+    - {fileID: 11400000}
+    distanceWorldUnits: 5
+  buildingsThisCanOverlap: []

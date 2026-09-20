@@ -10,7 +10,12 @@ public class FarmerBehaviour : ProfessionBehaviour
 {
     [SerializeField] private float idleSeconds = 6f;
 
-    protected override void OnWorkspaceAssigned() => Pathfinder.PathfindTo(Workspace.Bounds.center, IdleLoop);
+    protected override void OnWorkspaceReached() => Pathfinder.PathfindTo(Workspace.WorkingBounds.center, IdleLoop);
 
-    private void IdleLoop() => IdleWithin(Workspace.Bounds, idleSeconds, IdleLoop);
+    public override void OnChangedFromThisProfession()
+    {
+        
+    }
+
+    private void IdleLoop() => IdleWithin(Workspace.WorkingBounds, idleSeconds, IdleLoop);
 }

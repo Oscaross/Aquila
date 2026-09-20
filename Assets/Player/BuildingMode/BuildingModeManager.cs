@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,10 +11,6 @@ using UnityEngine.InputSystem;
 public class BuildingModeManager : MonoBehaviour
 {
     [SerializeField] private BuildingConstraints[] allBuildables;
-    // ALWAYS INACTIVE! All holograms MUST be created as children of staging otherwise their awake scripts which will run their awake logic and consider them live assets! (This sends that bug back to hell where it belongs.)
-    [SerializeField] private Transform hologramStaging;
-    // All inactive holograms live here. It is active so an active hologram is visible, but that doesn't matter as the game object's components are already safely off.
-    [SerializeField] private Transform hologramRoot;
     
     private Legion legion;
     private LegionResources resources;
@@ -262,20 +259,24 @@ public class BuildingModeManager : MonoBehaviour
     private GameObject GetHologram(BuildingConstraints constraints)
     {
         // Check the cache, on hit return, on miss populate the cache with this building type for future use.
+        // Important that we only take the rendered sprite, if we just instantiate an image of the prefab we'll run the Awake logic and register ghost buildings.
         if (!hologramCache.TryGetValue(constraints, out GameObject hologram))
         {
-            // TODO: This does not fix the issue. We must instead write a process to capture the sprite and no other components from the prefab.
-            
-            hologram = Instantiate(constraints.buildingPrefab, hologramStaging);
-            // *IMPORTANT* we MUST deactivate all behavioural components of this hologram, otherwise, it'll consider any instantiated but unplaced hologram a real building and cause game-breaking bugs
-            foreach (Behaviour b in hologram.GetComponentsInChildren<Behaviour>(true))
-            {
-                b.enabled = false;
-            }
-            
-            hologram.SetActive(false); // any newly created cached hologram can't be active or visible, that isn't our job here
-            hologram.transform.SetParent(hologramRoot); 
-            
+            // TODO: For now we don't care that it doesn't apply the original material because we'll soon have our own custom material for holograms that conforms to the UI style.
+            hologram = new GameObject("Hologram_" + constraints.buildingPrefab.name);
+            GameObject original = constraints.buildingPrefab;
+
+            // Copy the sprite renderer from the prefab over to this hologram, including the data about the sorting layer so it renders in the correct place.
+            SpriteRenderer src = original.GetComponentInChildren<SpriteRenderer>(true);
+            SpriteRenderer sr = hologram.AddComponent<SpriteRenderer>();
+            sr.sprite = src.sprite;
+            sr.sortingLayerID = src.sortingLayerID;
+            sr.sortingOrder = src.sortingOrder + 1;
+
+            hologram.transform.position = src.transform.position; // prevent any strange offsets from getting copied over onto this hologram so it sits at the expected position
+            hologram.transform.SetParent(transform);
+            hologram.SetActive(false);
+  
             hologramCache[constraints] = hologram;
         }
         
@@ -289,19 +290,38 @@ public class BuildingModeManager : MonoBehaviour
     {
         var failures = new HashSet<BuildingFailureReason>();
         
+        // Check 1: The building is fully within one of its permitted zones.
         if (!IsInZone(fp, b)) failures.Add(BuildingFailureReason.NotInZone);
-        if (OverlapsExisting(fp)) failures.Add(BuildingFailureReason.TooCloseToAnother);
+        // Check 2: The building is not overlapping any building it shouldn't
+        if (OverlapsExisting(fp, b)) failures.Add(BuildingFailureReason.TooCloseToAnother);
+        
+        // Check 3: The player can afford the building
         foreach (ResourceTransaction rt in b.resourceCosts)
             if (!resources.CanConsumeResource(rt.resource, rt.amount))
                 failures.Add(BuildingFailureReason.InsufficientResources);
+        
+        // Check 4: Proximity constraints are satisfied (the building is near enough to buildings it must be near to, and far enough from buildings it must be far from) if applicable
+        foreach (ProximityRule r in b.proximityRules)
+        {
+            if (!r.IsSatisfiedBy(fp, buildingManager.Buildings))
+                failures.Add(BuildingFailureReason.ProximityRuleFailed);
+        }
         
         return failures;
     }
 
     private bool IsValidBuildable(RectInt fp, BuildingConstraints b) => Validate(fp, b).Count == 0;
-    
-    private bool OverlapsExisting(RectInt fp) =>
-        buildingManager.IsAreaOccupiedByBuilding(fp);
+
+    private bool OverlapsExisting(RectInt fp, BuildingConstraints c)
+    {
+        foreach (Building b in buildingManager.Buildings)
+        {
+            if (c.buildingsThisCanOverlap.Contains(b.Constraints)) continue; // buildings that this is allowed to overlap shouldn't be checked
+            if (b.FootprintInWorldSpace.Overlaps(fp)) return true;
+        }
+
+        return false; 
+    }
     
     private bool IsInZone(RectInt fp, BuildingConstraints b)
     {

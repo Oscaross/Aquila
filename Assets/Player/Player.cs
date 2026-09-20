@@ -6,7 +6,11 @@ public class Player : MonoBehaviour
     public Animator Animator => animator;
     public Rigidbody2D Rigidbody { get; private set; }
 
-    private Direction facing = Direction.Left;
+    public Direction Facing
+    {
+        get;
+        private set;
+    } = Direction.Left;
 
     private void Awake()
     {
@@ -16,13 +20,13 @@ public class Player : MonoBehaviour
     public void SetFacing(Direction faceDir)
     {
         if (faceDir.Sign() == 0) return;
-        facing = faceDir;
+        Facing = faceDir;
     }
 
     private void LateUpdate()
     {
         Vector3 scale = transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * -facing.Sign();
+        scale.x = Mathf.Abs(scale.x) * -Facing.Sign();
         transform.localScale = scale;
     }
 }
