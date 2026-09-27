@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 /**
  * Generic component for anything that must move towards some point. 
@@ -11,7 +10,6 @@ public class Pathfinder : MonoBehaviour
 {
     [Tooltip("Any asset that must flip when the sprite flips during pathfinding must be a child of this transform.")]
     [SerializeField] private Transform flipRoot;
-    [SerializeField] private float moveSpeed = 2f;
     [Tooltip("How close this GameObject gets to its target vector in world units before pathfinding is complete.")]
     [SerializeField] private float arrivalThreshold = 0.1f;
 
@@ -20,6 +18,7 @@ public class Pathfinder : MonoBehaviour
     private System.Action onArrive;
     private bool isMoving;
     private Direction facing = Direction.Left;
+    private float moveSpeed;
 
     public Direction Facing => facing;
     public bool IsMoving => isMoving;
@@ -31,10 +30,11 @@ public class Pathfinder : MonoBehaviour
     /// </summary>
     /// <param name="target">The vector to move towards.</param>
     /// <param name="onArrived">The callback function that is called when the GameObject is within threshold distance of the target vector.</param>
-    public void PathfindTo(Vector2 target, System.Action onArrived = null)
+    public void PathfindTo(Vector2 target, float speed, Action onArrived = null)
     {
         StopPathfinding();
-        
+
+        moveSpeed = speed;
         destination = target;
         onArrive = onArrived;
         isMoving = true;

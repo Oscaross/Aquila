@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Slinger : MonoBehaviour
 {
+    [SerializeField] private float moveSpeed;
     [SerializeField] private SlingerState currentState;
     // [SerializeField] private Animator animator;
     [Tooltip("Time elapsed between the slinger beginning the slingshot reload and starting the firing animation in seconds.")]
@@ -44,7 +45,7 @@ public class Slinger : MonoBehaviour
         int sign = DirectionExtensions.FromDelta(target.x - transform.position.x).Sign();
         Vector2 standingPoint = new Vector2(target.x - sign * targetStandingRange, 0f); // where we'll stand (some dx away from the target) and start firing
 
-        pathfinder.PathfindTo(standingPoint, LoadSlingshot);
+        pathfinder.PathfindTo(standingPoint, moveSpeed, LoadSlingshot);
     }
 
     private void LoadSlingshot()

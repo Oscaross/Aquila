@@ -9,7 +9,12 @@ using UnityEngine;
 
 public class LegionSubjectManager : MonoBehaviour
 {
+    [Tooltip("The basic prefab that is instantiated for an unemployed subject. This prefab lives until the NPC dies, and persists between career changes.")]
     [SerializeField] private LegionSubject subjectPrefab;
+    [Tooltip("Customisable parameters that exist for each profession, such as visuals, spritesheets, move speeds, health, etc...")]
+    [SerializeField] private ProfessionDefinition[] professionDefinitions;
+    
+    [Header("READ-ONLY")]
     [SerializeField] private List<LegionSubject> subjects = new();
     private Queue<SubjectWorkspace> jobQueue = new();
 
@@ -25,6 +30,38 @@ public class LegionSubjectManager : MonoBehaviour
         {
             s.MakeUnemployed();
         }
+    }
+
+    private void OnValidate()
+    {
+        HashSet<Profession> requiredDefinitions = Enum.GetValues(typeof(Profession)).Cast<Profession>().ToHashSet();
+        
+        foreach (var definition in professionDefinitions)
+        {
+            if (requiredDefinitions.Contains(definition.typeFor)) requiredDefinitions.Remove(definition.typeFor);
+        }
+
+        if (requiredDefinitions.Count > 0)
+        {
+            Debug.LogError("Missing profession definitions in the Subject Manager for the following professions:", this);
+            foreach (var definition in requiredDefinitions)
+            {
+                Debug.LogError(definition.ToString());
+            }
+            
+            Debug.LogError("Either the definitions aren't serialized in the manager or the definitions themselves aren't properly configured (make sure each definition is set to the type it is for.)");
+        }
+    }
+
+    public ProfessionDefinition GetDefinitionFor(Profession p)
+    {
+        foreach (var def in professionDefinitions)
+        {
+            if (def.typeFor == p) return def;
+        }
+        
+        Debug.LogError($"No profession definition found for requested type {p.ToString()}.");
+        return null;
     }
 
     /// <summary>

@@ -6,6 +6,9 @@ public class LegionSubject : MonoBehaviour
 {
     public string Id { get; private set; }
     [SerializeField] [CanBeNull] private SubjectWorkspace currentWorkspace;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+    
     public bool IsEmployed => currentWorkspace != null;
 
     private Legion legion;
@@ -22,7 +25,9 @@ public class LegionSubject : MonoBehaviour
         private set;
     }
 
-    public ProfessionBehaviour Behaviour
+    private ProfessionBehaviour behaviour;
+
+    public SubjectVisuals Visuals
     {
         get;
         private set;
@@ -31,6 +36,9 @@ public class LegionSubject : MonoBehaviour
     private void Awake()
     {
         legion = GetComponentInParent<Legion>();
+        Visuals = GetComponentInChildren<SubjectVisuals>();
+        
+        if (Visuals == null) Debug.LogError("Subject unable to fetch a reference to it's visuals object! Did you change the tree structure? (visuals object needs to be a child of the subject).");
     }
 
     /// <summary>
@@ -52,20 +60,17 @@ public class LegionSubject : MonoBehaviour
         currentWorkspace = newWorkspace;
         Profession = (newWorkspace == null) ? Profession.Unemployed : newWorkspace.RequiredProfession; // no workplace => unemployed
         
+        // Fetch the definition data object for this new profession and update dependent classes
+        var def = legion.SubjectManager.GetDefinitionFor(Profession);
+        Visuals.Apply(def); // propogate change in profession to animation controller
+        
+        
         // Looks up the required class for the profession, checks it was found successfully then adds that behaviour as a component to this GameObject.
         // This means that our subject keeps all of its normal attributes but is effectively swapped, 
         
-        // We're now going to fetch the single profession behaviour we need for our new profession and assign it to this game object.
+        behaviour = Profession.AddBehaviour(gameObject);
         
-        Type behaviourType = ProfessionExtensions.TypeFor(Profession);
-        if (behaviourType == null)
-        {
-            Debug.LogError("Subject profession has no corresponding class telling it how to act in that profession or failed to fetch this class!", this);
-            return;
-        }
-
-        Behaviour = (ProfessionBehaviour)gameObject.AddComponent(behaviourType);
-        Behaviour.AssignToWorkspace(currentWorkspace);
+        behaviour.AssignToWorkspace(currentWorkspace);
         gameObject.name = Profession.ToString();
     }
     

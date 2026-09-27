@@ -70,6 +70,12 @@ public class ZoneManager : MonoBehaviour
         zones.Add(new Zone(bounds, type));
         zones.Sort((a, b) => a.bounds.xMin.CompareTo(b.bounds.xMin));
         RebuildCoordinateList();
+        
+        // TODO: This is terrible but i just wanna get it working first
+        if (type == ZoneType.Forest)
+        {
+            
+        }
     }
 
     /// <summary>

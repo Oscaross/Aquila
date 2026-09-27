@@ -63,7 +63,6 @@ public abstract class SubjectWorkspace : MonoBehaviour
             return;
         }
         
-        WorkerWhoWorksThis.MakeUnemployed();
         WorkerWhoWorksThis = null;
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /// <summary>
@@ -9,8 +8,19 @@ using UnityEngine;
 public class FarmerBehaviour : ProfessionBehaviour
 {
     [SerializeField] private float idleSeconds = 6f;
+    [SerializeField] private SoundDefinition harvestAnimationSound;
 
-    protected override void OnWorkspaceReached() => Pathfinder.PathfindTo(Workspace.WorkingBounds.center, IdleLoop);
+    private void OnDisable()
+    {
+        Workspace.GetComponent<FarmField>().OnHarvestReady -= Harvest;
+    }
+
+    protected override void OnWorkspaceReached()
+    {
+        Pathfinder.PathfindTo(Workspace.WorkingBounds.center, ProfessionDefinition.walkSpeed, IdleLoop);
+        Workspace.GetComponent<FarmField>().OnHarvestReady += Harvest; // subscribe to the harvest method so the field can alert this farmer when the crops are ready
+    }
+    
 
     public override void OnChangedFromThisProfession()
     {
@@ -18,4 +28,10 @@ public class FarmerBehaviour : ProfessionBehaviour
     }
 
     private void IdleLoop() => IdleWithin(Workspace.WorkingBounds, idleSeconds, IdleLoop);
+
+    private void Harvest(float yield)
+    {
+        // AudioManager.Instance.PlayOneShot(harvestAnimationSound, transform.position);
+        Subject.Visuals.TriggerWorkAnimation();
+    }
 }

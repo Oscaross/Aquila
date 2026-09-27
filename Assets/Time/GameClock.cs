@@ -114,6 +114,6 @@ public class GameClock : MonoBehaviour
     /// <returns></returns>
     public static float NowOffsetBy(float offset) => Mathf.Repeat(Now + offset, 1f);
     
-    /// <summary>0 at noon, rising to 1 at the next noon. Never wraps mid-night.</summary>
+    /// <summary>0 at noon, rising to 1 at the next noon. Never wraps midnight.</summary>
     public static float SinceNoon => Mathf.Repeat(Now - 0.5f, 1f);
 }

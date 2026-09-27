@@ -7,14 +7,22 @@ public class Farm : MonoBehaviour
       [SerializeField] private float maxGrainBuffer;
       [SerializeField] private float currentGrainStore;
 
-      public Action OnGrainStoreFull;
+      public Action OnGrainStored;
       
       public void StoreGrain(float grain)
       {
+            if (grain <= 0) return;
+            
             Debug.Log($"Attempting to store {grain} grain.");
             float projected = currentGrainStore + grain;
-            if (projected > maxGrainBuffer) OnGrainStoreFull.Invoke();
+            if (projected > maxGrainBuffer) Debug.Log("Grain store in this farm building is full.");
 
             currentGrainStore = Mathf.Min(projected, maxGrainBuffer);
+            OnGrainStored.Invoke();
+      }
+
+      public void TransportGrain(float grain)
+      {
+            
       }
 }

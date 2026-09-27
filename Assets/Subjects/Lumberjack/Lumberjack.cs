@@ -49,7 +49,7 @@ public class Lumberjack : MonoBehaviour
         currentCallback = null;
 
         SetState(LumberjackState.WalkingTo);
-        pathfinder.PathfindTo(target.transform.position, StartChopping);
+        // pathfinder.PathfindTo(target.transform.position, StartChopping);
     }
 
     private void StartChopping()
@@ -76,7 +76,7 @@ public class Lumberjack : MonoBehaviour
         log.localRotation = Quaternion.identity;
 
         SetState(LumberjackState.Dragging);
-        pathfinder.PathfindTo(logStorePos, StoreWood);
+        // pathfinder.PathfindTo(logStorePos, StoreWood);
     }
 
     private void StoreWood()
@@ -107,7 +107,7 @@ public class Lumberjack : MonoBehaviour
             transform.position.x + (Random.value < 0.5f ? -1 : 1) * Random.Range(1f, 3f),
             transform.position.y);
 
-        pathfinder.PathfindTo(idlePoint, OnIdleTargetReached);
+        // pathfinder.PathfindTo(idlePoint, OnIdleTargetReached);
     }
 
     private void SetState(LumberjackState next)

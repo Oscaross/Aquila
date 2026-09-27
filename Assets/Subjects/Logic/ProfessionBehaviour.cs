@@ -3,6 +3,17 @@ using System;
 
 public abstract class ProfessionBehaviour : MonoBehaviour
 {
+    private Gait gait;
+    protected Gait Gait
+    {
+        get => gait;
+        private set
+        {
+            gait = value;
+            Subject.Visuals.RefreshAnimations(gait);
+        }
+    }
+    
     protected Pathfinder Pathfinder
     {
         get;
@@ -26,41 +37,55 @@ public abstract class ProfessionBehaviour : MonoBehaviour
         get;
         private set;
     }
-    
+
+    protected ProfessionDefinition ProfessionDefinition
+    {
+        get;
+        private set;
+    }
+
     protected virtual void Awake()
     {
         Pathfinder = GetComponent<Pathfinder>();
         Subject = GetComponent<LegionSubject>();
         Legion = GetComponentInParent<Legion>();
 
-        if (Pathfinder ==null) Debug.LogError($"{name}: no Pathfinder component.", this);
-        if (Subject ==null) Debug.LogError($"{name}: no LegionSubject component.", this);
+        if (Pathfinder == null) Debug.LogError($"{name}: no Pathfinder component.", this);
+        if (Subject == null) Debug.LogError($"{name}: no LegionSubject component.", this);
+        
+        ProfessionDefinition = Legion.SubjectManager.GetDefinitionFor(Subject.Profession);
     }
-    
+
     /// <summary>
     /// Assigns this subject to the given workspace. Handles the bookkeeping every
     /// profession shares, then hands off to the subclass for its own setup.
     /// </summary>
     public void AssignToWorkspace(SubjectWorkspace workspace)
     {
-        if (workspace == null)
-        {
-            Debug.LogError($"{name}: cannot assign to a null workspace.", this);
-            return;
-        }
-
         if (Workspace != null) ReleaseWorkspace();
 
         Pathfinder.StopPathfinding(); // prevent the pathfinder from calling anything else
         Workspace = workspace;
-        
-        // Below gets us around the issue of a workspace thinking it has a worker before the worker is physically at it yet
-        Pathfinder.PathfindTo(Workspace.WorkingBounds.center, () =>
+
+        if (workspace == null)
         {
-            // Once we reach the job, officially assign the worker
-            workspace.AssignWorker(Subject);
-            OnWorkspaceReached();
-        });
+            // TODO: For now this'll just walk everyone back to the center. We soon want to get the idle loop mechanism working here too
+            Gait = Gait.Walk;
+            Pathfinder.PathfindTo(Legion.ZoneManager.GetLegionBounds().center, ProfessionDefinition.walkSpeed);
+        }
+        else
+        {
+            // Below gets us around the issue of a workspace thinking it has a worker before the worker is physically at it yet
+            Gait = Gait.Run;
+            
+            Pathfinder.PathfindTo(Workspace.WorkingBounds.center, ProfessionDefinition.runSpeed, () =>
+            {
+                // Once we reach the job, officially assign the worker
+                workspace.AssignWorker(Subject);
+                OnWorkspaceReached();
+                Gait = Gait.Idle;
+            });
+        }
     }
 
     protected abstract void OnWorkspaceReached();
@@ -84,6 +109,11 @@ public abstract class ProfessionBehaviour : MonoBehaviour
             UnityEngine.Random.Range(area.min.x, area.max.x),
             transform.position.y);
 
-        Pathfinder.PathfindTo(point, () => Delay.WaitThen(this, idleSeconds, onFinished));
+        Gait = Gait.Walk;
+        Pathfinder.PathfindTo(point, ProfessionDefinition.walkSpeed, () =>
+        {
+            Gait = Gait.Idle;
+            Delay.WaitThen(this, idleSeconds, onFinished);
+        });
     }
 }
