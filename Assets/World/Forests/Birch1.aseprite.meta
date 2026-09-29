@@ -74,7 +74,7 @@ ScriptedImporter:
   previousAsepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 1
     defaultPivotAlignment: 6
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -87,7 +87,7 @@ ScriptedImporter:
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 1
     defaultPivotAlignment: 6
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 639262071206817960
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,7 +123,28 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Birch1
+  - name: Stump
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 6
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 359
+      width: 23
+      height: 7
+    spriteID: e90608f61ab346d4a81cd77271ec0efe
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 359}
+  - name: Log
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 6
@@ -133,9 +154,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 153
-      height: 218
-    spriteID: 6f6f74b92ed611b4d836a99ef58a5b3c
+      width: 139
+      height: 211
+    spriteID: 8971ecb52dff69745ac2468f2bf6d6fa
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,24 +165,81 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: Leaves
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 6
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 223
+      width: 153
+      height: 128
+    spriteID: 2d1ba03a2501da949a05fe4271146901
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 223}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -427486029
-    name: Birch1
-    layerFlags: 0
+    guid: -938817057
+    name: Stump
+    layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
-    - name: Birch1
+    - name: Stump
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 61
+        y: 0
+        width: 23
+        height: 7
+      spriteId: e90608f61ab346d4a81cd77271ec0efe
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 1
+    guid: 1502599712
+    name: Log
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Log
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 6
+        y: 4
+        width: 139
+        height: 211
+      spriteId: 8971ecb52dff69745ac2468f2bf6d6fa
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 2
+    guid: 723504390
+    name: Leaves
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Leaves
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 3
-        y: 0
+        y: 90
         width: 153
-        height: 218
-      spriteId: 6f6f74b92ed611b4d836a99ef58a5b3c
+        height: 128
+      spriteId: 2d1ba03a2501da949a05fe4271146901
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -177,8 +255,44 @@ ScriptedImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 160, y: 224}
-  previousTextureSize: {x: 256, y: 256}
+  previousTextureSize: {x: 256, y: 512}

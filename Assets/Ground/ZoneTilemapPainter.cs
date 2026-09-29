@@ -15,19 +15,12 @@ public class ZoneTilemapPainter : MonoBehaviour
     [SerializeField] private ZoneManager zoneManager;
     [Tooltip("Each individual tile palette for each individual zone.")]
     [SerializeField] private ZoneTileset[] tilesets;
-    [Tooltip("The seed that this save uses. The seed is the value that means we can reconstruct the exact same tilemap 'randomness' regardless of how many times we must reconstruct it.")]
-    [SerializeField] private int seed;
-
-    private void Start()
-    {
-        PaintTilemap();
-    }
 
     /// <summary>
     /// Iterates over all zones within the tilemap and fills them with the corresponding zone-specific tile.
     /// </summary>
     [ContextMenu("Paint Tilemap")]
-    public void PaintTilemap()
+    public void PaintTilemap(int seed)
     {
         if (tilemap == null || zoneManager == null)
         {
@@ -37,26 +30,27 @@ public class ZoneTilemapPainter : MonoBehaviour
 
         tilemap.ClearAllTiles();
 
-        RectInt globalArea = zoneManager.worldBounds;
+        RectInt globalArea = zoneManager.WorldBounds;
         int tileCount = globalArea.width;
 
         var positions = new Vector3Int[tileCount];
         var tiles = new TileBase[tileCount];
 
         var zonesInWorld = zoneManager.GetAllZones(); // this is ORDERED in ascending order
+        // TODO: I want to rethink this because it no longer gives a intersection over worldBounds.min => worldBounds.max. There are no wilderness zones here because we don't instantiate them ever
         int idx = 0;
 
         foreach (var zone in zonesInWorld)
         {
-            var types = GenerateTilePositionTypes(GetTilesetOf(zone.type), zone.bounds.width, idx + zoneManager.worldBounds.xMin);
+            var types = GenerateTilePositionTypes(GetTilesetOf(zone.Type), zone.Bounds.width, idx + zoneManager.WorldBounds.xMin);
             
             // For this zone, iterate over each x coordinate and make a corresponding position index and fetch the tile
             foreach (var posType in types)
             {
-                int worldX = zoneManager.worldBounds.xMin + idx;
+                int worldX = zoneManager.WorldBounds.xMin + idx;
                 
                 positions[idx] = new Vector3Int(worldX, 0);
-                var tile = PickVariant(GetTilesetOf(zone.type), posType, worldX);
+                var tile = PickVariant(GetTilesetOf(zone.Type), posType, worldX);
                 tiles[idx] = tile;
 
                 idx++;
@@ -82,7 +76,8 @@ public class ZoneTilemapPainter : MonoBehaviour
         var positions = new TilePositionType?[zoneSize];
 
         int idx = 0;
-        bool isGeneratingIsland = (Pseudorandom.Hash01(set.GetHashCode(), Pseudorandom.TilePainterIslandSalt) > 0.5); // sometimes we start with island, other times we start with gap otherwise zones always start with one or the other
+        // TODO: BAD SEED HARDCODING!!!!
+        bool isGeneratingIsland = (Pseudorandom.Hash01(set.GetHashCode(), Pseudorandom.TilePainterIslandSalt, 0) > 0.5); // sometimes we start with island, other times we start with gap otherwise zones always start with one or the other
         int currIslandWidth = 0;
         int currGapWidth = 0;
         int gapWidthTarget = GenerateRandomGapSize(set, runStartWorldX);
@@ -137,13 +132,15 @@ public class ZoneTilemapPainter : MonoBehaviour
         return positions;
     }
 
+    // TODO: These seeds don't read from the save file yet
+    
     private int GenerateRandomIslandSize(ZoneTileset set, int runStartWorldX) =>
         Pseudorandom.HashRange(set.minIslandWidth, set.maxIslandWidth + 1,
-            runStartWorldX, Pseudorandom.TilePainterIslandSalt);
+            runStartWorldX, Pseudorandom.TilePainterIslandSalt, 0);
 
     private int GenerateRandomGapSize(ZoneTileset set, int runStartWorldX) =>
         Pseudorandom.HashRange(set.minIslandSeparation, set.maxIslandSeparation + 1,
-            runStartWorldX, Pseudorandom.TilePainterGapSalt);
+            runStartWorldX, Pseudorandom.TilePainterGapSalt, 0);
 
     /// <summary>
     /// Pseudorandom. Uses very large arbitrary values to provide deterministic randomness. This uses the seed which is stored on this class, meaning any save with the same seed always generates the same random tiles.
@@ -154,6 +151,8 @@ public class ZoneTilemapPainter : MonoBehaviour
     /// <returns>The tile that belongs at this particular x coordinate, null if we want a gap (no tile at this coordinate).</returns>
     private TileBase PickVariant(ZoneTileset set, TilePositionType? type, int worldX)
     {
+        int seed = 0; // TODO: again bad hardcoding
+        
         uint h = (uint)(worldX * 374761393 + (int)set.zone * 668265263 + seed * 2654435761u);
         h = (h ^ (h >> 13)) * 1274126177;
         h ^= h >> 16;

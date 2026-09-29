@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e1e833078b808245a56fcd91f25515b, type: 3}
+  m_Name: Birch1
+  m_EditorClassIdentifier: 
+  branches: {fileID: 8633671778484012169, guid: 9f6ce5a0831551345a5f3ffb9b4578ba, type: 3}
+  saplings: []
+  leaves: {fileID: 2446958763953764795, guid: 9f6ce5a0831551345a5f3ffb9b4578ba, type: 3}
+  stump: {fileID: -671374982183050213, guid: 9f6ce5a0831551345a5f3ffb9b4578ba, type: 3}
