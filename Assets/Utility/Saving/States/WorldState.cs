@@ -1,9 +1,17 @@
 using System;
+using UnityEngine;
 
 public class WorldState
 {
-    public DateTime SavedAtUtc; 
-    public IdAllocator IdAllocator;
+    [Header("Metadata")]
+    public DateTime SavedAtUtc;
     public int Version;
-    public ZoneState Zones;
+    
+    [Header("Core Save System")]
+    public int Seed;
+    public IdAllocator IdAllocator = new();
+    
+    [Header("Save Data")]
+    public ZoneState ZoneState = new();
+    // public ForestState ForestState;
 }

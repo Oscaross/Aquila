@@ -2,5 +2,5 @@ using Newtonsoft.Json;
 
 public class ZoneState
 {
-    public ForestZoneModel[] forestZones;
+    public EntityStore<ZoneModel> Zones = new();
 }

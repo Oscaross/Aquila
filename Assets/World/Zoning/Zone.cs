@@ -1,19 +1,19 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class Zone : MonoBehaviour, IEntity<ZoneModel>, IFindable
 {
     private ZoneModel data;
 
-    public int Id { get; private set; }
+    public int Id => data.Id;
 
-    public void Bind(ZoneModel model)
+    public virtual void Bind(ZoneModel model)
     {
-        throw new System.NotImplementedException();
+        data = model;
     }
 
-    public RectInt Bounds => new(new Vector2Int(data.XMin, data.YMin), new Vector2Int(data.Width, data.Height));
+    public RectInt Bounds => data.Bounds;
     
-    public virtual void OnZoneCreated() {}
     public virtual void OnZoneDestroyed() {}
 
     /// <summary>
@@ -22,11 +22,22 @@ public class Zone : MonoBehaviour, IEntity<ZoneModel>, IFindable
     public virtual ZoneType Type => ZoneType.Wilderness;
 }
 
-public class ZoneModel : ISaveRecord
+public class ZoneModel : EntityData
 {
+    public ZoneModel(ZoneType type, int width, int height, int xMin, int yMin)
+    {
+        Type = type;
+        Width = width;
+        Height = height;
+        XMin = xMin;
+        YMin = yMin;
+    }
+    
     public ZoneType Type;
     public int Width;
     public int Height;
     public int XMin;
     public int YMin;
+    
+    [JsonIgnore] public RectInt Bounds => new RectInt(XMin, YMin, Width, Height);
 }

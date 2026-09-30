@@ -1,23 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Handles the zoning logic for the world, including which zone is where and what, the bounds of each and the global world bounds. Single authority on all zoning lives here through these APIs.
-/// Execution order is -100 so it happens before other classes because it's the main API they query, so it is important that the zones have been instantiated before other scripts run like the
-/// tilemap painter otherwise the world generates incorrectly.
 /// </summary>
 
-[DefaultExecutionOrder(-100)]
 public class ZoneManager : GameManagerComponent
 {
-    [Tooltip("A prefab instance of each specific zone, such as the forest zone prefab or the arable zone prefab.")]
-    [SerializeField] private Zone[] zonePrefabs;
-    private readonly List<Zone> zones = new();
-    // A stable mapping from relative world coordinate => zone type for each integer position in the world.
-    // Index 0 is the minimum x position, so in a world that is 100 wide, idx = 0 represents -50 and idx = 99 represents +50.
-    private ZoneType[] typesAtCoords;
+    private List<Zone> zoneInstances = new();
+    [SerializeField] private Zone prefab;
+    private EntityStore<ZoneModel> Zones => save.ZoneState.Zones;
     
     /// <summary>
     /// The bounds of the area of the world walkable to the player from left to right.
@@ -25,24 +18,82 @@ public class ZoneManager : GameManagerComponent
     public RectInt WorldBounds => worldBounds;
 
     [SerializeField] private RectInt worldBounds;
-    
-    // private void Awake()
-    // {
-    //     CreateNewZone(new RectInt(new Vector2Int(-40, 0), new Vector2Int(80, 10)), ZoneType.Legion);
-    //     CreateNewZone(new RectInt(new Vector2Int(-150, 0), new Vector2Int(100, 10)), ZoneType.Arable);
-    //     CreateNewZone(new RectInt(new Vector2Int(70, 0), new Vector2Int(55, 10)), ZoneType.Forest);
-    // }
 
-    public override void Restore(WorldState state)
+    private WorldState save;
+    private WorldContext context;
+
+    public override void Restore(WorldState state, WorldContext ctx)
     {
-
+        save = state;
+        context = ctx;
+        
+        foreach (ZoneModel data in state.ZoneState.Zones.Items)
+        {
+            SetupZone(data);
+        }
     }
+
+    public override void GenerateNewWorld()
+    {
+        CreateNewZone(new RectInt(-50, 0, 100, 10), ZoneType.Legion);
+        CreateNewZone(new RectInt(-100, 0, 40, 10), ZoneType.Arable);
+        CreateNewZone(new RectInt(50, 0, 70, 10), ZoneType.Forest);
+    }
+
+    /// <summary>
+    /// Creates a zone object and saves it. 
+    /// </summary>
+    /// <param name="bounds">The bounding box of this zone, a rectangle with integer height, width and vertices.</param>
+    /// <param name="type">The type of the zone i.e. Legion, Arable, Forest...</param>
+    public void CreateNewZone(RectInt bounds, ZoneType type)
+    {
+        if (!ValidateZone(bounds, type)) return;
+        
+        var data = new ZoneModel(type, bounds.width, bounds.height, bounds.xMin, bounds.yMin);
+        Zones.Add(data, save.IdAllocator);
+        
+        SetupZone(data);
+    }
+
+    // Creates a zone from an existing data template
+    private void SetupZone(ZoneModel data)
+    {
+        Zone z = Instantiate(prefab, new Vector3(data.Bounds.xMin, data.Bounds.yMin, 0f), Quaternion.identity,
+            transform);
+        z.Bind(data);
+        context.Registry.Register(z);
+        
+        zoneInstances.Add(z);
+        zoneInstances.Sort((a, b) => a.Bounds.xMin.CompareTo(b.Bounds.xMin)); // sort ascending so most -ve rectangular zones are first and most +ve are last
+    }
+    
+    private bool ValidateZone(RectInt bounds, ZoneType type)
+    {
+        // Check this zone doesn't overlap with an existing one
+        foreach (ZoneModel existing in Zones.Items)
+            if (bounds.xMin < existing.Bounds.xMax && existing.Bounds.xMin < bounds.xMax)
+            {
+                Debug.LogError($"{name}: {type} at [{bounds.xMin},{bounds.xMax}) overlaps " +
+                               $"{existing.Type} at [{existing.Bounds.xMin},{existing.Bounds.xMax}).", this);
+                return false;
+            }
+        
+        // Check this zone doesn't exit the world area
+        if (bounds.xMin < WorldBounds.xMin || bounds.xMax > WorldBounds.xMax)
+        {
+            Debug.LogError("Can't have a zone that is outside of the world area!");
+            return false;
+        }
+
+        return true;
+    }
+
 
     public RectInt GetLegionBounds()
     {
-        var matching = new List<Zone>();
+        var matching = new List<ZoneModel>();
         
-        foreach (Zone z in zones)
+        foreach (ZoneModel z in Zones.Items)
         {
             if (z.Type == ZoneType.Legion) matching.Add(z);
         }
@@ -59,50 +110,7 @@ public class ZoneManager : GameManagerComponent
 
         return matching.First().Bounds;
     }
-
-    private void CreateNewZone(RectInt bounds, ZoneType type)
-    {
-        // Check this zone doesn't overlap with an existing one
-        foreach (Zone existing in zones)
-            if (bounds.xMin < existing.Bounds.xMax && existing.Bounds.xMin < bounds.xMax)
-            {
-                Debug.LogError($"{name}: {type} at [{bounds.xMin},{bounds.xMax}) overlaps " +
-                               $"{existing.Type} at [{existing.Bounds.xMin},{existing.Bounds.xMax}).", this);
-                return;
-            }
-        
-        if (bounds.xMin < WorldBounds.xMin || bounds.xMax > WorldBounds.xMax)
-        {
-            Debug.LogError("Can't have a zone that is outside of the world area!");
-            return;
-        }
-
-        Zone newZone = null;
-        
-        foreach (Zone z in zonePrefabs)
-        {
-            if (z.Type == type)
-            {
-                newZone = Instantiate(z, new Vector3(bounds.position.x, bounds.position.y, 0f), Quaternion.identity, transform);
-                break;
-            }
-        }
-
-        if (newZone == null)
-        {
-            Debug.LogError($"No prefab exists for the zone of type {type.ToString()}!", this);
-            return;
-        }
-        
-        // Zone exists and has been created so configure it
-        // newZone.Initialise(bounds);
-        newZone.OnZoneCreated();
-        
-        zones.Add(newZone);
-        zones.Sort((a, b) => a.Bounds.xMin.CompareTo(b.Bounds.xMin));
-        RebuildCoordinateList();
-    }
-
+    
     /// <summary>
     /// Checks whether a rectangular area is fully contained within the bounds of a zone of type.
     /// </summary>
@@ -113,6 +121,8 @@ public class ZoneManager : GameManagerComponent
     {
         if (bounds.width <= 0) return false;
         
+        // Loop over each discrete integer step in bounds, i.e. a 5 wide rectangle we check x = 0, 1, .. 4
+        // If each of the integer cells lies in the desired zone, then we're fully overlapping. Else, we are not.
         for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
             if (GetZoneTypeAt(x) != type) return false;
@@ -121,67 +131,26 @@ public class ZoneManager : GameManagerComponent
         return true;
     }
 
-    private void RemoveZone(Zone existing)
-    {
-        existing.OnZoneDestroyed();
-        zones.Remove(existing);
-        
-        Destroy(existing);
-        RebuildCoordinateList();
-    }
+    public ZoneType GetZoneTypeAt(int x) => GetZoneTypeAt(x, GlobalConstants.GroundY);
 
-    /// <summary>
-    /// Populates the typesAtCoords list after we add or subtract a zone.
-    /// Each index represents a world position, with the smallest position being idx = 0 and the largest being the idx = maxArea - 1.
-    /// Each index stores the type of the zone.
-    /// </summary>
-    private void RebuildCoordinateList()
+    public ZoneType GetZoneTypeAt(int x, int y)
     {
-        if (WorldBounds.width <= 0)
+        foreach (Zone z in zoneInstances)
         {
-            Debug.LogError($"{name}: worldBounds has zero width. Set it in the inspector.", this);
-            return;
+            var pos = new Vector2Int(x, y);
+            if (z.Bounds.Contains(pos)) return z.Type;
         }
-        
-        typesAtCoords = new ZoneType[WorldBounds.width];
-        
-        // Populate a ZoneType value for each of our worldBounds.width integer tile positions.
-        for (int i = 0; i < typesAtCoords.Length; i++)
-        {
-            int worldX = WorldXOf(i);
-            bool isWilderness = true;
 
-            foreach (Zone zone in zones)
-                if (zone.Bounds.Contains(new Vector2Int(worldX, zone.Bounds.yMin)))
-                {
-                    typesAtCoords[i] = zone.Type;
-                    isWilderness = false;
-                    break;
-                }
-
-            if (isWilderness) typesAtCoords[i] = ZoneType.Wilderness;
-        }
+        return ZoneType.Wilderness; // wilderness is the default
     }
-    
-    public List<Zone> GetAllZones() => zones;
 
-    private int IndexOf(float worldX) => Mathf.FloorToInt(worldX) - WorldBounds.xMin; // floor because we don't want something partially into the 4 tile to round up to the 5 tile.
-
-    private int WorldXOf(int index) => WorldBounds.xMin + index;
-    
-    /// <summary>
-    /// Takes an x coordinate in world coordinates and returns the zone type that the coordinate lies inside.
-    /// </summary>
-    /// <param name="x">The x coordinate to sample.</param>
-    /// <returns>The ZoneType. ZoneType.Wilderness is the default return type and will be returned in the case that this object does not lie in a predefined zone.</returns>
-    public ZoneType GetZoneTypeAt(float x)
-    {
-        return typesAtCoords[IndexOf(x)];
-    }
+    public IReadOnlyList<Zone> GetAllZones() => zoneInstances;
 
     private void OnDrawGizmos()
     {
-        foreach (Zone zone in zones)
+        if (save == null) return;
+        
+        foreach (ZoneModel zone in Zones.Items)
         {
             RectInt r = zone.Bounds;
             var centre = new Vector3(r.xMin + r.width * 0.5f, r.yMin + r.height * 0.5f, 0f);

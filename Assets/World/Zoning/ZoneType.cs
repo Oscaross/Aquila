@@ -2,8 +2,8 @@ using UnityEngine;
 
 public enum ZoneType
 {
-    Arable,
-    Forest,
-    Legion,
-    Wilderness
+    Wilderness = 0,
+    Arable = 1,
+    Forest = 2,
+    Legion = 3
 }
