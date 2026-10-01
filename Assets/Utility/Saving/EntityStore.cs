@@ -13,8 +13,9 @@ public class EntityStore<T> where T : EntityData
         // Check that we've not got an ID for this entity already
         if (record.Id != 0) throw new InvalidOperationException($"{typeof(T).Name} already has id {record.Id}; added twice?");
 
+        if (GameSession.LogSavingToConsole) Debug.Log($"Successfully saved entity record for {record.GetType()}");
+        
         record.Id = ids.AllocateNewID();
-        Debug.Log($"Successfully saved entity record for {record.GetType()}");
         items.Add(record);
         return record;
     }

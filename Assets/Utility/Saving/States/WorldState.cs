@@ -9,9 +9,10 @@ public class WorldState
     
     [Header("Core Save System")]
     public int Seed;
-    public IdAllocator IdAllocator = new();
+    public readonly IdAllocator IdAllocator = new();
     
     [Header("Save Data")]
-    public ZoneState ZoneState = new();
+    public readonly ZoneState ZoneState = new();
+    public readonly BuildingState BuildingState = new();
     // public ForestState ForestState;
 }

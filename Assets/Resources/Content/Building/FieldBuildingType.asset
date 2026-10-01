@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38b14df3e89ab3f46ad9019d2446b39e, type: 3}
-  m_Name: FieldBuildingConstraints
+  m_Name: FieldBuildingType
   m_EditorClassIdentifier: 
+  key: building:field
   buildingPrefab: {fileID: 8559477821406755291, guid: 55b859384db0c114d83415d689483eee, type: 3}
   width: 10
   height: 1

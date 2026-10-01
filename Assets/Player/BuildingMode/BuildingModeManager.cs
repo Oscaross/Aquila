@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 
 public class BuildingModeManager : MonoBehaviour
 {
-    [SerializeField] private BuildingConstraints[] allBuildables;
+    [SerializeField] private BuildingType[] allBuildables;
     
     private Legion legion;
     private LegionResources resources;
@@ -23,10 +23,10 @@ public class BuildingModeManager : MonoBehaviour
     private int currentBuildCell = int.MinValue; // cell HAS to be the min value so we don't initialise to 0 then claim that context is the same
     // If this flag is true it triggers a reevaluation of valid buildables at this position.
     private bool hologramDirty;
-    private readonly List<BuildingConstraints> currentBuildableHolograms = new();
+    private readonly List<BuildingType> currentBuildableHolograms = new();
     // Every building is pre-generated as a cached game object so we don't need to re-instantiate each time the hologram state changes
-    private readonly Dictionary<BuildingConstraints, GameObject> hologramCache = new();
-    private BuildingConstraints currentBuildableSelected;
+    private readonly Dictionary<BuildingType, GameObject> hologramCache = new();
+    private BuildingType currentBuildableSelected;
     private GameObject activeHologram;
     private RectInt currentFootprint;
     private int hologramSelectionIdx;
@@ -69,7 +69,7 @@ public class BuildingModeManager : MonoBehaviour
             return;
         }
 
-        foreach (BuildingConstraints b in allBuildables)
+        foreach (BuildingType b in allBuildables)
         {
             var prefab = b.buildingPrefab;
             if (prefab == null)
@@ -147,21 +147,13 @@ public class BuildingModeManager : MonoBehaviour
         var b = currentBuildableSelected;
         RectInt fp = GetFootprint(GetCurrentCell(), b); // fresh, not last frame's
         if (!IsValidBuildable(fp, b)) return; // This isn't a valid buildable anymore so we can't build it
-
-        var go = Instantiate(b.buildingPrefab, FootprintToWorld(fp), Quaternion.identity, transform);
         
-        if (!go.TryGetComponent(out Building building))
-        {
-            Debug.LogError($"The building prefab for {b.name} has no Building component attached. Fix the prefab!", this);
-            Destroy(go);
-            return;
-        }
-        
-        hologramDirty = true;
-        building.Register(fp);
+        buildingManager.CreateNewBuilding(fp.position, b);
         
         foreach (ResourceTransaction rt in b.resourceCosts)
             resources.ConsumeResource(rt.resource, rt.amount);
+        
+        hologramDirty = true;
     }
     
     /// System Logic:
@@ -180,7 +172,7 @@ public class BuildingModeManager : MonoBehaviour
     /// <summary>
     /// Returns the rectangular area that this building would occupy, in global space.
     /// </summary>
-    private RectInt GetFootprint(int cell, BuildingConstraints b)
+    private RectInt GetFootprint(int cell, BuildingType b)
     {
         int originX = cell - b.width / 2; // centre the building on the cursor's current cell
         return new RectInt(originX, GlobalConstants.GroundY, b.width, b.height);
@@ -205,7 +197,7 @@ public class BuildingModeManager : MonoBehaviour
         if (!hologramDirty) return;
         hologramDirty = false;
         
-        BuildingConstraints previous = currentBuildableSelected; // this is the building we want to be building here, if possible
+        BuildingType previous = currentBuildableSelected; // this is the building we want to be building here, if possible
         
         DetermineLegalBuildables();
         ReconcileSelection(previous);
@@ -234,7 +226,7 @@ public class BuildingModeManager : MonoBehaviour
     }
     
     /// Keeps the previous selection if it's still legal, otherwise falls back to the first entry.
-    private void ReconcileSelection(BuildingConstraints previous)
+    private void ReconcileSelection(BuildingType previous)
     {
         hologramSelectionIdx = currentBuildableHolograms.IndexOf(previous);
         if (hologramSelectionIdx < 0) hologramSelectionIdx = 0;
@@ -256,7 +248,7 @@ public class BuildingModeManager : MonoBehaviour
     /// <summary>
     /// Manages the cache for pre-images of unbuilt buildables and returns an unbuilt instance to show the player a preview of what this buildable would look like.
     /// </summary>
-    private GameObject GetHologram(BuildingConstraints constraints)
+    private GameObject GetHologram(BuildingType constraints)
     {
         // Check the cache, on hit return, on miss populate the cache with this building type for future use.
         // Important that we only take the rendered sprite, if we just instantiate an image of the prefab we'll run the Awake logic and register ghost buildings.
@@ -286,7 +278,7 @@ public class BuildingModeManager : MonoBehaviour
     /// <summary>
     /// Checks all constraints on BuildingConstraints and returns None if no violation to constraints is found, or the set of all violation(s) that occurred otherwise.
     /// </summary>
-    private HashSet<BuildingFailureReason> Validate(RectInt fp, BuildingConstraints b)
+    private HashSet<BuildingFailureReason> Validate(RectInt fp, BuildingType b)
     {
         var failures = new HashSet<BuildingFailureReason>();
         
@@ -310,9 +302,9 @@ public class BuildingModeManager : MonoBehaviour
         return failures;
     }
 
-    private bool IsValidBuildable(RectInt fp, BuildingConstraints b) => Validate(fp, b).Count == 0;
+    private bool IsValidBuildable(RectInt fp, BuildingType b) => Validate(fp, b).Count == 0;
 
-    private bool OverlapsExisting(RectInt fp, BuildingConstraints c)
+    private bool OverlapsExisting(RectInt fp, BuildingType c)
     {
         foreach (Building b in buildingManager.Buildings)
         {
@@ -323,7 +315,7 @@ public class BuildingModeManager : MonoBehaviour
         return false; 
     }
     
-    private bool IsInZone(RectInt fp, BuildingConstraints b)
+    private bool IsInZone(RectInt fp, BuildingType b)
     {
         foreach (ZoneType z in b.zonesBuildableIn)
         {

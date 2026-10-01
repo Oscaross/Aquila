@@ -1,28 +1,36 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : MonoBehaviour, IEntity<BuildingModel>, IFindable
 {
-    [SerializeField] private BuildingConstraints constraints;
-    public BuildingConstraints Constraints => constraints;
+    public int Id => data.Id;
+    
+    private BuildingType constraints;
+    public BuildingType Constraints => constraints;
 
-    private BuildingManager buildingManager;
-    private Legion legion;
+    private BuildingModel data;
 
-    private void Awake()
+    public void Bind(BuildingModel model)
     {
-        legion = GetComponentInParent<Legion>();
-        buildingManager = legion.BuildingManager;
+        data = model;
+        constraints = model.Constraints;
     }
 
-    public void Register(RectInt footprintInWorldSpace)
+    public RectInt FootprintInWorldSpace => new(data.XMin, data.YMin, constraints.width, constraints.height);
+}
+
+public class BuildingModel : EntityData
+{
+    public BuildingModel(string typeKey, int xMin, int yMin)
     {
-        FootprintInWorldSpace = footprintInWorldSpace;
-        buildingManager.Register(this);
+        TypeKey = typeKey;
+        XMin = xMin;
+        YMin = yMin;
     }
 
-    public RectInt FootprintInWorldSpace
-    {
-        get;
-        private set;
-    }
+    public readonly string TypeKey;
+    public int XMin;
+    public int YMin;
+
+    [JsonIgnore] public BuildingType Constraints => ContentRegistry.Get<BuildingType>(TypeKey);
 }

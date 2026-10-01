@@ -12,7 +12,13 @@ public class GameSession : MonoBehaviour
     [SerializeField] private int devSeed = 12345;
     [Tooltip("Example save file that we want to load.")]
     [SerializeField] private TextAsset devScenario;
-    
+    [SerializeField] private bool logSavingToConsole;
+
+    public static bool LogSavingToConsole;
+
+    private void OnValidate() => LogSavingToConsole = logSavingToConsole;
+    private void Awake() => LogSavingToConsole = logSavingToConsole;
+
     private string DevSavePath => Path.Combine(Application.persistentDataPath, "dev.json");
     
     [SerializeField] private GameManagerComponent[] gameManagers;
@@ -45,11 +51,14 @@ public class GameSession : MonoBehaviour
         {
             Begin(JsonConvert.DeserializeObject<WorldState>(json, Settings));
         }
-        catch (Exception e)
+        catch (JsonException e)
         {
-            Debug.LogError($"Error while parsing save file! Is it corrupt? Error message: {e.Message}.");
-            throw;
+            Debug.LogError("Save file could not be parsed. Is it corrupt?");
+            Debug.LogException(e);
+            return;
         }
+        
+        // any non-JSON error escapes here then gets thrown anyways, which is good because it means it's a bug not caused by the core save architecture itself but rather another part
         
         RaiseWorldReady();
         Debug.Log("Successfully loaded save!");

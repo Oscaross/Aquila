@@ -8,7 +8,7 @@ public class ProximityRule
     [Tooltip("Usually either we want a rule to say WITHIN x units or OUTSIDE x units of target.")]
     public ProximityMode mode;
     [Tooltip("The type(s) of buildings that this rule should apply to.")]
-    public List<BuildingConstraints> buildingsThisAppliesTo;
+    public List<BuildingType> buildingsThisAppliesTo;
     [Tooltip("If within then this building must be within x units of some building in the buildings this applies to set.")]
     public int distanceWorldUnits;
 

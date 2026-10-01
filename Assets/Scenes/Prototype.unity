@@ -653,14 +653,14 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
-  zenith: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 1}
+  zenith: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 1}
   horizon: {r: 0, g: 0, b: 0, a: 0}
-  light: {r: 0.11372549, g: 0.105882354, b: 0.13333334, a: 1}
-  haze: {r: 0.02347456, g: 0.02347456, b: 0.02641511, a: 0.375}
+  light: {r: 0.9452109, g: 0.8851799, b: 0.74268305, a: 1}
+  haze: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 0.625}
   globalLightTemperature: 0
-  currentSunrise: {fileID: 11400000, guid: 237d61d4ea551ca4c88d1f9131371708, type: 2}
+  currentSunrise: {fileID: 11400000, guid: 94f51f1c0ffdf7444b86b3a9ae86804a, type: 2}
   currentSunset: {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
-  currentRampExponent: 1.1177567
+  currentRampExponent: 0.47729474
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -2730,8 +2730,10 @@ MonoBehaviour:
   startMode: 0
   devSeed: 12345
   devScenario: {fileID: 0}
+  logSavingToConsole: 0
   gameManagers:
   - {fileID: 523121394}
+  - {fileID: 152429220}
 --- !u!1 &1335300795
 GameObject:
   m_ObjectHideFlags: 0
