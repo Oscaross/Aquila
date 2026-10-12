@@ -15,7 +15,7 @@ public class Pathfinder : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 destination;
-    private System.Action onArrive;
+    private Action onArrive;
     private bool isMoving;
     private Direction facing = Direction.Left;
     private float moveSpeed;

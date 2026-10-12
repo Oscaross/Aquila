@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,7 +42,7 @@ public class BuildingManager : GameManagerComponent
             legion.SubjectManager.RegisterJob(w);
         }
         
-        b.Bind(data);
+        b.Bind(data, saveContext);
         saveContext.Registry.Register(b);
     }
 
@@ -65,7 +64,7 @@ public class BuildingManager : GameManagerComponent
     public void CreateNewBuilding(Vector2Int origin, BuildingType type)
     {
         var model = new BuildingModel(type.Key, origin.x, origin.y);
-        save.BuildingState.Buildings.Add(model, save.IdAllocator);
+        save.BuildingState.Buildings.Add(model);
         InstantiateBuilding(model);
     }
 
@@ -73,7 +72,7 @@ public class BuildingManager : GameManagerComponent
     {
         foreach (var workspace in buildingsWithWorkspaces)
         {
-            workspace.Tick(Time.deltaTime);
+            workspace.Tick();
         }
     }
 }

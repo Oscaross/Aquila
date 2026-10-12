@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e1e833078b808245a56fcd91f25515b, type: 3}
   m_Name: Birch0
   m_EditorClassIdentifier: 
-  branches: {fileID: 0}
+  key: trees:birch0
+  trunk: {fileID: 0}
   saplings: []
   leaves: {fileID: 0}
   stump: {fileID: 0}

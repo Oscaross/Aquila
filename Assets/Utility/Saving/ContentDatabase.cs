@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -23,6 +24,17 @@ public static class ContentRegistry
         _keyedAssets ??= Build(); // we only rebuild the keyed assets file if our working dictionary is null
         if (_keyedAssets.TryGetValue(key, out ContentAsset asset) && asset is T typed) return typed;
         throw new KeyNotFoundException($"No {typeof(T).Name} with key {key} found!");
+    }
+
+    /// <summary>
+    /// Fetches all ScriptableObjects registered under the type T.
+    /// </summary>
+    /// <typeparam name="T">The type of ContentAsset to search for.</typeparam>
+    /// <returns>All objects that are registered under the type T.</returns>
+    public static IEnumerable<T> All<T>() where T : ContentAsset
+    {
+        _keyedAssets ??= Build();
+        return _keyedAssets.Values.OfType<T>();
     }
 
     private static Dictionary<string, ContentAsset> Build()

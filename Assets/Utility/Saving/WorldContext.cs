@@ -4,10 +4,12 @@
 
 public class WorldContext
 {
-    public WorldContext(EntityRegistry registry)
+    public WorldContext(EntityRegistry registry, GameBalance balance)
     {
         Registry = registry;
+        Balance = balance;
     }
     
+    public GameBalance Balance { get; private set; }
     public EntityRegistry Registry { get; private set; }
 }

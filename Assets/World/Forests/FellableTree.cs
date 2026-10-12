@@ -1,93 +1,95 @@
-// using System;
-// using UnityEngine;
-//
-// public class FellableTree : MonoBehaviour, IFindable, IEntity<FellableTreeData>
-// {
-//     public int Id => data.id;
-//     private FellableTreeData data;
-//
-//     private int ticksPerPhase;
-//
-//     [SerializeField] private int secondsPerGrowthPhase;
-//     [SerializeField] private Shaker shaker;
-//     [SerializeField] private SpriteRenderer stump;
-//     [SerializeField] private SpriteRenderer branches;
-//     [SerializeField] private SpriteRenderer leaves;
-//     [SerializeField] private SpriteRenderer sapling;
-//     
-//     public bool HasBeenFelled => data.health < 1;
-//     public bool IsMature => Phase == data.species.saplings.Length;
-//     public int Phase => Mathf.Min(data.ticksElapsedSincePlanted / ticksPerPhase, data.species.saplings.Length);
-//     
-//     private readonly int shownPhase = -1; // what our sprites currently show
-//
-//     public void Bind(FellableTreeData dataModel)
-//     {
-//         data = dataModel;
-//         ticksPerPhase = Mathf.Max(1, Mathf.RoundToInt(secondsPerGrowthPhase / Time.fixedDeltaTime)); // we consider a tick to be the number of FixedUpdate calls required to elapse secondsPerGrowthPhase
-//         ResolveGrowthPhase();
-//     }
-//
-//     public void Tick()
-//     {
-//         if (HasBeenFelled || IsMature) return; // don't need to grow a fully mature/cut down tree
-//
-//         data.ticksElapsedSincePlanted++;
-//         if (Phase != shownPhase) ResolveGrowthPhase();
-//     }
-//
-//     public void Chop()
-//     {
-//         if (HasBeenFelled) return;
-//         
-//         data.health--;
-//         shaker.Shake();
-//
-//         if (HasBeenFelled)
-//         {
-//             Fell();
-//         }
-//     }
-//
-//     /// <summary>
-//     /// Configures the sprite renderers to show the tree's correct state depending on what stage in the growth cycle it's at.
-//     /// </summary>
-//     private void ResolveGrowthPhase()
-//     {
-//         if (IsMature)
-//         {
-//             // Sapling off, everything else on
-//             sapling.enabled = false;
-//             branches.enabled = true;
-//             branches.sprite = data.species.branches;
-//             leaves.enabled = true;
-//             leaves.sprite = data.species.leaves;
-//             stump.enabled = true;
-//             stump.sprite = data.species.stump;
-//         }
-//         else
-//         {
-//             // Sapling to its growth phase and everything non-sapling off
-//             sapling.sprite = data.species.saplings[Phase];
-//             sapling.enabled = true;
-//             branches.enabled = false;
-//             leaves.enabled = false;
-//             stump.enabled = false;
-//         }
-//     }
-//
-//     private void Fell()
-//     {
-//         // TODO: Spawn a work package, a pallette of chopped wood to be taken back.
-//     }
-// }
-//
-// [Serializable]
-// public class FellableTreeData : ISaveRecord
-// {
-//     public int id; 
-//     public int health;
-//     public int ticksElapsedSincePlanted;
-//     public int xPos;
-//     public bool hasBeenFelled;
-// }
+using System;
+using Newtonsoft.Json;
+using UnityEngine;
+
+public class FellableTree : MonoBehaviour, IEntity<FellableTreeData>, IFindable
+{
+    [Tooltip("The leaves (i.e. to apply a shader to during the seasons).")]
+    private SpriteRenderer leaves;
+    [Tooltip("The trunk and the branches, aka the wooden part of the tree that is NOT the stump that gets left after chopping.")]
+    private SpriteRenderer trunk;
+    [Tooltip("The stump that gets left behind after the tree is felled.")]
+    private SpriteRenderer stump;
+    [Tooltip("A single sprite that gets rendered, when all the others are false and we have a sapling.")]
+    private SpriteRenderer sapling;
+    
+    public int Id { get; }
+    
+    private FellableTreeData data;
+
+    private int TicksPerGrowthPhase =>
+        Ticks.FromSeconds(GameSession.Current.Context.Balance.forestry.secondsToFullyGrow / data.Species.saplings.Length);
+
+    private int currentGrowthPhase;
+    
+    public void Bind(FellableTreeData model, WorldContext save)
+    {
+        data = model;
+        ResolveSprites();
+    }
+
+    public void Refresh(long currentTick)
+    {
+        long tickDelta = currentTick - data.PlantedAtTick;
+        
+        Debug.Log("Ticks elapsed since planting: " + tickDelta);
+        currentGrowthPhase = Mathf.FloorToInt((float) tickDelta / TicksPerGrowthPhase);
+        currentGrowthPhase = Mathf.Clamp(currentGrowthPhase, 0, data.Species.saplings.Length); // we can only display from sapling phase 1 to the max sapling phase from the species
+        ResolveSprites();
+        
+    }
+
+    private void ResolveSprites()
+    {
+        var species = ContentRegistry.Get<TreeSpecies>(data.SpeciesID);
+
+        if (species == null)
+        {
+            Debug.LogError("FellableTree has no species object so it does not know how to render itself!", this);
+            return;
+        }
+        
+        // Growth phase needs to be less than saplings.Length if it's a non-fully grown sapling 
+        if (currentGrowthPhase < data.Species.saplings.Length)
+        {
+            leaves.enabled = false;
+            trunk.enabled = false;
+            stump.enabled = false;
+            sapling.enabled = true;
+
+            sapling.sprite = data.Species.saplings[currentGrowthPhase];
+        }
+        else
+        {
+            leaves.sprite = species.leaves;
+            trunk.sprite = species.trunk;
+            stump.sprite = species.stump;
+
+            sapling.enabled = false;
+            trunk.enabled = true;
+            leaves.enabled = true;
+            stump.enabled = true;
+        }
+    }
+}
+
+public class FellableTreeData : EntityData
+{
+    [JsonConstructor]
+    public FellableTreeData() {}
+    
+    public FellableTreeData(int maxHealth, int xPosPx, string speciesID)
+    {
+        Health = maxHealth;
+        XPosPx = xPosPx;
+        SpeciesID = speciesID;
+    }
+    
+    public int Health;
+    public long PlantedAtTick;
+    public int XPosPx;
+    public bool HasBeenFelled;
+    public string SpeciesID;
+
+    [JsonIgnore] public TreeSpecies Species => ContentRegistry.Get<TreeSpecies>(SpeciesID);
+}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a82ec7c1fd9cd14daafe62a2636b906, type: 3}
   m_Name: MainPaletteFixed
   m_EditorClassIdentifier: 
-  stepsBetweenColours: 4
+  stepsBetweenColours: 2
   blocks:
   - temperature: 0
     gpl: {fileID: 4900000, guid: 63b054e781331d04a84bda5a43a864e6, type: 3}

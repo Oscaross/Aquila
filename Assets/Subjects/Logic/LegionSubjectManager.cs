@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Responsible for assigning workers to job sites when the demand presents itself.
 /// </summary>
 
-public class LegionSubjectManager : MonoBehaviour
+public class LegionSubjectManager : GameManagerComponent
 {
+    [Header("Game Balance")] 
+    [SerializeField] private int initialSubjectCount = 10;
+    
     [Tooltip("The basic prefab that is instantiated for an unemployed subject. This prefab lives until the NPC dies, and persists between career changes.")]
     [SerializeField] private LegionSubject subjectPrefab;
     [Tooltip("Customisable parameters that exist for each profession, such as visuals, spritesheets, move speeds, health, etc...")]
@@ -18,17 +22,19 @@ public class LegionSubjectManager : MonoBehaviour
     [SerializeField] private List<LegionSubject> subjects = new();
     private Queue<SubjectWorkspace> jobQueue = new();
 
-    private void Awake()
+    public override void Restore(WorldState state, WorldContext context)
     {
-        // TODO: Debug we just make a couple of guys for different professions at the origin
-        for (int i = 0; i < 10; i++)
+        foreach (var subjectModel in state.NPCState.Subjects.Items)
         {
-            CreateNewSubject();
+            subjects.Add(Spawn(subjectPrefab, subjectModel, new Vector3(subjectModel.XPos, subjectModel.YPos, 0f), context));
         }
+    }
 
-        foreach (LegionSubject s in subjects)
+    public override void GenerateNewWorld()
+    {
+        for (int i = 0; i < initialSubjectCount; i++)
         {
-            s.MakeUnemployed();
+            CreateNewSubject(Random.Range(-10f, 10f), 0);
         }
     }
 
@@ -78,11 +84,15 @@ public class LegionSubjectManager : MonoBehaviour
     /// <summary>
     /// Adds a new subject to the legion and triggers a search for a vacancy for them.
     /// </summary>
-    public void CreateNewSubject()
+    public void CreateNewSubject(float xPos, float yPos)
     {
-        LegionSubject subject = Instantiate(subjectPrefab, new Vector2(0f, 1f), Quaternion.identity, transform);
+        var data = new LegionSubjectModel(xPos, yPos, 0, 1f);
+        
+        GameSession.Current.State.NPCState.Subjects.Add(data);
+        var subject = Spawn(subjectPrefab, data, new Vector3(xPos, yPos, 0f), GameSession.Current.Context);
         subjects.Add(subject);
-        MatchUnemployedToJob();
+        
+        subject.MakeUnemployed(); // all subjects when they are first created start as unemployed
     }
     
     [ContextMenu("Force Employment Check")]

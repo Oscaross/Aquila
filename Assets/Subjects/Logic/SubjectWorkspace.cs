@@ -13,10 +13,9 @@ public abstract class SubjectWorkspace : MonoBehaviour
     public abstract RectInt WorkingBounds { get; }
     
     /// <summary>
-    /// Allows workspaces to change state over time. Automatically called from a single manager object and provides the game time that has elapsed since last frame.
+    /// Allows workspaces to change state over time. Each FixedUpdate() call represents a Tick().
     /// </summary>
-    /// <param name="deltaGameSeconds"></param>
-    public abstract void Tick(float deltaGameSeconds);
+    public abstract void Tick();
     
     private void Awake()
     {

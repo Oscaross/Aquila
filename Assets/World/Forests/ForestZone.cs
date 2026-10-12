@@ -1,107 +1,91 @@
-// using System;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using Random = UnityEngine.Random;
-//
-// public class ForestZone : Zone, IFindable, IEntity<ForestZoneModel>
-// {
-//     public int Id { get; }
-//     public override ZoneType Type => ZoneType.Forest;
-//     
-//     [Header("WorldGen Logic")]
-//     [SerializeField] private FellableTree[] fellableTreePrefabs;
-//     [Tooltip("The maximum tree density this forest zone is able to sustain. When a forest zone is first created, this is the density that it occupies. The absolute max number of trees is the integer width of this zone multiplied by this proportion.")]
-//     [SerializeField] private float carryingCapacity;
-//     [Tooltip("The rate at which the forest moves towards the carrying capacity.")]
-//     [SerializeField] private float growthRate;
-//     [SerializeField] private int maxClumpSize = 10;
-//
-//     private List<FellableTree> fellableTrees = new();
-//     private ForestZoneModel data;
-//
-//     private void FixedUpdate()
-//     {
-//         // Allows trees to grow by ticking each tree in this zone each frame
-//         foreach (FellableTree t in fellableTrees)
-//         {
-//             t.Tick();
-//         }
-//     }
-//
-//     public void Bind(ForestZoneModel dataModel)
-//     {
-//         data = dataModel;
-//         GameClock.OnSunrise += OnNewDay;
-//         
-//         // Calculate the number of initial trees we wish to spawn and spawn them
-//         int fellableTreesToSpawn = Mathf.RoundToInt(carryingCapacity * (Bounds.xMax - Bounds.xMin));
-//
-//         for (int i = 0; i < fellableTreesToSpawn; i++)
-//         {
-//             FellableTree t = Instantiate(PickTreeVariant(), transform.position, Quaternion.identity, transform);
-//             data.fellableTrees.Add(t);
-//         }
-//     }
-//
-//     public override void OnZoneDestroyed()
-//     {
-//         GameClock.OnSunrise -= OnNewDay;
-//     }
-//
-//     private void OnNewDay()
-//     {
-//         foreach (FellableTreeData f in data.fellableTrees)
-//         {
-//             if (f.hasBeenFelled)
-//             {
-//                 data.fellableTrees.Remove(f);
-//             }
-//         }
-//     }
-//     
-//     
-//     // TODO: Make seeded and maybe some logic by where in the zone we're picking from?
-//     private FellableTree PickTreeVariant() => fellableTreePrefabs[Random.Range(0, fellableTreePrefabs.Length)];
-//
-//     private int GetTreeSpawnXPos()
-//     {
-//         // 1. Pick a random tree, weighted by trees with the most neighbours. The most likely tree for us to pick is the one that's the closest to the most trees
-//         Dictionary<FellableTree, int> neighbours = new Dictionary<FellableTree, int>();
-//
-//         int sum = 0;
-//         
-//         // foreach (FellableTree t in data.fellableTrees)
-//         // {
-//         //     // All the trees within a 5 world unit radius of this
-//         //     int count = data.fellableTrees.FindAll(a => a.transform.position.x - t.transform.position.x < 5f).Count;
-//         //     neighbours.Add(t, count);
-//         //
-//         //     sum += count;
-//         // }
-//         
-//         // Imagine a line going from i = 0 to the sum of all neighbour counts for each tree. Pick a random number between 0 and sum, whichever tree that lands on we choose
-//
-//         // int chosen = Pseudorandom.HashRange(0, sum, transform.position.GetHashCode(), Pseudorandom.TreeSpawnSalt);
-//
-//         FellableTree origin;
-//
-//         int curr = 0;
-//         
-//         foreach ((FellableTree t, int count) in neighbours)
-//         {
-//             curr += count;
-//         }
-//         
-//  
-//         
-//         // 2. For this tree, pick a spawn position that's weighted towards being in the closest possible x slot to this tree. 
-//
-//         return 1;
-//     }
-// }
-//
-// [Serializable]
-// public class ForestZoneModel : ISaveRecord
-// {
-//     public List<FellableTreeData> fellableTrees;
-// }
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class ForestZone : Zone<ForestZoneModel>
+{
+    #region Boilerplate
+    public override ZoneType Type => ZoneType.Forest;
+    
+    protected override void OnBind(WorldContext context)
+    {
+        allSpeciesAssets = ContentRegistry.All<TreeSpecies>().ToList();
+        
+        foreach (var t in Model.FellableTrees)
+        {
+            SpawnTree(t, context);
+        }
+    }
+    
+    #endregion
+
+    private List<FellableTree> treeInstances = new();
+    // Simply a list of the available tree species and their properties we can choose from.
+    private List<TreeSpecies> allSpeciesAssets;
+
+    private void CreateNewTree(int xPos, WorldContext context)
+    {
+        var data = new FellableTreeData(context.Balance.forestry.treeMaxHealth, xPos, GetRandomTreeSpeciesID(xPos, TreeSpeciesType.Birch));
+        SpawnTree(data, context);
+    }
+
+    private string GetRandomTreeSpeciesID(int xPos, TreeSpeciesType t)
+    {
+        var treesOfType = allSpeciesAssets.FindAll(a => a.type == t);
+
+        if (treesOfType.Count == 0) return treesOfType[Pseudorandom.HashRange(0, treesOfType.Count - 1, xPos, ForestGenerator.TreeSpawnPosSalt)].Key;
+ 
+        Debug.Log($"No trees of type {t.ToString()} were found to return from the content registry!", this);
+        return null;
+    }
+
+    private void SpawnTree(FellableTreeData tree, WorldContext context)
+    {
+        // The x position is stored in pixels, not world units so we must convert back into world units when we put into world space
+        var instance = Instantiate(GameSession.Current.Context.Balance.forestry.treePrefab, new Vector3(tree.XPosPx / (float) GlobalConstants.PixelsPerUnit, 0f, 0f), Quaternion.identity, transform);
+        
+        treeInstances.Add(instance);
+        context.Registry.Register(instance);
+    }
+
+    #region Worldgen
+
+    /// <summary>
+    /// Defines the aesthetics of each forest, giving a mix of trees in different forests with certain weightings.
+    /// </summary>
+    private static readonly TreeSpeciesTypeWeight[][] ForestPresets =
+    {
+        new[] { new TreeSpeciesTypeWeight(TreeSpeciesType.Oak, 4), new TreeSpeciesTypeWeight(TreeSpeciesType.Birch, 2) },
+        new[] { new TreeSpeciesTypeWeight(TreeSpeciesType.Birch, 1), new TreeSpeciesTypeWeight(TreeSpeciesType.Oak, 3) },
+        new[] { new TreeSpeciesTypeWeight(TreeSpeciesType.Pine, 5), new TreeSpeciesTypeWeight(TreeSpeciesType.Birch, 1) },
+    };
+
+    public override void OnZoneCreated()
+    {
+        var newTrees = ForestGenerator.GenerateForest(this, 0.4f, ForestPresets);
+
+        foreach (var t in newTrees)
+        {
+            GameSession.Current.State.ZoneState.FellableTrees.Add(t); // make a record of this tree so it persists
+            SpawnTree(t, GameSession.Current.Context);
+        }
+    }
+
+    #endregion
+
+    private void FixedUpdate()
+    {
+        // Every 1 real world second, trigger an update to all trees
+        var currTick = GameSession.Current.TicksElapsed;
+        
+        if (currTick % Ticks.PerSecond == 0)
+        {
+            foreach (var t in treeInstances) t.Refresh(currTick);
+        }
+    }
+}
+
+public class ForestZoneModel : ZoneModel
+{
+    public List<FellableTreeData> FellableTrees = new();
+}

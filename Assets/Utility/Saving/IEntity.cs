@@ -1,5 +1,3 @@
-using UnityEngine;
-
 /// <summary>
 /// A saveable and loadable object that must persist throughout play sessions.
 /// </summary>
@@ -8,8 +6,10 @@ using UnityEngine;
 public interface IEntity<TModel> where TModel : ISaveRecord
 {
     /// <summary>
-    /// Loads this entity's data model and populates the MonoBehaviour's corresponding fields/invokes corresponding methods to do with this object's life cycle in this play session.
+    /// Binds this entity's data model to its instance member and populates the MonoBehaviour's corresponding fields/invokes corresponding methods to do with this object's life cycle in this play session. Includes the
+    /// save file in the event that this entity needs to fetch a reference from a cached ID from the global registry.
     /// </summary>
-    /// <param name="model"></param>
-    public void Bind(TModel model);
+    /// <param name="model">The data model of the object we are binding from save data.</param>
+    /// <param name="save">The context surrounding this instance particular instance of the save, namely so we can access the registry which maps ID => live instances of IFindable entities.</param>
+    public void Bind(TModel model, WorldContext save);
 }

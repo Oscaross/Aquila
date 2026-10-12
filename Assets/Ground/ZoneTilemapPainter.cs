@@ -15,6 +15,9 @@ public class ZoneTilemapPainter : MonoBehaviour
     [SerializeField] private ZoneManager zoneManager;
     [Tooltip("Each individual tile palette for each individual zone.")]
     [SerializeField] private ZoneTileset[] tilesets;
+    
+    public static readonly int TilePainterIslandSalt = Pseudorandom.SaltOf("tile-painter-island");
+    public static readonly int TilePainterGapSalt = Pseudorandom.SaltOf("tile-gap-island");
 
     /// <summary>
     /// Iterates over all zones within the tilemap and fills them with the corresponding zone-specific tile.
@@ -77,7 +80,7 @@ public class ZoneTilemapPainter : MonoBehaviour
 
         int idx = 0;
         // TODO: BAD SEED HARDCODING!!!!
-        bool isGeneratingIsland = (Pseudorandom.Hash01(set.GetHashCode(), Pseudorandom.TilePainterIslandSalt, 0) > 0.5); // sometimes we start with island, other times we start with gap otherwise zones always start with one or the other
+        bool isGeneratingIsland = (Pseudorandom.Hash01(set.GetHashCode(), TilePainterIslandSalt) > 0.5); // sometimes we start with island, other times we start with gap otherwise zones always start with one or the other
         int currIslandWidth = 0;
         int currGapWidth = 0;
         int gapWidthTarget = GenerateRandomGapSize(set, runStartWorldX);
@@ -136,11 +139,11 @@ public class ZoneTilemapPainter : MonoBehaviour
     
     private int GenerateRandomIslandSize(ZoneTileset set, int runStartWorldX) =>
         Pseudorandom.HashRange(set.minIslandWidth, set.maxIslandWidth + 1,
-            runStartWorldX, Pseudorandom.TilePainterIslandSalt, 0);
+            runStartWorldX, TilePainterIslandSalt);
 
     private int GenerateRandomGapSize(ZoneTileset set, int runStartWorldX) =>
         Pseudorandom.HashRange(set.minIslandSeparation, set.maxIslandSeparation + 1,
-            runStartWorldX, Pseudorandom.TilePainterGapSalt, 0);
+            runStartWorldX, TilePainterGapSalt);
 
     /// <summary>
     /// Pseudorandom. Uses very large arbitrary values to provide deterministic randomness. This uses the seed which is stored on this class, meaning any save with the same seed always generates the same random tiles.

@@ -5,35 +5,80 @@ using Newtonsoft.Json;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the startup phase of loading an existing/new save. Sends command signals, callbacks and fires manager scripts to trigger the building of a new game instance.
+/// Single authority on game sessions, so it is imperative it runs before everything else (hence the -1000 exec order).
+/// </summary>
+
+[DefaultExecutionOrder(-1000)]
 public class GameSession : MonoBehaviour
 {
-    [Header("Save System Bypass")]
-    [SerializeField] private StartMode startMode = StartMode.NewGame;
+    [Header("Save System Bypass")] [SerializeField]
+    private StartMode startMode = StartMode.NewGame;
+
     [SerializeField] private int devSeed = 12345;
-    [Tooltip("Example save file that we want to load.")]
-    [SerializeField] private TextAsset devScenario;
+
+    [Tooltip("Example save file that we want to load.")] [SerializeField]
+    private TextAsset devScenario;
+
     [SerializeField] private bool logSavingToConsole;
+
+    /// <summary>
+    /// The active instance of the current game session, allowing any script in the codebase to give methods to be run only after the world is configured.
+    /// </summary>
+    public static GameSession Current { get; private set; }
+
+    private event Action worldReady;
 
     public static bool LogSavingToConsole;
 
     private void OnValidate() => LogSavingToConsole = logSavingToConsole;
-    private void Awake() => LogSavingToConsole = logSavingToConsole;
+
+    private void Awake()
+    {
+        if (Current != null && Current != this) Debug.LogError("More than one GameSession allocated to this scene!");
+        Current = this;
+        LogSavingToConsole = logSavingToConsole;
+
+        Time.fixedDeltaTime =
+            1f / Ticks.PerSecond; // we MUST override the project setting for FixedUpdate()'s frequency to use our custom one
+    }
 
     private string DevSavePath => Path.Combine(Application.persistentDataPath, "dev.json");
-    
-    [SerializeField] private GameManagerComponent[] gameManagers;
+
+    [Tooltip(
+        "Game managers are responsible for configuring and rebuilding the world around them from given state. Each sector of the game (i.e. subjects, buildings, ...) should have its own manager.")]
+    [SerializeField]
+    private GameManagerComponent[] gameManagers;
 
     /// <summary>
     /// The current save file that we are using 
     /// </summary>
     public WorldState State { get; private set; }
+
     public WorldContext Context { get; private set; }
-    
-    public bool IsWorldReady { get; private set; }
     /// <summary>
-    /// Event that fires once world generation and placement is finished. Subscribe methods to this event that observe the world and can't run until immediately after the world is generated.
+    /// How many ticks (calls of FixedUpdate(), set in Ticks.cs but I made it 50 when I wrote this comment) have occurred since this save was created. Use to derive "time elapsed" anywhere.
     /// </summary>
-    public event Action WorldReady;
+    public long TicksElapsed { get; private set; }
+
+    private void FixedUpdate()
+    {
+        TicksElapsed++;
+    }
+
+    [Tooltip("Object that all parts of the game use that involve balance. Includes information like yield from trees, how long trees take to grow, yield multipliers in winter, etc...")]
+    [SerializeField] private GameBalance gameBalance;
+
+    private bool isWorldReady;
+
+    public static void WhenWorldReady(Action callback)
+    {
+        if (Current == null) { Debug.LogError("No GameSession instance exists in the scene."); }
+
+        if (Current.isWorldReady) callback();
+        else Current.worldReady += callback;
+    }
     
     // Setting config
     private static readonly JsonSerializerSettings Settings = new()
@@ -66,8 +111,16 @@ public class GameSession : MonoBehaviour
 
     private void RaiseWorldReady()
     {
-        IsWorldReady = true;
-        WorldReady?.Invoke();
+        isWorldReady = true;
+        Action handlers = worldReady;
+        worldReady = null; // auto-unsubscribe everyone that was waiting for us to be ready
+        handlers?.Invoke(); // fire every subscriber's ready event 
+    }
+
+    private void OnDestroy()
+    {
+        if (Current == this) Current = null;
+        worldReady = null;
     }
 
     public void Save(string path)
@@ -105,7 +158,7 @@ public class GameSession : MonoBehaviour
     private void Begin(WorldState state)
     {
         State = state;
-        Context = new WorldContext(new EntityRegistry());
+        Context = new WorldContext(new EntityRegistry(), gameBalance);
         
         foreach (var manager in gameManagers) manager.Restore(State, Context);
         foreach (var manager in gameManagers) manager.ResolveReferences(Context);
@@ -125,6 +178,8 @@ public class GameSession : MonoBehaviour
         if (startMode == StartMode.Scenario && devScenario != null) LoadFromJson(devScenario.text);
         else NewGame(devSeed);
     }
+    
+    // temporary, allows us to just use f5 and f9 to test whether the game can rebuild itself and save everything it needs to competently. Later this can just be refactored into a UI endpoint
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     private void Update()
     {

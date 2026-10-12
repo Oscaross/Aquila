@@ -7,7 +7,7 @@ public class EntityRegistry
 
     public void Register(IFindable entity)
     {
-        Debug.Assert(entity.Id != 0, $"{entity} has been registered without a valid ID!");
+        Debug.Assert(entity.Id != 0, $"{entity} has been registered without a valid ID! Did you forget to add it to the EntityStore on the save file? Do EntityStore<Model>.Add(Model)");
         
         entities.Add(entity.Id, entity);
     }

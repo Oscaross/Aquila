@@ -10,7 +10,7 @@ public class Building : MonoBehaviour, IEntity<BuildingModel>, IFindable
 
     private BuildingModel data;
 
-    public void Bind(BuildingModel model)
+    public void Bind(BuildingModel model, WorldContext ctx)
     {
         data = model;
         constraints = model.Constraints;

@@ -15,11 +15,9 @@ public class UnemployedBehaviour : ProfessionBehaviour
         Debug.Log("UnemployedBehaviour has been removed.");
     }
 
-    protected override void Awake()
+    protected override void OnWorldReady()
     {
-        base.Awake();
         legionBounds = Legion.ZoneManager.GetLegionBounds();
-        
         IdleLoop();
     }
 

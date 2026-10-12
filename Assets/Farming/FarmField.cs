@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// TODO: Refactor to use save logic!
 public class FarmField : SubjectWorkspace
 {
     [Header("Growth Logic")]
@@ -31,10 +32,8 @@ public class FarmField : SubjectWorkspace
     public override Profession RequiredProfession => Profession.Farmer;
     public override RectInt WorkingBounds => Building.FootprintInWorldSpace;
 
-    public override void Tick(float deltaGameSeconds)
+    public override void Tick()
     {
-        timeSinceLastPhaseSeconds += deltaGameSeconds;
-        
         while (timeSinceLastPhaseSeconds >= timeBetweenGrowthPhasesSeconds)
         {
             timeSinceLastPhaseSeconds -= timeBetweenGrowthPhasesSeconds;

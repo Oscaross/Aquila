@@ -8,15 +8,16 @@ public class EntityStore<T> where T : EntityData
     [JsonProperty] private readonly List<T> items = new();
     [JsonIgnore] public IReadOnlyList<T> Items => items;
 
-    public T Add(T record, IdAllocator ids)
+    public T Add(T record)
     {
-        // Check that we've not got an ID for this entity already
+        // A non-zero ID implies that this record has already been assigned an ID
         if (record.Id != 0) throw new InvalidOperationException($"{typeof(T).Name} already has id {record.Id}; added twice?");
-
-        if (GameSession.LogSavingToConsole) Debug.Log($"Successfully saved entity record for {record.GetType()}");
         
-        record.Id = ids.AllocateNewID();
+        record.Id = GameSession.Current.State.IdAllocator.AllocateNewID();
         items.Add(record);
+        
+        if (GameSession.LogSavingToConsole) Debug.Log($"Added {typeof(T)} record with id {record.Id}");
+        
         return record;
     }
 }

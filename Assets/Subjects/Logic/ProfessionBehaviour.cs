@@ -44,7 +44,12 @@ public abstract class ProfessionBehaviour : MonoBehaviour
         private set;
     }
 
-    protected virtual void Awake()
+    private void Awake()
+    {
+        GameSession.WhenWorldReady(OnWorldReady);
+    }
+
+    protected virtual void OnWorldReady()
     {
         Pathfinder = GetComponent<Pathfinder>();
         Subject = GetComponent<LegionSubject>();

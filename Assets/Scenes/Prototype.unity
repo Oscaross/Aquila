@@ -653,14 +653,14 @@ MonoBehaviour:
   maxRampExponent: 2
   illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   horizonY: 0
-  zenith: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 1}
+  zenith: {r: 0.09952313, g: 0.15290305, b: 0.17242397, a: 1}
   horizon: {r: 0, g: 0, b: 0, a: 0}
-  light: {r: 0.9452109, g: 0.8851799, b: 0.74268305, a: 1}
-  haze: {r: 0.70980394, g: 0.8235294, b: 0.8666667, a: 0.625}
+  light: {r: 0.32858112, g: 0.23520306, b: 0.16286325, a: 1}
+  haze: {r: 0.09952313, g: 0.15290305, b: 0.17242397, a: 0.625}
   globalLightTemperature: 0
-  currentSunrise: {fileID: 11400000, guid: 94f51f1c0ffdf7444b86b3a9ae86804a, type: 2}
-  currentSunset: {fileID: 11400000, guid: 431582ba40303144ba3784d9b0925c4c, type: 2}
-  currentRampExponent: 0.47729474
+  currentSunrise: {fileID: 11400000, guid: 9e4a54915e00e2945831e29199a477ea, type: 2}
+  currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
+  currentRampExponent: 1.8823621
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -874,10 +874,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5315599742043175043, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 49bb9f203d7943449bd98f1817312679, type: 2}
+    - target: {fileID: -5194253403836450630, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 49bb9f203d7943449bd98f1817312679, type: 2}
     - target: {fileID: -2253911629886400664, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
       propertyPath: m_Name
       value: Birch0
       objectReference: {fileID: 0}
+    - target: {fileID: 1539900624389793398, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 49bb9f203d7943449bd98f1817312679, type: 2}
     - target: {fileID: 3626916397498700004, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1543,7 +1555,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a1ba6bf693cf3341a1f2e1480c250a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4696725080858368681, guid: 385e031fc0c948f4986e6248032274d3, type: 3}
+  zonePrefabs:
+  - {fileID: 3491111788846008425, guid: a15259e4cd64d5a43957678f5b24f366, type: 3}
+  - {fileID: 1482997091483130999, guid: e3e7137bc5ee61f4b9ff6e1a92a73cd0, type: 3}
+  - {fileID: 3703342662095164069, guid: d41e97a98b824034dadda3228c10985d, type: 3}
   worldBounds:
     x: -300
     y: 0
@@ -2730,10 +2745,12 @@ MonoBehaviour:
   startMode: 0
   devSeed: 12345
   devScenario: {fileID: 0}
-  logSavingToConsole: 0
+  logSavingToConsole: 1
   gameManagers:
   - {fileID: 523121394}
   - {fileID: 152429220}
+  - {fileID: 1868031256}
+  gameBalance: {fileID: 11400000, guid: 943bcb4fa4998dc4b80eb256c5a43c7c, type: 2}
 --- !u!1 &1335300795
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,6 +3290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cbec91b3c135a24cae88a67fa26082e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialSubjectCount: 10
   subjectPrefab: {fileID: -6567341167364343380, guid: 8e107b4c3f7c4a44d9ee60d8560b1f1a, type: 3}
   professionDefinitions:
   - {fileID: 11400000, guid: 2013fbae4a914d144bb561c5718a0483, type: 2}

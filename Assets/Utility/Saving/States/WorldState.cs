@@ -14,5 +14,5 @@ public class WorldState
     [Header("Save Data")]
     public readonly ZoneState ZoneState = new();
     public readonly BuildingState BuildingState = new();
-    // public ForestState ForestState;
+    public readonly NPCState NPCState = new();
 }

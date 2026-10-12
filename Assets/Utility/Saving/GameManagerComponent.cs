@@ -24,4 +24,25 @@ public abstract class GameManagerComponent : MonoBehaviour
     /// </summary>
     /// <param name="context">The save-wide context containing things like the registry, which contains the ID => Instance mappings for any IFindable entity.</param>
     public virtual void ResolveReferences(WorldContext context) {}
+
+    /// <summary>
+    /// Spawns an instance of the object that the data model stored in JSON defines, registering it with the registry, calling its Bind method and putting it into the world.
+    /// </summary>
+    /// <param name="prefab">The prefab instance of the object to spawn.</param>
+    /// <param name="record">The data container specifying the data parameters of the specific object.</param>
+    /// <param name="position">Where it should be spawned (usually contained in the data model itself).</param>
+    /// <param name="context">The object containing context about the current save like the registry.</param>
+    /// <typeparam name="TView">The view of the data model. This is the version that the user sees and is re-instantiated each time a save is loaded. It is completely derived from the data model
+    /// and must be a MonoBehaviour as well as an Entity and IFindable, meaning it a stable ID that can be looked up and referred to by other objects in code.</typeparam>
+    /// <typeparam name="TModel">The data model that has been stored and is being reconstructed into the game. It must be an ISaveRecord so that the save system knows to serialise it into JSON.</typeparam>
+    /// <returns></returns>
+    protected TView Spawn<TView, TModel>(TView prefab, TModel record, Vector3 position, WorldContext context)
+        where TView : MonoBehaviour, IEntity<TModel>, IFindable
+        where TModel : ISaveRecord
+    {
+        TView view = Instantiate(prefab, position, Quaternion.identity, transform);
+        view.Bind(record, context);
+        context.Registry.Register(view);
+        return view;
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine;
 public class ZoneManager : GameManagerComponent
 {
     private List<Zone> zoneInstances = new();
-    [SerializeField] private Zone prefab;
+    [SerializeField] private Zone[] zonePrefabs;
     private EntityStore<ZoneModel> Zones => save.ZoneState.Zones;
     
     /// <summary>
@@ -48,23 +49,44 @@ public class ZoneManager : GameManagerComponent
     public void CreateNewZone(RectInt bounds, ZoneType type)
     {
         if (!ValidateZone(bounds, type)) return;
+
+        Zone prefab = PrefabFor(type);
+        if (prefab == null) return;
+
+        ZoneModel data = prefab.CreateModel(bounds);
+        Zone z = SetupZone(data, prefab);
         
-        var data = new ZoneModel(type, bounds.width, bounds.height, bounds.xMin, bounds.yMin);
-        Zones.Add(data, save.IdAllocator);
-        
-        SetupZone(data);
+        Zones.Add(data);
+        z.OnZoneCreated();
     }
 
     // Creates a zone from an existing data template
-    private void SetupZone(ZoneModel data)
+    private Zone SetupZone(ZoneModel data) => SetupZone(data, PrefabFor(data.Type));
+    
+    private Zone SetupZone(ZoneModel data, Zone prefab)
     {
-        Zone z = Instantiate(prefab, new Vector3(data.Bounds.xMin, data.Bounds.yMin, 0f), Quaternion.identity,
-            transform);
-        z.Bind(data);
+        Zone z = Instantiate(prefab, new Vector3(data.Bounds.xMin, data.Bounds.yMin, 0f), Quaternion.identity, transform);
+        z.Bind(data, context);
+        
         context.Registry.Register(z);
+        
+        z.gameObject.name = $"{z.Type.ToString()} @ [{z.Bounds.xMin},{z.Bounds.yMin}]";
         
         zoneInstances.Add(z);
         zoneInstances.Sort((a, b) => a.Bounds.xMin.CompareTo(b.Bounds.xMin)); // sort ascending so most -ve rectangular zones are first and most +ve are last
+        return z;
+    }
+
+    // Fetch the correct prefab for the given zone type so that it has its correct specific logic.
+    private Zone PrefabFor(ZoneType z)
+    {
+        foreach (var p in zonePrefabs)
+        {
+            if (p.Type == z) return p;
+        }
+
+        Debug.LogError($"No zone prefab exists for zone type {z.ToString()}!", this);
+        return null;
     }
     
     private bool ValidateZone(RectInt bounds, ZoneType type)
@@ -146,11 +168,27 @@ public class ZoneManager : GameManagerComponent
 
     public IReadOnlyList<Zone> GetAllZones() => zoneInstances;
 
+    #region Unity validation and development
+    
+    private void OnValidate()
+    {
+        HashSet<ZoneType> typesRequired = Enum.GetValues(typeof(ZoneType)).Cast<ZoneType>().ToHashSet();
+
+        typesRequired.Remove(ZoneType.Wilderness); // wilderness is not required for the prefab
+        
+        foreach (var z in zonePrefabs)
+        {
+            if (typesRequired.Contains(z.Type)) typesRequired.Remove(z.Type);
+        }
+        
+        if (typesRequired.Count > 0) Debug.LogError("The zone manager is missing zone types for the following types: " + string.Join(", ", typesRequired), this); 
+    }
+
     private void OnDrawGizmos()
     {
         if (save == null) return;
         
-        foreach (ZoneModel zone in Zones.Items)
+        foreach (Zone zone in zoneInstances)
         {
             RectInt r = zone.Bounds;
             var centre = new Vector3(r.xMin + r.width * 0.5f, r.yMin + r.height * 0.5f, 0f);
@@ -180,4 +218,6 @@ public class ZoneManager : GameManagerComponent
         ZoneType.Wilderness => Color.cyan,
         _ => Color.magenta
     };
+    
+    #endregion
 }
