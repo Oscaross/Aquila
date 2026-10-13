@@ -6,13 +6,18 @@ public class SkyController : MonoBehaviour
 {
     public static SkyController Instance { get; private set; }
     
+    [Header("Main Sky")]
+    
     [SerializeField] private HorizonPreset[] sunrises;
     [SerializeField] private HorizonPreset[] sunsets;
     [SerializeField] private float minRampExponent;
     [SerializeField] private float maxRampExponent;
     
     [SerializeField] private IlluminationProfile illumination;
-    [SerializeField] private float horizonY = 0f;
+
+    [Header("Clouds")] 
+    [Tooltip("The colour preset for each component of the cloud (high, middle and low part) that gets assigned to during the day/night. The sky colour lerps between this at sunrise/sunset.")]
+    [SerializeField] private CloudColours cloudColoursDay, cloudColoursNight;
     
     [Header("Runtime - FOR INSPECTION ONLY")]
     [SerializeField] private Color zenith;
@@ -38,6 +43,9 @@ public class SkyController : MonoBehaviour
     // This allows shaders like lit shaders to figure out, globally, where they should land on the ramp. Darkness peaks at midnight, and is a minimum at midday.
     private static readonly int DarknessID = Shader.PropertyToID("_GlobalDarkness");
     private static readonly int GlobalLightTemperatureID = Shader.PropertyToID("_GlobalLightTemperatureBlock");
+
+    static readonly int CloudColoursID = Shader.PropertyToID("_CloudColours");
+    static readonly Vector4[] CloudColoursBuffer = new Vector4[3];
     
     [SerializeField] private HorizonPreset currentSunrise;
     [SerializeField] private HorizonPreset currentSunset;
@@ -67,7 +75,8 @@ public class SkyController : MonoBehaviour
 
         UpdateIllumination(t);
         UpdateHorizon(t);
-        PublishGlobals(t);
+        UpdateCloudColours();
+        PublishGlobals(t); // comes last because it's after we've evaluated everything for this frame
     }
     
     /// <summary>
@@ -93,11 +102,12 @@ public class SkyController : MonoBehaviour
         Shader.SetGlobalFloat(LightIntensityID, intensity);
         Shader.SetGlobalFloat(GlobalLightTemperatureID, (int) globalLightTemperature);
         Shader.SetGlobalColor(HazeColorID, Haze);
-        Shader.SetGlobalFloat(HorizonYID, horizonY);
+        Shader.SetGlobalFloat(HorizonYID, GlobalConstants.GroundY);
         Shader.SetGlobalColor(HorizonColorID, Horizon);
         Shader.SetGlobalColor(ZenithColorID, Zenith);
         Shader.SetGlobalColor(LightColorID, Light);
         Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
+        Shader.SetGlobalVectorArray(CloudColoursID, CloudColoursBuffer);
     }
 
     /// <summary>
@@ -144,9 +154,31 @@ public class SkyController : MonoBehaviour
     {
         Debug.Assert(sunrises.Length > 0 && sunsets.Length > 0);
 
-        currentSunrise =  sunrises[Random.Range(0, sunrises.Length)];
+        currentSunrise = sunrises[Random.Range(0, sunrises.Length)];
         currentSunset = sunsets[Random.Range(0, sunsets.Length)];
         
         currentRampExponent = Random.Range(minRampExponent, maxRampExponent);
+    }
+
+    /// <summary>
+    /// Smoothly interpolates cloud colour between nighttime, day time, and (eventually) storm clouds.
+    /// Randomly tints clouds at sunset/sunrise.
+    /// </summary>
+    /// <param name="t"></param>
+    private void UpdateCloudColours()
+    {
+        float n = NightWeight();
+        CloudColoursBuffer[0] = Color.Lerp(cloudColoursDay.high, cloudColoursNight.high, n).linear;
+        CloudColoursBuffer[1] = Color.Lerp(cloudColoursDay.mid,  cloudColoursNight.mid,  n).linear;
+        CloudColoursBuffer[2] = Color.Lerp(cloudColoursDay.low,  cloudColoursNight.low,  n).linear;
+        Shader.SetGlobalVectorArray(CloudColoursID, CloudColoursBuffer);
+    }
+    
+    private static float NightWeight()
+    {
+        float t = GameClock.Now;
+        if (GameClock.TryGetSunriseProgress(t, out float p)) return 1f - Mathf.SmoothStep(0f, 1f, p);
+        if (GameClock.TryGetSunsetProgress(t, out p)) return Mathf.SmoothStep(0f, 1f, p);
+        return GameClock.IsNight ? 1f : 0f;
     }
 }

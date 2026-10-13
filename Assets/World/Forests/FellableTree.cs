@@ -78,14 +78,16 @@ public class FellableTreeData : EntityData
     [JsonConstructor]
     public FellableTreeData() {}
     
-    public FellableTreeData(int maxHealth, int xPosPx, string speciesID)
+    public FellableTreeData(int maxHealth, int xPosPx, string speciesID, int zoneID)
     {
         Health = maxHealth;
         XPosPx = xPosPx;
         SpeciesID = speciesID;
+        ZoneID = zoneID;
     }
     
     public int Health;
+    public int ZoneID;
     public long PlantedAtTick;
     public int XPosPx;
     public bool HasBeenFelled;

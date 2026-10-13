@@ -46,7 +46,7 @@ public class ZoneManager : GameManagerComponent
     /// </summary>
     /// <param name="bounds">The bounding box of this zone, a rectangle with integer height, width and vertices.</param>
     /// <param name="type">The type of the zone i.e. Legion, Arable, Forest...</param>
-    public void CreateNewZone(RectInt bounds, ZoneType type)
+    private void CreateNewZone(RectInt bounds, ZoneType type)
     {
         if (!ValidateZone(bounds, type)) return;
 
@@ -54,9 +54,9 @@ public class ZoneManager : GameManagerComponent
         if (prefab == null) return;
 
         ZoneModel data = prefab.CreateModel(bounds);
+        Zones.Add(data);
         Zone z = SetupZone(data, prefab);
         
-        Zones.Add(data);
         z.OnZoneCreated();
     }
 
@@ -73,7 +73,7 @@ public class ZoneManager : GameManagerComponent
         z.gameObject.name = $"{z.Type.ToString()} @ [{z.Bounds.xMin},{z.Bounds.yMin}]";
         
         zoneInstances.Add(z);
-        zoneInstances.Sort((a, b) => a.Bounds.xMin.CompareTo(b.Bounds.xMin)); // sort ascending so most -ve rectangular zones are first and most +ve are last
+        zoneInstances.Sort((a, b) => a.Bounds.xMin.CompareTo(b.Bounds.xMin)); // sort ascending 
         return z;
     }
 

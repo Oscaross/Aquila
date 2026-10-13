@@ -10,7 +10,7 @@ public class ForestryBalance : ScriptableObject
     [Tooltip("What proportion of the total capacity of a forest zone starts covered by trees at world gen.")]
     [Range(0f, 1f)] public float perForestCarryingCapacity = 0.4f;
     [Tooltip("No tree's centre can be closer than this value to another tree's centre.")]
-    [Range(0.25f, 2f)] public float minTreeSeparationWorldUnits = 0.5f;
+    [Range(0, 32)] public int minTreeSeparationPx = 8;
     
     public FellableTree treePrefab;
 }

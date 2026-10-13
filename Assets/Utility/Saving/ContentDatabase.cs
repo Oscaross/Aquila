@@ -42,6 +42,8 @@ public static class ContentRegistry
         var dict = new Dictionary<string, ContentAsset>();
         foreach (ContentAsset a in Resources.LoadAll<ContentAsset>("Content"))
         {
+            if (string.IsNullOrEmpty(a.Key))
+                throw new InvalidOperationException($"Empty/null content key found in the asset file {a.name}!");
             if (!dict.TryAdd(a.Key, a))
                 throw new InvalidOperationException($"Duplicate content key found at key {a.Key}!");
         }
@@ -49,7 +51,7 @@ public static class ContentRegistry
         return dict;
     }
     
-    // This makes sure that when we're adding new ScriptableObjects the registry recaches each time we recompile and updates with the new key
+    // This makes sure that when we're adding new ScriptableObjects the registry recaches each time play mode is entered/exited so that new assets are detected between playtests.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Reset() => _keyedAssets = null;
     

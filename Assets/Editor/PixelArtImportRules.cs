@@ -39,6 +39,7 @@ public class PixelArtImportRules : AssetPostprocessor
     void OnPreprocessAsset()
     {
         if (assetImporter is not AsepriteImporter ase) return;
+        if (!assetImporter.importSettingsMissing) return; // Important! Stops us from changing ALL our pivots we've set up from before...
 
         ase.pivotSpace = PivotSpaces.Local;
         ase.pivotAlignment = SpriteAlignment.BottomLeft;

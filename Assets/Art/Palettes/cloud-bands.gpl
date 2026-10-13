@@ -1,0 +1,8 @@
+GIMP Palette
+Name: Cloud Bands
+Channels: RGBA
+#
+255 255 255 255	Highlight
+170 170 170 255	Body
+ 85  85  85 255	Shadow
+170 170 170 170	Fringe

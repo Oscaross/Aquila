@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebc80ea479ea7064ea41a3cc7115640d, type: 3}
   m_Name: GameBalance
   m_EditorClassIdentifier: 
-  Forestry: {fileID: 11400000, guid: e857b4deac196aa4c9a9f447084b2207, type: 2}
+  forestry: {fileID: 11400000, guid: e857b4deac196aa4c9a9f447084b2207, type: 2}

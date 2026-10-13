@@ -56,19 +56,14 @@ public class GameClock : MonoBehaviour
 
     private void Update()
     {
-        float prev = 0f;
+        float prev = Now;
         
-        if (scrubTime != Now)
-        {
-            prev = Now;
-            Now = scrubTime;
-        }
+        if (scrubTime != Now) Now = scrubTime;
         
         if (!IsPaused)
         {
             float dt = Time.deltaTime * timeMultiplier;
-            prev = Now;
-
+            
             ElapsedSeconds += dt;
             Now = Mathf.Repeat(Now + dt / dayLengthSeconds, 1f);
         }

@@ -6,12 +6,13 @@ public class ForestZone : Zone<ForestZoneModel>
 {
     #region Boilerplate
     public override ZoneType Type => ZoneType.Forest;
+
+    private EntityStore<FellableTreeData> TreeData => GameSession.Current.State.ZoneState.FellableTrees;
     
     protected override void OnBind(WorldContext context)
     {
-        allSpeciesAssets = ContentRegistry.All<TreeSpecies>().ToList();
-        
-        foreach (var t in Model.FellableTrees)
+        // load trees from save and reconstruct them
+        foreach (var t in TreeData.Items.Where(data => !data.HasBeenFelled && data.ZoneID == Id))
         {
             SpawnTree(t, context);
         }
@@ -20,23 +21,11 @@ public class ForestZone : Zone<ForestZoneModel>
     #endregion
 
     private List<FellableTree> treeInstances = new();
-    // Simply a list of the available tree species and their properties we can choose from.
-    private List<TreeSpecies> allSpeciesAssets;
 
-    private void CreateNewTree(int xPos, WorldContext context)
+    private void CreateNewTree(FellableTreeData data, WorldContext context)
     {
-        var data = new FellableTreeData(context.Balance.forestry.treeMaxHealth, xPos, GetRandomTreeSpeciesID(xPos, TreeSpeciesType.Birch));
+        TreeData.Add(data);
         SpawnTree(data, context);
-    }
-
-    private string GetRandomTreeSpeciesID(int xPos, TreeSpeciesType t)
-    {
-        var treesOfType = allSpeciesAssets.FindAll(a => a.type == t);
-
-        if (treesOfType.Count == 0) return treesOfType[Pseudorandom.HashRange(0, treesOfType.Count - 1, xPos, ForestGenerator.TreeSpawnPosSalt)].Key;
- 
-        Debug.Log($"No trees of type {t.ToString()} were found to return from the content registry!", this);
-        return null;
     }
 
     private void SpawnTree(FellableTreeData tree, WorldContext context)
@@ -62,12 +51,11 @@ public class ForestZone : Zone<ForestZoneModel>
 
     public override void OnZoneCreated()
     {
-        var newTrees = ForestGenerator.GenerateForest(this, 0.4f, ForestPresets);
+        var newTrees = ForestGenerator.GenerateForest(this, 0.5f, ForestPresets, GameSession.Current.Context.Balance.forestry);
 
         foreach (var t in newTrees)
         {
-            GameSession.Current.State.ZoneState.FellableTrees.Add(t); // make a record of this tree so it persists
-            SpawnTree(t, GameSession.Current.Context);
+            CreateNewTree(t, GameSession.Current.Context);
         }
     }
 
@@ -87,5 +75,5 @@ public class ForestZone : Zone<ForestZoneModel>
 
 public class ForestZoneModel : ZoneModel
 {
-    public List<FellableTreeData> FellableTrees = new();
+    
 }

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Birch0
   m_EditorClassIdentifier: 
   key: trees:birch0
-  trunk: {fileID: 0}
+  type: 0
+  trunk: {fileID: 2884232290961432929, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
   saplings: []
-  leaves: {fileID: 0}
-  stump: {fileID: 0}
+  leaves: {fileID: 4918193508451546654, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
+  stump: {fileID: 2884232290961432929, guid: c31531f0e0183a14db17155a23aff34d, type: 3}
