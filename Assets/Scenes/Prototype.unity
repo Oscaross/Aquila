@@ -657,17 +657,17 @@ MonoBehaviour:
     mid: {r: 0.69836235, g: 0.7258526, b: 0.735849, a: 0}
     low: {r: 0.62702024, g: 0.6395759, b: 0.645283, a: 0}
   cloudColoursNight:
-    high: {r: 0, g: 0, b: 0, a: 0}
-    mid: {r: 0, g: 0, b: 0, a: 0}
-    low: {r: 0, g: 0, b: 0, a: 0}
-  zenith: {r: 0.19976689, g: 0.3235098, b: 0.36488622, a: 1}
-  horizon: {r: 0.642266, g: 0.28645703, b: 0.12117346, a: 1}
-  light: {r: 0.9438827, g: 0.6221273, b: 0.27436742, a: 1}
-  haze: {r: 0.36570406, g: 0.30961502, b: 0.27349395, a: 0.625}
-  globalLightTemperature: 1
-  currentSunrise: {fileID: 11400000, guid: 94f51f1c0ffdf7444b86b3a9ae86804a, type: 2}
+    high: {r: 0.2057601, g: 0.2057601, b: 0.21509439, a: 0}
+    mid: {r: 0.11912423, g: 0.11912423, b: 0.12452829, a: 0}
+    low: {r: 0.080405794, g: 0.083599105, b: 0.08679241, a: 0}
+  zenith: {r: 0.02352941, g: 0.02352941, b: 0.027450979, a: 1}
+  horizon: {r: 0, g: 0, b: 0, a: 0}
+  light: {r: 0.11372548, g: 0.10588235, b: 0.13333334, a: 1}
+  haze: {r: 0.02352941, g: 0.02352941, b: 0.027450979, a: 0.5}
+  globalLightTemperature: 0
+  currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
   currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
-  currentRampExponent: 0.416605
+  currentRampExponent: 1.7374884
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -781,8 +781,13 @@ MonoBehaviour:
   bands:
   - {fileID: 333005632}
   - {fileID: 582400675}
-  windSpeed: 0.01
+  windSpeed: 0.05
   windDirection: -1
+  midBandWindSpeedMultiplier: 0.6
+  farBandWindSpeedMultiplier: 0.1
+  nearCloudCount: 12
+  midCloudCount: 8
+  farCloudCount: 5
 --- !u!1 &333005631
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 333005633}
   - component: {fileID: 333005632}
+  - component: {fileID: 333005634}
   m_Layer: 9
   m_Name: FarBand
   m_TagString: Untagged
@@ -817,6 +823,8 @@ MonoBehaviour:
   - {fileID: -5317622603132893343, guid: 1ab25ddbcb8ea914b8c89e1973636b27, type: 3}
   - {fileID: -7869742088129034377, guid: 67d7cefa9dbe54843bb552b44f4e6789, type: 3}
   - {fileID: 7223320455488363513, guid: e6e24199528b30a41b05ba6e270034b2, type: 3}
+  - {fileID: -5677066917540637720, guid: 6e562010d5241ff4fbc116ca5e14cb7f, type: 3}
+  - {fileID: 404227939409327133, guid: d80d11507c8b1d145a7ab78a8359f6ab, type: 3}
   yBounds: {x: 0.5, y: 0.6}
   margin: 4
   bandType: 2
@@ -836,6 +844,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 294650783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333005634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333005631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5894814bfe72b14d90a63c711fc7cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parallaxFactor: 0.001
 --- !u!1 &355767445
 GameObject:
   m_ObjectHideFlags: 0
@@ -2052,6 +2073,7 @@ GameObject:
   m_Component:
   - component: {fileID: 582400674}
   - component: {fileID: 582400675}
+  - component: {fileID: 582400676}
   m_Layer: 0
   m_Name: MidBand
   m_TagString: Untagged
@@ -2089,10 +2111,24 @@ MonoBehaviour:
   sprites:
   - {fileID: 307458652544915395, guid: 1a743fdc905edc5469980f41fc264e08, type: 3}
   - {fileID: -1258161935376733442, guid: 3e9274d986a5fe640ac3bb2fa5188459, type: 3}
-  yBounds: {x: 0.6, y: 0.75}
+  - {fileID: 11901121416013167, guid: fdb9fb9ee0bb40b4196340c23ed2034c, type: 3}
+  yBounds: {x: 0.65, y: 0.75}
   margin: 4
   bandType: 1
   cloudMaterial: {fileID: 2100000, guid: 64c18b92cfdcec744a8ee35ac8537ec1, type: 2}
+--- !u!114 &582400676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582400673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5894814bfe72b14d90a63c711fc7cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parallaxFactor: 0.04
 --- !u!1 &626013582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,7 +2265,7 @@ Transform:
   m_GameObject: {fileID: 626745556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20, y: -3.34, z: 0}
+  m_LocalPosition: {x: 0, y: -3.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3360,7 +3396,7 @@ Transform:
   m_GameObject: {fileID: 1988298494}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20, y: -5, z: 0}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

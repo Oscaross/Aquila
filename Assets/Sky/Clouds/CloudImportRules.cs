@@ -30,8 +30,7 @@ public class CloudImportRules : AssetPostprocessor
         // the shader compares them against hardcoded gamma-space keys.
         ase.sRGBTexture = false;
 
-        // Plain quad: Tight meshes can clip pixels diagonally, especially fringes.
-        ase.spriteMeshType = SpriteMeshType.FullRect;
+        ase.spriteMeshType = SpriteMeshType.Tight;
 
         // Only the sprite is used: CloudBand creates the GameObjects/SpriteRenderers at runtime,
         // so the importer's generated prefab is never used, and the art isn't animated.

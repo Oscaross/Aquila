@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -8,11 +7,19 @@ using UnityEngine;
 
 public class CloudManager : MonoBehaviour
 {
+    // The wind speed is applied to clouds in the near band. The mid band and far band move according to the speed * the multiplier as defined below.
+    
     [SerializeField] private List<CloudBand> bands;
     
     [SerializeField] private float windSpeed = 1f;
     [SerializeField] private Direction windDirection = Direction.Left;
+    [SerializeField] private float midBandWindSpeedMultiplier = 0.9f;
+    [SerializeField] private float farBandWindSpeedMultiplier = 0.5f;
 
+    [SerializeField] private int nearCloudCount = 12;
+    [SerializeField] private int midCloudCount = 8;
+    [SerializeField] private int farCloudCount = 5;
+    
     private void Start()
     {
         foreach (CloudBand band in bands)
@@ -20,13 +27,13 @@ public class CloudManager : MonoBehaviour
             switch (band.bandType)
             {
                 case CloudType.Near:
-                    band.SpawnClouds(10);
+                    band.SpawnClouds(nearCloudCount);
                     break;
                 case CloudType.Mid:
-                    band.SpawnClouds(5);
+                    band.SpawnClouds(midCloudCount);
                     break;
                 case CloudType.Far:
-                    band.SpawnClouds(15);
+                    band.SpawnClouds(farCloudCount);
                     break;
             }
         }
@@ -36,7 +43,16 @@ public class CloudManager : MonoBehaviour
     {
         foreach (var band in bands)
         {
-            band.MoveClouds(windSpeed, windDirection);
+            band.MoveClouds(SpeedFor(band.bandType), windDirection);
         }
     }
+
+    // Scale the speed by the speed scaling factor for this band so further clouds move at a slower rate than nearer bands.
+    private float SpeedFor(CloudType t) => t switch
+    {
+        CloudType.Near => windSpeed,
+        CloudType.Mid => windSpeed * midBandWindSpeedMultiplier,
+        CloudType.Far => windSpeed * farBandWindSpeedMultiplier,
+        _ => 0f,
+    };
 }

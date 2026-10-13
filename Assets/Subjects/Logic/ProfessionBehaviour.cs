@@ -68,8 +68,8 @@ public abstract class ProfessionBehaviour : MonoBehaviour
     public void AssignToWorkspace(SubjectWorkspace workspace)
     {
         if (Workspace != null) ReleaseWorkspace();
-
-        Pathfinder.StopPathfinding(); // prevent the pathfinder from calling anything else
+        
+        if (Pathfinder != null) Pathfinder.StopPathfinding(); // prevent the pathfinder from calling anything else
         Workspace = workspace;
 
         if (workspace == null)

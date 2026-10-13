@@ -169,11 +169,12 @@ public class SkyController : MonoBehaviour
     {
         float n = NightWeight();
         CloudColoursBuffer[0] = Color.Lerp(cloudColoursDay.high, cloudColoursNight.high, n).linear;
-        CloudColoursBuffer[1] = Color.Lerp(cloudColoursDay.mid,  cloudColoursNight.mid,  n).linear;
-        CloudColoursBuffer[2] = Color.Lerp(cloudColoursDay.low,  cloudColoursNight.low,  n).linear;
+        CloudColoursBuffer[1] = Color.Lerp(cloudColoursDay.mid, cloudColoursNight.mid, n).linear;
+        CloudColoursBuffer[2] = Color.Lerp(cloudColoursDay.low, cloudColoursNight.low, n).linear;
         Shader.SetGlobalVectorArray(CloudColoursID, CloudColoursBuffer);
     }
     
+    // How much the cloud's night weight colour contributes vs the day weight. A shorthand for making it so that nighttime cloud colours fade in and out during the night.
     private static float NightWeight()
     {
         float t = GameClock.Now;
