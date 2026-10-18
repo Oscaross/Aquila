@@ -25,7 +25,7 @@ public class FellableTree : MonoBehaviour, IEntity<FellableTreeData>, IFindable
     public void Bind(FellableTreeData model, WorldContext save)
     {
         data = model;
-        ResolveSprites();
+        ResolveSprites(); 
     }
 
     public void Refresh(long currentTick)

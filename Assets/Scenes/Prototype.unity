@@ -649,9 +649,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 324aa49761b32ce4bbb23b6c88415362, type: 2}
   - {fileID: 11400000, guid: 988363a0a40a16c4585ddb5dc75c993d, type: 2}
   - {fileID: 11400000, guid: e3d74ecf355a9e24ab75a22b9ed4b5a8, type: 2}
+  twilightProbability: 0.5
+  illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   minRampExponent: 0.4
   maxRampExponent: 2
-  illumination: {fileID: 11400000, guid: e7ab7faffff4d6d428d8f8c1ec25362f, type: 2}
   cloudColoursDay:
     high: {r: 0.81035954, g: 0.83110136, b: 0.83396226, a: 0}
     mid: {r: 0.69836235, g: 0.7258526, b: 0.735849, a: 0}
@@ -665,9 +666,14 @@ MonoBehaviour:
   light: {r: 0.11372548, g: 0.10588235, b: 0.13333334, a: 1}
   haze: {r: 0.02352941, g: 0.02352941, b: 0.027450979, a: 0.5}
   globalLightTemperature: 0
+  currentTwilightStrength: 0
+  isTwilightActive: 0
+  cloudColours:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
   currentSunrise: {fileID: 11400000, guid: 533cb62a50469e14d8445ac053ef3b60, type: 2}
   currentSunset: {fileID: 11400000, guid: 3abe8c69faeb7c54e8134251d8c4328b, type: 2}
-  currentRampExponent: 1.7374884
 --- !u!4 &214148986
 Transform:
   m_ObjectHideFlags: 0
@@ -748,7 +754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &294650783
 Transform:
   m_ObjectHideFlags: 0

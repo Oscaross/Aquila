@@ -1,7 +1,6 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[ExecuteAlways]
 public class SkyController : MonoBehaviour
 {
     public static SkyController Instance { get; private set; }
@@ -10,10 +9,10 @@ public class SkyController : MonoBehaviour
     
     [SerializeField] private HorizonPreset[] sunrises;
     [SerializeField] private HorizonPreset[] sunsets;
-    [SerializeField] private float minRampExponent;
-    [SerializeField] private float maxRampExponent;
-    
+    [SerializeField] private float twilightProbability = 0.5f;
     [SerializeField] private IlluminationProfile illumination;
+    [SerializeField] private float minRampExponent = 0.2f;
+    [SerializeField] private float maxRampExponent = 1.5f;
 
     [Header("Clouds")] 
     [Tooltip("The colour preset for each component of the cloud (high, middle and low part) that gets assigned to during the day/night. The sky colour lerps between this at sunrise/sunset.")]
@@ -25,6 +24,12 @@ public class SkyController : MonoBehaviour
     [SerializeField] private Color light;
     [SerializeField] private Color haze;
     [SerializeField] private LightTemperature globalLightTemperature;
+    [Tooltip("How spectacular the sunrise/sunset is. Deterministic by the seed and day counter, set for each sunrise/sunset separately. " +
+             "All atmospheric effects around sunrise/sunset consume from this value, such as the strength of sunrise/sunset, cloud colour, haze colour, etc...")]
+    [SerializeField] private float currentTwilightStrength;
+
+    [SerializeField] private bool isTwilightActive;
+    [SerializeField] private Color[] cloudColours = new Color[3];
     
     public Color Zenith { get => zenith; private set => zenith = value; }
     public Color Horizon { get => horizon; private set => horizon = value; }
@@ -39,18 +44,25 @@ public class SkyController : MonoBehaviour
     private static readonly int ZenithColorID = Shader.PropertyToID("_GlobalZenithColor");
     private static readonly int LightColorID = Shader.PropertyToID("_GlobalLightColor");
     private static readonly int LightIntensityID = Shader.PropertyToID("_GlobalLightIntensity");
+    private static readonly int TwilightStrengthID = Shader.PropertyToID("_GlobalTwilightStrength");
     private static readonly int RampExponentID = Shader.PropertyToID("_GlobalRampExponent");
+    
     // This allows shaders like lit shaders to figure out, globally, where they should land on the ramp. Darkness peaks at midnight, and is a minimum at midday.
     private static readonly int DarknessID = Shader.PropertyToID("_GlobalDarkness");
     private static readonly int GlobalLightTemperatureID = Shader.PropertyToID("_GlobalLightTemperatureBlock");
 
-    static readonly int CloudColoursID = Shader.PropertyToID("_CloudColours");
-    static readonly Vector4[] CloudColoursBuffer = new Vector4[3];
+    private static readonly int HiCloudID = Shader.PropertyToID("_CloudHi");
+    private static readonly int MidCloudID = Shader.PropertyToID("_CloudMid");
+    private static readonly int LoCloudID = Shader.PropertyToID("_CloudLo");
+
+    private static readonly int TwilightSalt = Pseudorandom.SaltOf("daynight-twilight");
+    private static readonly int TwilightStrengthSalt = Pseudorandom.SaltOf("daynight-twilight-strength");
     
     [SerializeField] private HorizonPreset currentSunrise;
     [SerializeField] private HorizonPreset currentSunset;
-    [SerializeField] private float currentRampExponent;
 
+    private void Start() => ConfigureNewHorizonPreset();
+    
     private void OnEnable()
     {
         if (illumination == null || currentSunrise == null || currentSunset == null)
@@ -59,7 +71,6 @@ public class SkyController : MonoBehaviour
             enabled = false;
         }
         
-        ConfigureNewHorizonPreset();
         Instance = this;
         GameClock.OnNoon += ConfigureNewHorizonPreset;
     }
@@ -86,7 +97,7 @@ public class SkyController : MonoBehaviour
     private void UpdateIllumination(float t)
     {
         zenith = illumination.zenithColour.Evaluate(t);
-        light  = illumination.lightColour.Evaluate(t);
+        light = illumination.lightColour.Evaluate(t);
     }
 
     /// <summary>
@@ -106,8 +117,11 @@ public class SkyController : MonoBehaviour
         Shader.SetGlobalColor(HorizonColorID, Horizon);
         Shader.SetGlobalColor(ZenithColorID, Zenith);
         Shader.SetGlobalColor(LightColorID, Light);
-        Shader.SetGlobalFloat(RampExponentID, currentRampExponent);
-        Shader.SetGlobalVectorArray(CloudColoursID, CloudColoursBuffer);
+        Shader.SetGlobalFloat(RampExponentID, RampExponent);
+        Shader.SetGlobalFloat(TwilightStrengthID, currentTwilightStrength);
+        Shader.SetGlobalColor(HiCloudID, cloudColours[0]);
+        Shader.SetGlobalColor(MidCloudID, cloudColours[1]);
+        Shader.SetGlobalColor(LoCloudID, cloudColours[2]);
     }
 
     /// <summary>
@@ -124,7 +138,7 @@ public class SkyController : MonoBehaviour
         {
             globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunrise.horizonColour.Evaluate(p1);
-            horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p1 * Mathf.PI));
+            horizonStrength = GetHorizonStrength(p1);
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
             hazeBias = currentSunrise.hazeHorizonBias;
         }
@@ -132,7 +146,7 @@ public class SkyController : MonoBehaviour
         {
             globalLightTemperature = LightTemperature.MILDWARM;
             Color c = currentSunset.horizonColour.Evaluate(p2);
-            horizonStrength = Mathf.SmoothStep(0f, 1f, Mathf.Sin(p2 * Mathf.PI));
+            horizonStrength = GetHorizonStrength(p2);
             horizon = new Color(c.r, c.g, c.b, ShaderController.QuantiseAlpha(horizonStrength));
             hazeBias = currentSunset.hazeHorizonBias;
         }
@@ -157,8 +171,27 @@ public class SkyController : MonoBehaviour
         currentSunrise = sunrises[Random.Range(0, sunrises.Length)];
         currentSunset = sunsets[Random.Range(0, sunsets.Length)];
         
-        currentRampExponent = Random.Range(minRampExponent, maxRampExponent);
+        isTwilightActive = Pseudorandom.Hash01(GameClock.Day, TwilightSalt) > 1 - twilightProbability;
+        currentTwilightStrength = RandomTwilightStrength();
     }
+
+    // How much the horizon contributes vs. the zenith during sunrise/sunset.
+    private float GetHorizonStrength(float intensity)
+    {
+        return isTwilightActive ? Mathf.SmoothStep(0f, 1f, Mathf.Sin(intensity * Mathf.PI)) : 0f;
+    }
+    
+
+    /// <summary>
+    /// Depending on the key, returns the twilight strength for this day and seed. Returns 0 if we do not exceed the twilight probability for this day.
+    /// </summary>
+    /// <returns></returns>
+    private float RandomTwilightStrength() =>
+        isTwilightActive ? Pseudorandom.HashRange(1, 11, GameClock.Day, TwilightStrengthSalt) / 10f : 0f;
+
+    private float RampExponent => currentTwilightStrength == 0
+        ? 0f
+        : Mathf.Lerp(minRampExponent, maxRampExponent, currentTwilightStrength);
 
     /// <summary>
     /// Smoothly interpolates cloud colour between nighttime, day time, and (eventually) storm clouds.
@@ -168,10 +201,10 @@ public class SkyController : MonoBehaviour
     private void UpdateCloudColours()
     {
         float n = NightWeight();
-        CloudColoursBuffer[0] = Color.Lerp(cloudColoursDay.high, cloudColoursNight.high, n).linear;
-        CloudColoursBuffer[1] = Color.Lerp(cloudColoursDay.mid, cloudColoursNight.mid, n).linear;
-        CloudColoursBuffer[2] = Color.Lerp(cloudColoursDay.low, cloudColoursNight.low, n).linear;
-        Shader.SetGlobalVectorArray(CloudColoursID, CloudColoursBuffer);
+        cloudColours[0] = Color.Lerp(cloudColoursDay.high, cloudColoursNight.high, n).linear;
+        cloudColours[1] = Color.Lerp(cloudColoursDay.mid, cloudColoursNight.mid, n).linear;
+        cloudColours[2] = Color.Lerp(cloudColoursDay.low, cloudColoursNight.low, n).linear;
+        
     }
     
     // How much the cloud's night weight colour contributes vs the day weight. A shorthand for making it so that nighttime cloud colours fade in and out during the night.
