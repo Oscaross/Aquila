@@ -36,18 +36,14 @@ public class ZoneManager : GameManagerComponent
 
     public override void GenerateNewWorld()
     {
-        CreateNewZone(new RectInt(-50, 0, 100, 10), ZoneType.Legion);
-        CreateNewZone(new RectInt(-100, 0, 40, 10), ZoneType.Arable);
-        CreateNewZone(new RectInt(50, 0, 70, 10), ZoneType.Forest);
+        CreateNewZone(-32, 64, ZoneType.Legion);
+        CreateNewZone(32, 64, ZoneType.Arable);
+        CreateNewZone(-96, 64, ZoneType.Forest);
     }
-
-    /// <summary>
-    /// Creates a zone object and saves it. 
-    /// </summary>
-    /// <param name="bounds">The bounding box of this zone, a rectangle with integer height, width and vertices.</param>
-    /// <param name="type">The type of the zone i.e. Legion, Arable, Forest...</param>
-    private void CreateNewZone(RectInt bounds, ZoneType type)
+    
+    private void CreateNewZone(int xMin, int width, ZoneType type)
     {
+        var bounds = new RectInt(xMin, 0, width, GlobalConstants.ZoneHeightWorldUnits);
         if (!ValidateZone(bounds, type)) return;
 
         Zone prefab = PrefabFor(type);
@@ -104,6 +100,13 @@ public class ZoneManager : GameManagerComponent
         if (bounds.xMin < WorldBounds.xMin || bounds.xMax > WorldBounds.xMax)
         {
             Debug.LogError("Can't have a zone that is outside of the world area!");
+            return false;
+        }
+        
+        // Check this zone is a multiple of the zone width multiplier
+        if (bounds.width % GlobalConstants.ZoneWidthMultipleWorldUnits != 0)
+        {
+            Debug.LogError($"A zone was created with width {bounds.width} but all zones must be width {GlobalConstants.ZoneWidthMultipleWorldUnits} world units wide!");
             return false;
         }
 

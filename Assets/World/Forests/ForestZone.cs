@@ -51,12 +51,12 @@ public class ForestZone : Zone<ForestZoneModel>
 
     public override void OnZoneCreated()
     {
-        var newTrees = ForestGenerator.GenerateForest(this, 0.5f, ForestPresets, GameSession.Current.Context.Balance.forestry);
-
-        foreach (var t in newTrees)
-        {
-            CreateNewTree(t, GameSession.Current.Context);
-        }
+        // var newTrees = ForestGenerator.GenerateForest(this, 0.5f, ForestPresets, GameSession.Current.Context.Balance.forestry);
+        //
+        // foreach (var t in newTrees)
+        // {
+        //     CreateNewTree(t, GameSession.Current.Context);
+        // }
     }
 
     #endregion

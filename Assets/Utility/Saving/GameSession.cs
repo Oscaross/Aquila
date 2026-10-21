@@ -28,7 +28,7 @@ public class GameSession : MonoBehaviour
     /// </summary>
     public static GameSession Current { get; private set; }
 
-    private event Action worldReady;
+    private event Action WorldReady;
 
     public static bool LogSavingToConsole;
 
@@ -72,12 +72,25 @@ public class GameSession : MonoBehaviour
 
     private bool isWorldReady;
 
+    /// <summary>
+    /// When all managers have ran Restore() and all references are resolved, any callback passed to this function is invoked. Use this for methods that should run at the instant after a save file is fully reconstructed.
+    /// </summary>
+    /// <param name="callback">The function to invoke.</param>
     public static void WhenWorldReady(Action callback)
     {
-        if (Current == null) { Debug.LogError("No GameSession instance exists in the scene."); }
+        if (Current == null)
+        {
+            Debug.LogError("No GameSession instance exists in the scene.");
+            return;
+        }
 
-        if (Current.isWorldReady) callback();
-        else Current.worldReady += callback;
+        if (Current.isWorldReady)
+        {
+            Debug.Log("World is ready! Firing WhenWorldReady subscribers...");
+            callback();
+        }
+        
+        else Current.WorldReady += callback;
     }
     
     // Setting config
@@ -112,15 +125,16 @@ public class GameSession : MonoBehaviour
     private void RaiseWorldReady()
     {
         isWorldReady = true;
-        Action handlers = worldReady;
-        worldReady = null; // auto-unsubscribe everyone that was waiting for us to be ready
+        
+        Action handlers = WorldReady;
+        WorldReady = null; // auto-unsubscribe everyone that was waiting for us to be ready
         handlers?.Invoke(); // fire every subscriber's ready event 
     }
 
     private void OnDestroy()
     {
         if (Current == this) Current = null;
-        worldReady = null;
+        WorldReady = null;
     }
 
     public void Save(string path)
@@ -152,7 +166,7 @@ public class GameSession : MonoBehaviour
         Debug.Log("Generating a fresh save (a new game, not loading from a save file).");
         Begin(new WorldState { Seed = seed });
         foreach (var manager in gameManagers) manager.GenerateNewWorld();
-        
+        RaiseWorldReady();
     }
     
     private void Begin(WorldState state)

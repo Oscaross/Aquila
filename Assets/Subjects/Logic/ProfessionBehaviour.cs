@@ -10,7 +10,7 @@ public abstract class ProfessionBehaviour : MonoBehaviour
         private set
         {
             gait = value;
-            Subject.Visuals.RefreshAnimations(gait);
+            // Subject.Visuals.RefreshAnimations(gait);
         }
     }
     
@@ -76,7 +76,7 @@ public abstract class ProfessionBehaviour : MonoBehaviour
         {
             // TODO: For now this'll just walk everyone back to the center. We soon want to get the idle loop mechanism working here too
             Gait = Gait.Walk;
-            Pathfinder.PathfindTo(Legion.ZoneManager.GetLegionBounds().center, ProfessionDefinition.walkSpeed);
+            // Pathfinder.PathfindTo(Legion.ZoneManager.GetLegionBounds().center, ProfessionDefinition.walkSpeed);
         }
         else
         {
