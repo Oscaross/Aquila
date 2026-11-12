@@ -2,13 +2,92 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4b93b3c-81fd-452f-a8ca-ec3b17864c01" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Art/AquilaPalette.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Art/AquilaPalette.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/River/Water.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/River/Water.shader" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/River/WaterMat.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/River/WaterMat.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Aquila/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/TileAssetCreator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/TileAssetCreator.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/DirtBand.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/DirtBand.aseprite.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/LegionTilemap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/LegionTilemap.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tilemaps.aseprite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tilemaps.aseprite.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_0.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_0.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_2.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_2.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_3.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTilemap_3.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTileset.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Arable/ArableTileset.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_0.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_0.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_2.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_2.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_3.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_3.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_4.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_4.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_5.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_5.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_6.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTilemap_6.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTileset.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Forest/ForestTileset.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_0.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_0.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_2.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_2.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_3.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_3.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_4.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_4.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_5.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTilemap_5.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTileset.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Legion/LegionTileset.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_0.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_0.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_2.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_2.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_3.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_3.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_4.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_4.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_5.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_5.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_6.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTilemap_6.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTileset.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/Tiles/Wilderness/WildernessTileset.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/ZoneTilemapPainter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/ZoneTilemapPainter.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/ZoneTileset.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Ground/ZoneTileset.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prototype.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prototype.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Shaders/ShaderController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/ShaderController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Skybox/Sky/SkyGradient.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Skybox/Sky/SkyGradient.shader" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Skybox/Sky/SkyGradientMaterial.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Skybox/Sky/SkyGradientMaterial.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World/Forests/Sprites/Backgrounds/ForestLayer2.aseprite" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World/Forests/Sprites/Backgrounds/ForestLayer2.aseprite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World/Forests/Sprites/Backgrounds/ForestLayer2.aseprite.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World/Forests/Sprites/Backgrounds/ForestLayer2.aseprite.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World/Wilderness/WorldGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World/Wilderness/WorldGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/World/Wilderness/path-wilderness-0.aseprite" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/World/Wilderness/path-wilderness-0.aseprite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,23 +97,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="3Ie1k291QBO5PY2Q8gqz6i7Ju0X" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -44,6 +123,7 @@
       <option name="presentableId" value="Default" />
       <updated>1788110360300</updated>
       <workItem from="1788110362368" duration="5000" />
+      <workItem from="1793482890274" duration="4000" />
     </task>
     <servers />
   </component>
